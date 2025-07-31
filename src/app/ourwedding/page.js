@@ -1,11 +1,13 @@
-import OrderView from 'src/sections/new/view/order-view';
-import { Metadata } from 'next';
+import Ourwedding from 'src/sections/intro/view/intro-view';
 
 export const metadata = {
-  title: '아워웨딩 | 주문접수',
-  description: '아워웨딩 주문 접수 페이지입니다.',
+  title: '아워웨딩',
+  icons: {
+    icon: '/아워웨딩.ico', // 또는 .png, .svg 등
+  },
+  description: 'Ourwedding Ourdrama',
 };
 
-export default function OrderPage() {
-  return <OrderView />;
+export default function Page() {
+  return <Ourwedding />;
 }

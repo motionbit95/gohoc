@@ -2,33 +2,30 @@
 
 import React from 'react';
 import { Box, Typography, TextField, Alert } from '@mui/material';
-import { Markdown } from 'src/components/markdown';
 import { DEFAULT_TEXTAREA_CONTENT, REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
 import MarkdownWithCodeFix from './markdown-with-code-fix';
-
-// image-uploader.js 스타일과 유사하게 컬러 및 스타일 적용
-const BG_COLOR = '#23291f';
-const TEXT_COLOR = '#fffbe9';
-const ACCENT_COLOR = '#ffe082';
-const ACCENT_COLOR_DARK = '#ffd54f';
-const PAPER_BG = '#2e3527';
+import { COLORS } from 'src/constant/colors';
 
 export default function OrderRequest({ value = '', onChange }) {
+  // 상세페이지 전용 색상 적용
+  const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
+  const ACCENT_COLOR = 'rgb(220, 222, 204)';
+  const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
+  const PAPER_BG = COLORS.DETAIL_ALERT_BG;
+
   return (
     <Box
       sx={{
-        background: BG_COLOR,
         borderRadius: 3,
         p: { xs: 2, sm: 3 },
         color: TEXT_COLOR,
-        boxShadow: '0 2px 16px 0 rgba(35,41,31,0.08)',
       }}
     >
       <Typography
         variant="h6"
         sx={{
           mb: 2,
-          color: ACCENT_COLOR,
+          color: TEXT_COLOR,
           fontWeight: 800,
           letterSpacing: 0.5,
           fontSize: { xs: 20, sm: 22 },
@@ -46,7 +43,8 @@ export default function OrderRequest({ value = '', onChange }) {
           mb: 2,
           fontSize: { xs: 15, sm: 16 },
           wordBreak: 'keep-all',
-          background: 'rgba(255,255,255,0.13)',
+          borderRadius: 2,
+          background: ACCENT_COLOR,
           color: TEXT_COLOR,
           fontWeight: 600,
           lineHeight: 1.7,
@@ -71,12 +69,13 @@ export default function OrderRequest({ value = '', onChange }) {
             borderRadius: 2,
             fontWeight: 500,
             letterSpacing: 0.5,
+            p: 4,
             '& .MuiInputBase-input': { color: TEXT_COLOR },
           },
         }}
         InputLabelProps={{
           sx: {
-            color: ACCENT_COLOR,
+            color: ACCENT_COLOR_DARK,
             fontWeight: 700,
             letterSpacing: 0.2,
             fontSize: 16,

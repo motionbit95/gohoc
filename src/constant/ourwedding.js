@@ -55,20 +55,20 @@ export const CAUTION_GUIDE = [
   {
     key: 'unclear',
     label: `요청사항 중 불가능한 사항에 대해서는 작업 중 따로 연락 드리지 않습니다.</span> <br />
-<span style="color:#ffe082;font-weight:700;">그러므로 요청사항 중 애매한 부분에 대해서는 업로드 전 미리 사진과 함께 채팅으로 가능 여부 확인 부탁드립니다.</span>`,
+<span style="color:#D7562B;font-weight:700;">그러므로 요청사항 중 애매한 부분에 대해서는 업로드 전 미리 사진과 함께 채팅으로 가능 여부 확인 부탁드립니다.</span>`,
     required: true,
   },
   {
     key: 'storage',
     label: `<span>1차 보정본과 최근 재수정(모든 재수정 파일 X) 주신 파일은 요청일로부터 한달 간 [접수 내역]에서 확인이 가능하나, <br /> 그 이후엔 파기되며 완성본에 대해서 책임지지 않습니다.</span>   <br />
-<span style="color:#ffe082;font-weight:700;">그러므로 모든 재수정과 작업본은 개인적으로 꼭 저장해주시길 바랍니다.</span>`,
+<span style="color:#D7562B;font-weight:700;">그러므로 모든 재수정과 작업본은 개인적으로 꼭 저장해주시길 바랍니다.</span>`,
     required: true,
   },
   {
     key: 'option',
     label: `<span>[색감, 합성 요청사항]의 경우, 해당 상품 미결제 시 작업 적용되지 않으니 꼭 별도의 추가 상품 구매 후 요청 부탁드립니다.</span>    <br /> 
 <span>[합성]의 경우 작업 여부가 달라지기에 꼭 주문 전 채팅으로 ‘가능 여부(사진+요청사항)’ 요청 부탁드립니다.</span>    <br />
-<span style="color:#ffe082;font-weight:700;">해당 사항에 대하여 요청사항 적용 보류 시 책임지지 않으니 꼭 참고 부탁 드립니다.`,
+<span style="color:#D7562B;font-weight:700;">해당 사항에 대하여 요청사항 적용 보류 시 책임지지 않으니 꼭 참고 부탁 드립니다.`,
     required: true,
   },
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import OrderForm from '../order-form';
 import ImageUploader from '../image-uploader';
 import {
@@ -24,9 +24,20 @@ import {
   REFERENCE_UPLOAD_GUIDE,
 } from 'src/constant/ourwedding';
 import OurWeddingDivider from '../ourwedding-divier';
+import { getMe } from 'src/actions/user';
+import { COLORS } from 'src/constant/colors';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
-const BG_COLOR = '#23291f';
+const BG_COLOR = COLORS.DETAIL_BG_COLOR;
+const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
+const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
+
+// 유저 정보 가져오는 함수 (예시, 실제 API 엔드포인트에 맞게 수정 필요)
+async function fetchUserInfo(token) {
+  // 예시: /api/me 엔드포인트에서 사용자 정보 가져오기
+  const res = await getMe(token);
+  return res.user;
+}
 
 export default function OrderView() {
   // formdata: { orderForm, orderImages, referenceImages, orderRequest, cautionAgree }
@@ -49,9 +60,39 @@ export default function OrderView() {
   // 업로드 퍼센트 상태
   const [uploadPercent, setUploadPercent] = useState(0);
 
-  // 임시 테스트 계정 정보
-  const testUserId = 'krystalvv';
-  const testUserName = '박수정';
+  // 유저 정보 상태
+  const [user, setUser] = useState(null);
+
+  // 유저 정보 불러오기
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      setMessage('로그인이 필요합니다.');
+      setMessageType('error');
+      setMessageOpen(true);
+      // 로그인 페이지로 이동
+      if (typeof window !== 'undefined') {
+        window.location.href = '/ourwedding/login?target=new';
+      }
+      return;
+    }
+    fetchUserInfo(token)
+      .then((data) => {
+        setUser({
+          userId: data.naver_id,
+          userName: data.user_name,
+        });
+      })
+      .catch((err) => {
+        setMessage('유저 정보를 불러오지 못했습니다.');
+        setMessageType('error');
+        setMessageOpen(true);
+        // 에러 발생 시 로그인 페이지로 이동
+        if (typeof window !== 'undefined') {
+          window.location.href = '/ourwedding/login?target=new';
+        }
+      });
+  }, []);
 
   // 각 컴포넌트의 변경 핸들러
   const handleOrderFormChange = (newOrderForm) => {
@@ -129,6 +170,12 @@ export default function OrderView() {
   // 주문 이미지와 참고 이미지 모두 S3에 업로드하고, 최종 데이터에는 파일 데이터 대신 업로드 결과만 포함
   const handleUploadClick = async () => {
     if (!validateRequiredFields()) return;
+    if (!user) {
+      setMessage('유저 정보를 불러오는 중입니다. 잠시 후 다시 시도해 주세요.');
+      setMessageType('error');
+      setMessageOpen(true);
+      return;
+    }
 
     setUploading(true);
     setUploadPercent(0);
@@ -146,8 +193,8 @@ export default function OrderView() {
         [
           'ourwedding',
           formData.orderForm?.grade,
-          testUserName,
-          testUserId,
+          user.userName || user.name || user.nickname || user.id || 'unknown',
+          user.userId || user.id || 'unknown',
           formData.orderForm?.orderNumber || 'noOrderNum',
           type,
         ].join('_');
@@ -208,9 +255,13 @@ export default function OrderView() {
 
       // customer 데이터 추가
       const customer = {
-        userId: testUserId,
-        userName: testUserName,
+        userId: user.userId || user.id || '',
+        email: user.userId,
+        name: user.userName || user.name || user.nickname || '',
       };
+
+      console.log(customer);
+
       await createOrder({ ...finalFormData, customer });
       //   console.log('최종 폼 데이터:', finalFormData);
 
@@ -241,47 +292,23 @@ export default function OrderView() {
             px: { xs: 1, sm: 2, md: 0 },
           }}
         >
-          <Box
+          <Typography
+            variant="h4"
+            component="h1"
             sx={{
-              width: '100%',
-              background: 'linear-gradient(90deg, #ffe082 0%, #ffd54f 100%)',
-              color: '#23291f',
-              px: { xs: 2, md: 4 },
-              py: { xs: 2, md: 2 },
-              boxShadow: '0 2px 12px 0 rgba(35,41,31,0.10)',
+              fontWeight: 800,
+              fontSize: { xs: 24, md: 30 },
+              color: COLORS.DETAIL_ACCENT_COLOR_DARK,
+              letterSpacing: 1,
+              textShadow: '0 1px 2px rgba(35,41,31,0.18)',
+              mb: 1.5,
               textAlign: 'center',
-              fontWeight: 700,
-              fontSize: { xs: 18, md: 22 },
-              letterSpacing: 0.5,
-              mb: 1,
+              mt: '10vh',
+              mb: '5vh',
             }}
           >
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{
-                fontWeight: 800,
-                fontSize: { xs: 18, md: 22 },
-                color: '#23291f',
-                letterSpacing: 1,
-                textShadow: '0 1px 2px rgba(255,255,255,0.12)',
-              }}
-            >
-              신규 주문 접수
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                color: '#23291f',
-                fontWeight: 500,
-                mt: 0.5,
-                fontSize: { xs: 14, md: 16 },
-                opacity: 0.85,
-              }}
-            >
-              아래 양식을 작성하여 신규 주문을 접수해 주세요.
-            </Typography>
-          </Box>
+            신규 주문 접수
+          </Typography>
           <Box
             sx={{
               maxWidth: 'md',
@@ -293,8 +320,8 @@ export default function OrderView() {
             <OrderForm
               value={formData.orderForm}
               onChange={handleOrderFormChange}
-              userId={testUserId}
-              userName={testUserName}
+              userId={user?.userId || user?.id || ''}
+              userName={user?.userName || user?.name || user?.nickname || ''}
             />
           </Box>
           <OurWeddingDivider text="Ourwedding Ourdrama" />
@@ -343,16 +370,8 @@ export default function OrderView() {
             />
           </Box>
           <OurWeddingDivider text="Ourdrama" isBorder />
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
-            <CautionAgree checked={formData.cautionAgree} onChange={handleCautionAgreeChange} />
-          </Box>
+
+          <CautionAgree checked={formData.cautionAgree} onChange={handleCautionAgreeChange} />
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Button
               variant="contained"
@@ -360,24 +379,18 @@ export default function OrderView() {
               onClick={handleUploadClick}
               disabled={uploading}
               sx={{
-                minWidth: 180,
-                fontWeight: 700,
-                fontSize: 18,
-                py: 1.2,
-                borderRadius: 2,
-                background: '#ffe082',
-                color: '#23291f',
-                boxShadow: '0 2px 8px 0 rgba(255,224,130,0.18)',
-                letterSpacing: 1,
-                transition: 'background 0.2s, color 0.2s',
+                mb: 2,
+                background: ACCENT_COLOR,
+                color: BG_COLOR,
+                fontWeight: 800,
+                fontSize: 16,
+                letterSpacing: 0.5,
+                textShadow: '0 1px 2px rgba(0,0,0,0.10)',
                 '&:hover': {
-                  background: '#ffd54f',
-                  color: '#23291f',
+                  background: ACCENT_COLOR_DARK,
                 },
-                '&:disabled': {
-                  background: '#bdbdbd',
-                  color: '#fffbe9',
-                },
+                boxShadow: '0 2px 8px 0 rgba(255,224,130,0.15)',
+                minWidth: '256px',
               }}
             >
               {uploading ? '업로드 중...' : '업로드'}

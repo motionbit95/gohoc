@@ -16,16 +16,18 @@ import {
   Paper,
 } from '@mui/material';
 
-// 디자인 컬러 (image-uploader.js와 통일)
-const BG_COLOR = '#23291f';
-const TEXT_COLOR = '#fffbe9';
-const ACCENT_COLOR = '#ffe082';
-const ACCENT_COLOR_DARK = '#ffd54f';
-const PAPER_BG = '#23291f';
+// 색상 상수 import
+import { COLORS, STYLES } from 'src/constant/colors';
+
+// 색감 수정: 상세페이지 전용 색상 사용
+const BG_COLOR = COLORS.DETAIL_BG_COLOR;
+const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
+const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
+const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
 
 // 통일된 input 스타일 변수
-const UNIFIED_RADIUS = 2; // px 단위가 아니라 theme.spacing 단위, 2.5 = 20px
-const UNIFIED_HEIGHT = 44; // px, 모든 input/셀렉트 높이 통일
+const UNIFIED_RADIUS = STYLES.UNIFIED_RADIUS;
+const UNIFIED_HEIGHT = STYLES.UNIFIED_HEIGHT;
 
 // 등급 옵션
 export const GRADE_OPTIONS = [
@@ -148,15 +150,12 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
   // (unifiedInputLabelProps에 이미 shrink: true가 있지만, 혹시 모를 오버라이드 방지 위해 각 필드에 명시적으로 추가)
 
   return (
-    <Paper
-      elevation={2}
+    <Box
       sx={{
-        background: PAPER_BG,
         color: TEXT_COLOR,
         borderRadius: 3,
         px: { xs: 2, md: 4 },
         py: { xs: 2, md: 3 },
-        boxShadow: '0 2px 12px 0 rgba(35,41,31,0.10)',
         mx: 'auto',
         mb: 2,
       }}
@@ -172,7 +171,7 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           textShadow: '0 1px 2px rgba(0,0,0,0.10)',
         }}
       >
-        주문 정보 확인
+        주문자 정보(신규)
       </Typography>
       <Stack spacing={2}>
         <TextField
@@ -431,6 +430,6 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           </FormGroup>
         </FormControl>
       </Stack>
-    </Paper>
+    </Box>
   );
 }

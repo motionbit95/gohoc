@@ -3,19 +3,20 @@
 import React from 'react';
 import { Box, FormControlLabel, Checkbox, FormGroup } from '@mui/material';
 import { CAUTION_GUIDE } from 'src/constant/ourwedding';
+import { COLORS } from 'src/constant/colors';
 
 // 컬러 팔레트 (image-uploader.js와 통일)
-const BG_COLOR = '#23291f';
-const TEXT_COLOR = '#fffbe9';
-const ACCENT_COLOR = '#ffe082';
-const ACCENT_COLOR_DARK = '#ffd54f';
+const BG_COLOR = COLORS.DETAIL_PAPER_BG;
+const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
+const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
+const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
 
 // "모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄" 체크박스 key
 const ALL_AGREE_KEY = 'allAgree';
 
 // 체크박스 스타일 공통화
 const checkboxSx = {
-  color: ACCENT_COLOR,
+  color: ACCENT_COLOR_DARK,
   '&.Mui-checked': {
     color: ACCENT_COLOR_DARK,
   },
@@ -90,75 +91,83 @@ export default function CautionAgree({ checked = {}, onChange }) {
       sx={{
         my: 2,
         background: BG_COLOR,
-        borderRadius: 3,
         p: { xs: 2, sm: 3 },
         color: TEXT_COLOR,
-        boxShadow: '0 2px 16px 0 rgba(35,41,31,0.08)',
       }}
     >
-      <span
-        style={{
+      <Box
+        sx={{
+          maxWidth: 'md',
+          mx: 'auto',
           width: '100%',
-          maxWidth: '1000px',
-          color: 'transparent',
-          WebkitTextStroke: '0.6px #A79166',
-          fontFamily: 'Noto Serif KR, serif',
-          fontWeight: 400,
-          fontSize: 64,
+          px: { xs: 1, sm: 2, md: 0 },
+          py: 4,
         }}
       >
-        Caution
-      </span>
-      <FormGroup>
-        {CAUTION_GUIDE.map((item) => (
+        <span
+          style={{
+            width: '100%',
+            maxWidth: '1000px',
+            color: 'transparent',
+            WebkitTextStroke: '0.6px #A79166',
+            fontFamily: 'Noto Serif KR, serif',
+            fontWeight: 400,
+            fontSize: 64,
+          }}
+        >
+          Caution
+        </span>
+        <FormGroup>
+          {CAUTION_GUIDE.map((item) => (
+            <FormControlLabel
+              key={item.key}
+              control={
+                <Checkbox
+                  checked={!!checked?.[item.key]}
+                  onChange={handleChange(item.key)}
+                  sx={checkboxSx}
+                />
+              }
+              sx={{ ...labelSx, mb: 1.5 }}
+              label={
+                <span
+                  style={{
+                    color: TEXT_COLOR,
+                    fontWeight: 600,
+                    fontSize: 'inherit',
+                    lineHeight: 2.0,
+                  }}
+                  dangerouslySetInnerHTML={{ __html: item.label }}
+                />
+              }
+            />
+          ))}
+          {/* 모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄 */}
           <FormControlLabel
-            key={item.key}
+            key={ALL_AGREE_KEY}
             control={
               <Checkbox
-                checked={!!checked?.[item.key]}
-                onChange={handleChange(item.key)}
+                checked={!!checked?.[ALL_AGREE_KEY]}
+                //   onChange={handleChange(ALL_AGREE_KEY)}
                 sx={checkboxSx}
               />
             }
-            sx={{ ...labelSx, mb: 1.5 }}
+            sx={allAgreeLabelSx}
             label={
               <span
                 style={{
                   color: TEXT_COLOR,
-                  fontWeight: 600,
+                  fontWeight: 800,
                   fontSize: 'inherit',
                   lineHeight: 2.0,
                 }}
-                dangerouslySetInnerHTML={{ __html: item.label }}
-              />
+              >
+                위의 내용을 모두 숙지했습니다
+              </span>
             }
           />
-        ))}
-        {/* 모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄 */}
-        <FormControlLabel
-          key={ALL_AGREE_KEY}
-          control={
-            <Checkbox
-              checked={!!checked?.[ALL_AGREE_KEY]}
-              //   onChange={handleChange(ALL_AGREE_KEY)}
-              sx={checkboxSx}
-            />
-          }
-          sx={allAgreeLabelSx}
-          label={
-            <span
-              style={{
-                color: ACCENT_COLOR_DARK,
-                fontWeight: 800,
-                fontSize: 'inherit',
-                lineHeight: 2.0,
-              }}
-            >
-              위의 내용을 모두 숙지했습니다
-            </span>
-          }
-        />
-      </FormGroup>
+        </FormGroup>
+      </Box>
     </Box>
   );
 }
