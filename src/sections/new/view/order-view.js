@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import OrderForm from '../order-form';
 import ImageUploader from '../image-uploader';
 import {
@@ -62,6 +62,9 @@ export default function OrderView() {
 
   // 유저 정보 상태
   const [user, setUser] = useState(null);
+
+  // 제출 완료 후 이동을 위한 ref
+  const redirectTimeoutRef = useRef(null);
 
   // 유저 정보 불러오기
   useEffect(() => {
@@ -155,9 +158,9 @@ export default function OrderView() {
       return false;
     }
     // 4. 주의사항 모든 항목 동의 필요
+    // cautionAgree가 비어있거나, 모든 항목이 true가 아니면 false
     const allCautions = Object.keys(cautionAgree);
-    const notAgreed = allCautions.filter((key) => !cautionAgree[key]);
-    if (notAgreed.length > 0) {
+    if (allCautions.length === 0 || allCautions.some((key) => !cautionAgree[key])) {
       setMessage('모든 주의사항에 동의해 주세요.');
       setMessageType('error');
       setMessageOpen(true);
@@ -189,16 +192,6 @@ export default function OrderView() {
       const totalFiles = orderImgs.length + refImgs.length;
       let completedFiles = 0;
 
-      const getFolderName = (type) =>
-        [
-          'ourwedding',
-          formData.orderForm?.grade,
-          user.userName || user.name || user.nickname || user.id || 'unknown',
-          user.userId || user.id || 'unknown',
-          formData.orderForm?.orderNumber || 'noOrderNum',
-          type,
-        ].join('_');
-
       // 파일 업로드 공통 함수 (order는 그대로, reference는 네이밍 변경)
       const uploadFiles = async (files, type, uploadedList) => {
         for (let i = 0; i < files.length; i++) {
@@ -221,10 +214,21 @@ export default function OrderView() {
           }
 
           try {
-            const result = await uploadToS3(fileToUpload, getFolderName(type), (percent) => {
-              const overall = ((completedFiles + percent / 100) / totalFiles) * 100;
-              setUploadPercent(Math.round(overall * 10) / 10);
-            });
+            const result = await uploadToS3(
+              fileToUpload,
+              [
+                'ourwedding',
+                formData.orderForm?.grade,
+                user.userName || user.name || user.nickname || user.id || 'unknown',
+                user.userId || user.id || 'unknown',
+                formData.orderForm?.orderNumber || 'noOrderNum',
+                type,
+              ],
+              (percent) => {
+                const overall = ((completedFiles + percent / 100) / totalFiles) * 100;
+                setUploadPercent(Math.round(overall * 10) / 10);
+              }
+            );
             uploadedList.push(result);
             completedFiles += 1;
             setUploadPercent(Math.round((completedFiles / totalFiles) * 1000) / 10);
@@ -251,6 +255,7 @@ export default function OrderView() {
         ...restFormData,
         uploadedOrderImages,
         uploadedReferenceImages,
+        status: '아워웨딩',
       };
 
       // customer 데이터 추가
@@ -263,21 +268,42 @@ export default function OrderView() {
       console.log(customer);
 
       await createOrder({ ...finalFormData, customer });
-      //   console.log('최종 폼 데이터:', finalFormData);
 
-      //   setMessage('폼 데이터가 정상적으로 준비되었습니다.');
-      //   setMessageType('success');
-      //   setMessageOpen(true);
-    } finally {
+      // 업로드 성공 메시지 및 이동 로직을 finally에서 분리하여, 성공시에만 실행
+      setUploading(false);
+      setUploadPercent(0);
+
+      setMessage('업로드가 완료되었습니다. 주문 목록 화면으로 이동합니다.');
+      setMessageType('success');
+      setMessageOpen(true);
+
+      // 1.5초 후 자연스럽게 이동
+      redirectTimeoutRef.current = setTimeout(() => {
+        if (typeof window !== 'undefined') {
+          window.location.replace('/ourwedding');
+        }
+      }, 1500);
+    } catch (e) {
       setUploading(false);
       setTimeout(() => setUploadPercent(0), 1000);
+      // 에러 메시지는 위에서 처리됨
     }
   };
 
+  // 메시지 닫기 핸들러
   const handleMessageClose = (event, reason) => {
     if (reason === 'clickaway') return;
     setMessageOpen(false);
   };
+
+  // 언마운트시 타임아웃 정리
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>

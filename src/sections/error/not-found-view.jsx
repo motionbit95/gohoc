@@ -25,14 +25,14 @@ export function NotFoundView() {
       <Container component={MotionContainer}>
         <m.div variants={varBounce('in')}>
           <Typography variant="h3" sx={{ mb: 2 }}>
-            Sorry, page not found!
+            죄송합니다, 페이지를 찾을 수 없습니다!
           </Typography>
         </m.div>
 
         <m.div variants={varBounce('in')}>
           <Typography sx={{ color: 'text.secondary' }}>
-            Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
-            sure to check your spelling.
+            요청하신 페이지를 찾을 수 없습니다. 주소가 잘못 입력되었거나, 페이지가 이동 또는
+            삭제되었을 수 있습니다. 주소를 다시 한 번 확인해 주세요.
           </Typography>
         </m.div>
 
@@ -40,8 +40,8 @@ export function NotFoundView() {
           <PageNotFoundIllustration sx={{ my: { xs: 5, sm: 10 } }} />
         </m.div>
 
-        <Button component={RouterLink} href="/" size="large" variant="contained">
-          Go to home
+        <Button component={RouterLink} href="/ourwedding" size="large" variant="contained">
+          홈으로 가기
         </Button>
       </Container>
     </SimpleLayout>

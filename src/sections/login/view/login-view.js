@@ -92,11 +92,12 @@ export default function LoginView() {
       let targetPath = '/';
       if (nextPage === 'new') {
         targetPath = '/ourwedding/new';
+      } else if (nextPage === 'revision') {
+        targetPath = '/ourwedding/revision';
       } else if (nextPage) {
         targetPath = nextPage;
       }
 
-      console.log(targetPath);
       window.location.href = targetPath;
     }
 

@@ -1,5 +1,7 @@
 // S3에 파일 업로드하는 action 함수
 
+import axiosInstance from 'src/lib/axios';
+
 // 파일 해시 계산 함수 (SHA-256)
 async function calculateHash(file) {
   const arrayBuffer = await file.arrayBuffer();
@@ -17,14 +19,9 @@ async function calculateHash(file) {
  * @param {string} [folderId] - (옵션) 폴더 ID (서버 확인용)
  * @returns {Promise<object>} - 서버 응답 데이터
  */
-export async function uploadToS3(file, folderName, onProgress, onServerProcessing, folderId) {
+export async function uploadToS3(file, parts, onProgress, onServerProcessing, folderId) {
   try {
     const fileHash = await calculateHash(file);
-
-    const parts = folderName.split('_');
-    if (parts.length < 5) {
-      throw new Error('폴더 정보가 올바르지 않습니다. 다시 시도해 주세요.');
-    }
 
     const [rootLabel, type, userName, userId, orderNumber] = parts;
 
@@ -104,6 +101,8 @@ export async function createOrder(orderData) {
       }
     }
 
+    console.log(dataToSend);
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -116,6 +115,28 @@ export async function createOrder(orderData) {
     return result;
   } catch (err) {
     console.error('[ORDER][CREATE] 요청 실패:', err);
+    throw err;
+  }
+}
+
+// 예시: 특정 naver_id로 유저 정보를 조회하는 함수
+
+export async function getOrderByNaverId(naver_id) {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/order/user/${encodeURIComponent(naver_id)}`,
+      {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+    if (!res.ok) {
+      throw new Error('주문 정보를 불러오지 못했습니다.');
+    }
+    const data = await res.json();
+    return data.orders || [];
+  } catch (err) {
+    console.error('[ORDER][GET] 요청 실패:', err);
     throw err;
   }
 }
