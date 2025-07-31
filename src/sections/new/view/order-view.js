@@ -32,11 +32,15 @@ const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
 const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
 
-// 유저 정보 가져오는 함수 (예시, 실제 API 엔드포인트에 맞게 수정 필요)
+// fetchUserInfo에서 에러 발생 시 에러를 던지도록 수정
+// (아래 함수는 이미 async로 선언되어 있으므로, 에러 발생 시 throw)
 async function fetchUserInfo(token) {
-  // 예시: /api/me 엔드포인트에서 사용자 정보 가져오기
-  const res = await getMe(token);
-  return res.user;
+  try {
+    const res = await getMe(token);
+    return res.user;
+  } catch (err) {
+    throw err;
+  }
 }
 
 export default function OrderView() {
@@ -432,28 +436,8 @@ export default function OrderView() {
           <Alert
             onClose={handleMessageClose}
             severity={messageType}
-            sx={{
-              width: '100%',
-              fontWeight: messageType === 'error' ? 700 : 500,
-              color:
-                messageType === 'error'
-                  ? '#d32f2f'
-                  : messageType === 'success'
-                    ? '#388e3c'
-                    : undefined,
-              background:
-                messageType === 'error'
-                  ? '#ffebee'
-                  : messageType === 'success'
-                    ? '#e8f5e9'
-                    : undefined,
-              border:
-                messageType === 'error'
-                  ? '1.5px solid #d32f2f'
-                  : messageType === 'success'
-                    ? '1.5px solid #388e3c'
-                    : undefined,
-            }}
+            sx={{ width: '100%', fontWeight: 600, fontSize: 16 }}
+            variant="filled"
           >
             {message}
           </Alert>

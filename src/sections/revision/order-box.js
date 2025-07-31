@@ -3,6 +3,7 @@ import { useTheme, useMediaQuery } from '@mui/material';
 import { useMemo } from 'react';
 import NormalButtons from './normal-buttons';
 import SampleButtons from './sample-buttons';
+import { HOLIDAY_NOTICE, SAMPLE_DOWNLOAD_NOTICE } from 'src/constant/ourwedding';
 
 // 날짜 포맷 함수 (간단 버전, 실제로는 dayjs 등 사용 권장)
 function fDateTime(date) {
@@ -40,10 +41,7 @@ const OrderBox = ({ order }) => {
           ml: 1,
         }}
       >
-        {`샘플은 보정 강도 체크를 위해 만든 상품임으로 웹에서만 확인 가능합니다.
-
-다운로드 희망 시 포토리뷰(★★★★★) 작성 후 톡톡으로 캡쳐 본 보내주시면 다운로드 가능하니 참고 부탁 드립니다!
- ㄴ 리뷰작성시 꼭 구매확정을 눌러주셔야지 가능합니다!`}
+        {SAMPLE_DOWNLOAD_NOTICE}
       </Typography>
     ) : order?.process?.includes('진행중') ? (
       <Typography
@@ -53,7 +51,9 @@ const OrderBox = ({ order }) => {
           color: 'rgba(147, 81, 23, 1)',
           ml: 1,
         }}
-      >{`휴무일은 작업 기한에서 제외되니 참고 부탁드립니다.`}</Typography>
+      >
+        {HOLIDAY_NOTICE}
+      </Typography>
     ) : null;
 
   // 필드 정보 배열로 리팩토링

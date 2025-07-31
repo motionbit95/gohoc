@@ -42,11 +42,15 @@ export async function logout() {
 
 // Get current logged-in user info (from token)
 export async function getMe(token) {
-  const res = await axiosInstance.get(`${url}/user/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return res.data;
+  try {
+    const res = await axiosInstance.get(`${url}/user/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data;
+  } catch (error) {
+    // 서버가 실행이 안될 때 사용자에게 명확한 메시지 제공
+    throw new Error('서버가 응답하지 않습니다. 잠시 후 다시 시도해 주세요.');
+  }
 }

@@ -109,3 +109,10 @@ export const ORDER_LIST_CAUTION = [
 </ul>`,
   },
 ];
+
+export const SAMPLE_DOWNLOAD_NOTICE = `샘플은 보정 강도 체크를 위해 만든 상품임으로 웹에서만 확인 가능합니다.
+
+다운로드 희망 시 포토리뷰(★★★★★) 작성 후 톡톡으로 캡쳐 본 보내주시면 다운로드 가능하니 참고 부탁 드립니다!
+ ㄴ 리뷰작성시 꼭 구매확정을 눌러주셔야지 가능합니다!`;
+
+export const HOLIDAY_NOTICE = `휴무일은 작업 기한에서 제외되니 참고 부탁드립니다.`;

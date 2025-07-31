@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Container, Divider, Stack, Typography } from '@mui/material';
+import { Box, Container, Divider, Stack, Typography, Snackbar, Alert } from '@mui/material';
 import OrderListCaution from '../order-list-caution';
 import { COLORS } from 'src/constant/colors';
 import { useEffect, useState } from 'react';
@@ -35,37 +35,36 @@ const OrderListView = () => {
           setMessageType('error');
           setMessageOpen(true);
           if (typeof window !== 'undefined') {
-            window.location.href = '/ourwedding/login?target=revision';
+            setTimeout(() => {
+              window.location.href = '/ourwedding/login?target=revision';
+            }, 1200); // 1.2초 후 이동 (스낵바 보이게)
           }
           setLoading(false);
           return;
         }
 
         // getMe는 반드시 async/await로 처리
-        const res = await getMe(token);
+        await getMe(token)
+          .then(async (res) => {
+            const userData = {
+              userId: res.user.naver_id,
+              userName: res.user.user_name,
+            };
+            setUser(userData);
 
-        if (!res || !res.user) {
-          throw new Error('유저 정보를 불러오지 못했습니다.');
-        }
-        const userData = {
-          userId: res.user.naver_id,
-          userName: res.user.user_name,
-        };
-        setUser(userData);
-
-        console.log(userData.userId);
-
-        // 주문 정보도 await로 안전하게
-        const orderData = await getOrderByNaverId(userData.userId);
-        setOrders(orderData || []);
+            // 주문 정보도 await로 안전하게
+            const orderData = await getOrderByNaverId(userData.userId);
+            setOrders(orderData || []);
+          })
+          .catch((error) => {
+            setMessage(error.message || '유저 정보를 불러오지 못했습니다.');
+            setMessageType('error');
+            setMessageOpen(true);
+          });
       } catch (err) {
         setMessage('유저 정보를 불러오지 못했습니다.');
         setMessageType('error');
         setMessageOpen(true);
-        // 필요시 로그인 페이지로 이동
-        // if (typeof window !== 'undefined') {
-        //   window.location.href = '/ourwedding/login?target=revision';
-        // }
       } finally {
         setLoading(false);
       }
@@ -73,6 +72,11 @@ const OrderListView = () => {
 
     fetchUserAndOrders();
   }, []);
+
+  const handleMessageClose = (event, reason) => {
+    if (reason === 'clickaway') return;
+    setMessageOpen(false);
+  };
 
   return (
     <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>
@@ -127,6 +131,21 @@ const OrderListView = () => {
           )}
         </Stack>
       </Container>
+      <Snackbar
+        open={messageOpen}
+        autoHideDuration={3500}
+        onClose={handleMessageClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleMessageClose}
+          severity={messageType}
+          sx={{ width: '100%', fontWeight: 600, fontSize: 16 }}
+          variant="filled"
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
