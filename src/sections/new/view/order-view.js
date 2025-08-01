@@ -13,6 +13,10 @@ import {
   Typography,
   LinearProgress,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from '@mui/material';
 
 import { getMe } from 'src/actions/user';
@@ -72,6 +76,9 @@ export default function OrderView() {
 
   // 제출 완료 후 이동을 위한 ref
   const redirectTimeoutRef = useRef(null);
+
+  // 업로드 완료 Dialog 상태
+  const [uploadSuccessDialogOpen, setUploadSuccessDialogOpen] = useState(false);
 
   // 유저 정보 불러오기
   useEffect(() => {
@@ -169,6 +176,16 @@ export default function OrderView() {
     const allCautions = Object.keys(cautionAgree);
     if (allCautions.length === 0 || allCautions.some((key) => !cautionAgree[key])) {
       setMessage('모든 주의사항에 동의해 주세요.');
+      setMessageType('error');
+      setMessageOpen(true);
+      return false;
+    }
+
+    // 5. 업로드 한 이미지 수와 주문 수량이 일치하지 않을 때
+    if (orderImages.length !== Number(orderForm.photoCount)) {
+      setMessage(
+        `주문 수량(${orderForm.photoCount}장)과 업로드한 이미지 수(${orderImages.length}장)가 일치하지 않습니다.`
+      );
       setMessageType('error');
       setMessageOpen(true);
       return false;
@@ -280,16 +297,20 @@ export default function OrderView() {
       setUploading(false);
       setUploadPercent(0);
 
-      setMessage('업로드가 완료되었습니다. 주문 목록 화면으로 이동합니다.');
-      setMessageType('success');
-      setMessageOpen(true);
+      // Dialog로 업로드 완료 안내
+      setUploadSuccessDialogOpen(true);
 
-      // 1.5초 후 자연스럽게 이동
-      redirectTimeoutRef.current = setTimeout(() => {
-        if (typeof window !== 'undefined') {
-          window.location.replace('/ourwedding');
-        }
-      }, 1500);
+      // 기존 Snackbar 메시지 제거
+      // setMessage('업로드가 완료되었습니다. 주문 목록 화면으로 이동합니다.');
+      // setMessageType('success');
+      // setMessageOpen(true);
+
+      // 기존 자동 이동 제거, Dialog에서 이동하도록 변경
+      // redirectTimeoutRef.current = setTimeout(() => {
+      //   if (typeof window !== 'undefined') {
+      //     window.location.replace('/ourwedding');
+      //   }
+      // }, 1500);
     } catch (e) {
       setUploading(false);
       setTimeout(() => setUploadPercent(0), 1000);
@@ -303,12 +324,23 @@ export default function OrderView() {
     setMessageOpen(false);
   };
 
+  // 업로드 성공 Dialog 닫기 및 이동
+  const handleUploadSuccessDialogClose = () => {
+    setUploadSuccessDialogOpen(false);
+    if (typeof window !== 'undefined') {
+      window.location.replace('/ourwedding');
+    }
+  };
+
   // 언마운트시 타임아웃 정리
-  useEffect(() => () => {
+  useEffect(
+    () => () => {
       if (redirectTimeoutRef.current) {
         clearTimeout(redirectTimeoutRef.current);
       }
-    }, []);
+    },
+    []
+  );
 
   return (
     <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>
@@ -475,6 +507,32 @@ export default function OrderView() {
             </Typography>
           </Box>
         </Backdrop>
+        <Dialog
+          open={uploadSuccessDialogOpen}
+          onClose={handleUploadSuccessDialogClose}
+          aria-labelledby="upload-success-dialog-title"
+        >
+          <DialogTitle id="upload-success-dialog-title" sx={{ fontWeight: 700, fontSize: 22 }}>
+            업로드 완료
+          </DialogTitle>
+          <DialogContent>
+            <Typography sx={{ fontSize: 18, mt: 1, mb: 1.5 }}>
+              업로드가 완료되었습니다.
+              <br />
+              초기 화면으로 이동합니다.
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleUploadSuccessDialogClose}
+              variant="contained"
+              color="error"
+              sx={{ fontWeight: 700, minWidth: 120 }}
+            >
+              확인
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );

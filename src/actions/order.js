@@ -1,5 +1,8 @@
 // S3에 파일 업로드하는 action 함수
 
+import { createCustomer } from './customer';
+import { createFile } from './file';
+import { createTimeline } from './timeline';
 
 // 파일 해시 계산 함수 (SHA-256)
 async function calculateHash(file) {
@@ -84,36 +87,102 @@ export async function uploadToS3(file, parts, onProgress, onServerProcessing, fo
 
 // 주문 생성 API 호출 함수
 export async function createOrder(orderData) {
+  console.log(orderData);
+
+  // 1. customer 생성
+  let createdCustomer = null;
   try {
-    // customer 데이터가 없으면 추가 (userId, userName이 orderData에 있으면 customer로 래핑)
-    let dataToSend = { ...orderData };
-    if (!orderData.customer) {
-      const { userId, userName, ...rest } = orderData;
-      if (userId && userName) {
-        dataToSend = {
-          ...rest,
-          customer: {
-            userId,
-            userName,
-          },
-        };
-      }
+    if (orderData.customer) {
+      createdCustomer = await createCustomer(orderData.customer);
     }
+  } catch (err) {
+    console.error('[ORDER][CUSTOMER][CREATE] 요청 실패:', err);
+    throw err;
+  }
 
-    console.log(dataToSend);
-
+  // 2. 주문 생성 (order id를 사용)
+  let createdOrder = null;
+  try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dataToSend),
+      body: JSON.stringify(orderData),
     });
-    const result = await res.json();
-    if (!res.ok || !result.success) {
-      throw new Error(result.message || '주문 생성에 실패했습니다.');
+    if (!res.ok) {
+      throw new Error('주문 생성에 실패했습니다.');
     }
-    return result;
+    createdOrder = await res.json();
+    // orderData에 orderId를 할당 (타임라인 생성 등에서 사용)
+    if (createdOrder && createdOrder.order && createdOrder.order.id) {
+      orderData.orderId = createdOrder.order.id;
+    } else if (createdOrder && createdOrder.id) {
+      orderData.orderId = createdOrder.id;
+    }
   } catch (err) {
     console.error('[ORDER][CREATE] 요청 실패:', err);
+    throw err;
+  }
+
+  // 3. 타임라인 생성 (주문 생성 후)
+  if (orderData.orderId) {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/timeline`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: orderData.orderId,
+          title: '주문접수',
+        }),
+      });
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || '타임라인 생성에 실패했습니다.');
+      }
+      // 타임라인 결과를 반환값에 포함하고 싶으면 아래처럼 추가
+      // return { ...result, timeline: result.timeline };
+    } catch (err) {
+      console.error('[TIMELINE][CREATE] 요청 실패:', err);
+      throw err;
+    }
+  }
+
+  // 4. 작업 제출물 생성 (orderId, type, files)
+  // orderData.uploadedOrderImages, orderData.uploadedReferenceImages를 files로 사용
+  // [중복 파일 생성 방지: 작업 제출물 생성만 수행, 파일 정보 생성(createFile) 생략]
+  try {
+    const workSubmissionTypes = [
+      { type: 'origin', files: orderData.uploadedOrderImages || [] },
+      { type: 'reference', files: orderData.uploadedReferenceImages || [] },
+    ];
+
+    for (const { type, files } of workSubmissionTypes) {
+      // 성공적으로 업로드된 파일만 추출
+      const validFiles = files.filter((file) => file.success);
+      if (validFiles.length > 0) {
+        // createWorkSubmission은 파일 배열을 받음
+        await import('./work-submission').then(({ createWorkSubmission }) =>
+          createWorkSubmission(orderData.orderId, type, validFiles)
+        );
+      }
+    }
+  } catch (err) {
+    console.error('[WORK_SUBMISSION][CREATE] 요청 실패:', err);
+    throw err;
+  }
+
+  // 6. 코멘트 생성
+  try {
+    if (orderData.orderRequest) {
+      await import('./comment').then(({ createOrderComment }) =>
+        createOrderComment({
+          orderId: orderData.orderId,
+          step: '신규',
+          comment: orderData.orderRequest,
+        })
+      );
+    }
+  } catch (err) {
+    console.error('[COMMENT][CREATE] 요청 실패:', err);
     throw err;
   }
 }

@@ -92,7 +92,7 @@ export const FONTS = {
 // 스타일 상수
 export const STYLES = {
   // 통일된 input 스타일 변수
-  UNIFIED_RADIUS: 2, // theme.spacing 단위
+  UNIFIED_RADIUS: 1, // theme.spacing 단위
   UNIFIED_HEIGHT: 44, // px, 모든 input/셀렉트 높이 통일
 
   // 그림자 설정
