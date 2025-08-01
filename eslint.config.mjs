@@ -5,6 +5,7 @@ import importPlugin from 'eslint-plugin-import';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import perfectionistPlugin from 'eslint-plugin-perfectionist';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
+import nextConfig from 'eslint-config-next';
 
 // ----------------------------------------------------------------------
 
@@ -185,5 +186,7 @@ export default [
   },
   eslintJs.configs.recommended,
   reactPlugin.configs.flat.recommended,
+
+  ...nextConfig(),
   customConfig,
 ];

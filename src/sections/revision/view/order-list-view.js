@@ -1,14 +1,16 @@
 'use client';
 
-import { Box, Container, Divider, Stack, Typography, Snackbar, Alert } from '@mui/material';
-import OrderListCaution from '../order-list-caution';
-import { COLORS } from 'src/constant/colors';
-import { useEffect, useState } from 'react';
-import { getOrderByNaverId } from 'src/actions/order';
+import { useState, useEffect } from 'react';
+
+import { Box, Stack, Alert, Divider, Snackbar, Container, Typography } from '@mui/material';
 
 // getMe 함수가 실제로 import되어야 함. 예시로 추가
 import { getMe } from 'src/actions/user';
+import { COLORS } from 'src/constant/colors';
+import { getOrderByNaverId } from 'src/actions/order';
+
 import OrderBox from '../order-box';
+import OrderListCaution from '../order-list-caution';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';

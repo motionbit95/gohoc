@@ -1,6 +1,5 @@
 // S3에 파일 업로드하는 action 함수
 
-import axiosInstance from 'src/lib/axios';
 
 // 파일 해시 계산 함수 (SHA-256)
 async function calculateHash(file) {
@@ -63,7 +62,7 @@ export async function uploadToS3(file, parts, onProgress, onServerProcessing, fo
         key: s3Key,
         fileHash,
         originalFileName: file.name,
-        folderId: folderId,
+        folderId,
       }),
     });
 

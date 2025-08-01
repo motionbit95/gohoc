@@ -1,6 +1,7 @@
 'use client';
-import { useState, useCallback, useEffect, createContext, useContext } from 'react';
+
 import { usePopover } from 'minimal-shared/hooks';
+import { useState, useEffect, useContext, useCallback, createContext } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -8,6 +9,7 @@ import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
+
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
 import { CustomPopover } from 'src/components/custom-popover';

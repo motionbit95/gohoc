@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { mergeClasses } from 'minimal-shared/utils';
 
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 
 import { usePathname } from 'src/routes/hooks';
 
-import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { NavSectionVertical } from 'src/components/nav-section';
 

@@ -1,11 +1,15 @@
 'use client';
 
-import React, { useMemo, useCallback } from 'react';
-import { Box, Button, Container, useMediaQuery, useTheme } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
 import { useRouter } from 'next/navigation';
+import React, { useMemo, useCallback } from 'react';
+
+import { Box, Button, useTheme, Container, useMediaQuery } from '@mui/material';
+
+import { FONTS, COLORS } from 'src/constant/colors';
+
+import { Iconify } from 'src/components/iconify';
+
 import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
-import { COLORS, FONTS } from 'src/constant/colors';
 
 // 스타일 상수
 const BG_COLOR = COLORS.BG_COLOR;

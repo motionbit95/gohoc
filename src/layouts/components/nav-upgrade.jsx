@@ -1,5 +1,3 @@
-import { m } from 'framer-motion';
-import { varAlpha } from 'minimal-shared/utils';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -7,8 +5,6 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
-
-import { CONFIG } from 'src/global-config';
 
 import { Label } from 'src/components/label';
 

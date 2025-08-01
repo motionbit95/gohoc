@@ -1,10 +1,13 @@
 'use client';
+
 import { useState } from 'react';
-import { Box, Button, Container, TextField, useMediaQuery, useTheme } from '@mui/material';
-import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
-import { Iconify } from 'src/components/iconify';
+
+import { Box, Button, useTheme, Container, TextField, useMediaQuery } from '@mui/material';
+
 import { login } from 'src/actions/user';
-import { COLORS, FONTS } from 'src/constant/colors';
+import { FONTS, COLORS } from 'src/constant/colors';
+
+import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
 
 // 디자인 컬러 (image-uploader.js와 통일)
 const BG_COLOR = COLORS.BG_COLOR;
@@ -72,7 +75,7 @@ export default function LoginView() {
     if (Object.keys(newErrors).length > 0) return;
     setSubmitting(true);
     // 값 출력
-    // eslint-disable-next-line no-console
+     
     console.log('이메일:', form.email, '성함:', form.user_name);
 
     let data = await login({

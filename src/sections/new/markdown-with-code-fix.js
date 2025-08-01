@@ -1,5 +1,6 @@
-import { Markdown } from 'src/components/markdown';
 import { COLORS } from 'src/constant/colors';
+
+import { Markdown } from 'src/components/markdown';
 
 // 색상 상수 (상세페이지 전용 팔레트 포함)
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;

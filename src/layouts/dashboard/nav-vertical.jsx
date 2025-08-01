@@ -1,9 +1,7 @@
 import { varAlpha, mergeClasses } from 'minimal-shared/utils';
 
-import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
-import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { NavSectionMini, NavSectionVertical } from 'src/components/nav-section';
 
@@ -26,8 +24,7 @@ export function NavVertical({
   ...other
 }) {
   const renderNavVertical = () => (
-    <>
-      <Scrollbar fillContent>
+    <Scrollbar fillContent>
         <NavSectionVertical
           data={data}
           cssVars={cssVars}
@@ -37,7 +34,6 @@ export function NavVertical({
 
         {slots?.bottomArea ?? <NavUpgrade />}
       </Scrollbar>
-    </>
   );
 
   const renderNavMini = () => (

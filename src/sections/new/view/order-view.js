@@ -1,31 +1,34 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import OrderForm from '../order-form';
-import ImageUploader from '../image-uploader';
+import React, { useRef, useState, useEffect } from 'react';
+
 import {
   Box,
-  Container,
   Stack,
+  Alert,
   Button,
   Snackbar,
-  Alert,
   Backdrop,
-  CircularProgress,
+  Container,
   Typography,
   LinearProgress,
+  CircularProgress,
 } from '@mui/material';
-import OrderRequest from '../order-request';
-import CautionAgree from '../caution-agree';
-import { createOrder, uploadToS3 } from 'src/actions/order';
-import {
-  DEFAULT_TEXTAREA_CONTENT,
-  PHOTO_UPLOAD_GUIDE,
-  REFERENCE_UPLOAD_GUIDE,
-} from 'src/constant/ourwedding';
-import OurWeddingDivider from '../ourwedding-divier';
+
 import { getMe } from 'src/actions/user';
 import { COLORS } from 'src/constant/colors';
+import { uploadToS3, createOrder } from 'src/actions/order';
+import {
+  PHOTO_UPLOAD_GUIDE,
+  REFERENCE_UPLOAD_GUIDE,
+  DEFAULT_TEXTAREA_CONTENT,
+} from 'src/constant/ourwedding';
+
+import OrderForm from '../order-form';
+import OrderRequest from '../order-request';
+import CautionAgree from '../caution-agree';
+import ImageUploader from '../image-uploader';
+import OurWeddingDivider from '../ourwedding-divier';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -301,13 +304,11 @@ export default function OrderView() {
   };
 
   // 언마운트시 타임아웃 정리
-  useEffect(() => {
-    return () => {
+  useEffect(() => () => {
       if (redirectTimeoutRef.current) {
         clearTimeout(redirectTimeoutRef.current);
       }
-    };
-  }, []);
+    }, []);
 
   return (
     <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>

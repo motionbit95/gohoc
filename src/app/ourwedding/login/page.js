@@ -1,5 +1,3 @@
-import OrderView from 'src/sections/new/view/order-view';
-import { Metadata } from 'next';
 import LoginView from 'src/sections/login/view/login-view';
 
 export const metadata = {

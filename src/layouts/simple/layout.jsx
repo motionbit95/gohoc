@@ -1,4 +1,5 @@
 'use client';
+
 import { merge } from 'es-toolkit';
 
 import Box from '@mui/material/Box';

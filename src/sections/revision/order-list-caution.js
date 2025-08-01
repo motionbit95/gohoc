@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
+
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ORDER_LIST_CAUTION } from 'src/constant/ourwedding';
-import MarkdownWithCodeFix from '../new/markdown-with-code-fix';
+
 import { COLORS } from 'src/constant/colors';
+import { ORDER_LIST_CAUTION } from 'src/constant/ourwedding';
+
 
 function OrderListCaution() {
   return (

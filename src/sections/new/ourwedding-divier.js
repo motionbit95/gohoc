@@ -1,8 +1,8 @@
 import React from 'react';
-import Divider from '@mui/material/Divider';
-import { useTheme, useMediaQuery } from '@mui/material';
 
-import { COLORS } from 'src/constant/colors';
+import Divider from '@mui/material/Divider';
+import { useMediaQuery } from '@mui/material';
+
 
 const OurWeddingDivider = ({ text, isBorder = false }) => {
   const isMobile = useMediaQuery('(max-width:726px)');
@@ -15,7 +15,7 @@ const OurWeddingDivider = ({ text, isBorder = false }) => {
         color: '#A79166',
         fontFamily: 'Noto Serif KR, serif',
         fontWeight: 400,
-        fontSize: fontSize,
+        fontSize,
         borderColor: '#A79166',
         py: { xs: 3, sm: 4 }, // paddingBlock 대체
         background: 'transparent',

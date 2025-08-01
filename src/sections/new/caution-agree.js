@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
-import { Box, FormControlLabel, Checkbox, FormGroup } from '@mui/material';
-import { CAUTION_GUIDE } from 'src/constant/ourwedding';
+
+import { Box, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
+
 import { COLORS } from 'src/constant/colors';
+import { CAUTION_GUIDE } from 'src/constant/ourwedding';
 
 // 컬러 팔레트 (image-uploader.js와 통일)
 const BG_COLOR = COLORS.DETAIL_PAPER_BG;

@@ -1,10 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Box, Typography, TextField, Alert } from '@mui/material';
-import { DEFAULT_TEXTAREA_CONTENT, REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
-import MarkdownWithCodeFix from './markdown-with-code-fix';
+
+import { Box, Alert, TextField, Typography } from '@mui/material';
+
 import { COLORS } from 'src/constant/colors';
+import { REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
+
+import MarkdownWithCodeFix from './markdown-with-code-fix';
 
 export default function OrderRequest({ value = '', onChange }) {
   // 상세페이지 전용 색상 적용

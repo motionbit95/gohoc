@@ -1,7 +1,9 @@
 // Render: Sample Buttons (MUI 리팩토링, 반응형)
 import React, { useState } from 'react';
-import { Stack, Button, CircularProgress, useMediaQuery } from '@mui/material';
 import { BsCaretRightFill } from 'react-icons/bs';
+
+import { Stack, Button, useMediaQuery, CircularProgress } from '@mui/material';
+
 import { COLORS } from 'src/constant/colors';
 
 const SampleButtons = ({ order }) => {

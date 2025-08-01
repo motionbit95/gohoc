@@ -1,23 +1,27 @@
 'use client';
+
 import { useRef, useState } from 'react';
+
 import {
   Box,
-  Typography,
-  Button,
   Grid,
-  IconButton,
+  Fade,
   Paper,
   Alert,
   Modal,
-  Fade,
+  Button,
   Backdrop,
+  Typography,
+  IconButton,
 } from '@mui/material';
-import { Iconify } from 'src/components/iconify';
-import MarkdownWithCodeFix from './markdown-with-code-fix';
-import { Image } from 'src/components/image';
 
 // 색상 상수 import
-import { COLORS, STYLES } from 'src/constant/colors';
+import { COLORS } from 'src/constant/colors';
+
+import { Image } from 'src/components/image';
+import { Iconify } from 'src/components/iconify';
+
+import MarkdownWithCodeFix from './markdown-with-code-fix';
 
 // 컬러 팔레트 (조화롭게 변경)
 const BG_COLOR = 'white';

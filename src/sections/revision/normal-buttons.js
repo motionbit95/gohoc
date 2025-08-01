@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Box, Button, CircularProgress, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { BsCaretRightFill } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
+import { BsCaretRightFill } from 'react-icons/bs';
+
+import { useTheme } from '@mui/material/styles';
+import { Box, Button, useMediaQuery, CircularProgress } from '@mui/material';
 
 // MUI Flex 대체
 const Flex = ({ children, style, ...props }) => (

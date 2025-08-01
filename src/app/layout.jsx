@@ -6,16 +6,16 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { CONFIG } from 'src/global-config';
 import { primary } from 'src/theme/core/palette';
 import { themeConfig, ThemeProvider } from 'src/theme';
+import { _workspaces } from 'src/layouts/nav-config-workspace';
+import { WorkspaceProvider } from 'src/layouts/components/workspaces-popover';
 
+import { Snackbar } from 'src/components/snackbar';
 import { ProgressBar } from 'src/components/progress-bar';
 import { MotionLazy } from 'src/components/animate/motion-lazy';
 import { detectSettings } from 'src/components/settings/server';
 import { SettingsDrawer, defaultSettings, SettingsProvider } from 'src/components/settings';
 
 import { AuthProvider } from 'src/auth/context/jwt';
-import { WorkspaceProvider } from 'src/layouts/components/workspaces-popover';
-import { _workspaces } from 'src/layouts/nav-config-workspace';
-import { Snackbar } from 'src/components/snackbar';
 
 // ----------------------------------------------------------------------
 

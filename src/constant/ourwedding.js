@@ -76,6 +76,11 @@ export const CAUTION_GUIDE = [
     label: `<span>샘플 진행 시 사진은 자사 작업물로 귀속되어 마케팅 채널에 활용될 수 있습니다. (모자이크 X)</span>`,
     required: true,
   },
+  {
+    key: 'refund',
+    label: `<span>모든 작업은 고객님의 요청을 토대로 수작업으로 진행되며, 결과물이 제공된 이후에는 디지털 콘텐츠 특성상 복구 및 환불은 불가합니다.</span>`,
+    required: true,
+  },
 ];
 
 export const ORDER_LIST_CAUTION = [
