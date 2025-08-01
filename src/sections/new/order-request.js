@@ -69,7 +69,6 @@ export default function OrderRequest({ value = '', onChange }) {
           sx: {
             color: TEXT_COLOR,
             background: PAPER_BG,
-            borderRadius: 2,
             fontWeight: 500,
             letterSpacing: 0.5,
             p: 4,

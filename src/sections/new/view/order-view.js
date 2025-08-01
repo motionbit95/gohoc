@@ -511,23 +511,63 @@ export default function OrderView() {
           open={uploadSuccessDialogOpen}
           onClose={handleUploadSuccessDialogClose}
           aria-labelledby="upload-success-dialog-title"
+          maxWidth="xs"
+          fullWidth
+          PaperProps={{
+            sx: {
+              borderRadius: 3,
+              p: { xs: 2, sm: 3 },
+              minWidth: { xs: 260, sm: 340, md: 400 },
+              boxShadow: 6,
+            },
+          }}
         >
-          <DialogTitle id="upload-success-dialog-title" sx={{ fontWeight: 700, fontSize: 22 }}>
+          <DialogTitle
+            id="upload-success-dialog-title"
+            sx={{
+              fontWeight: 700,
+              fontSize: { xs: 20, sm: 22, md: 24 },
+              textAlign: 'center',
+              letterSpacing: 0.5,
+              mt: 1,
+              mb: 0.5,
+              color: '#222',
+            }}
+          >
             업로드 완료
           </DialogTitle>
           <DialogContent>
-            <Typography sx={{ fontSize: 18, mt: 1, mb: 1.5 }}>
+            <Typography
+              sx={{
+                fontSize: { xs: 15, sm: 16, md: 17 },
+                mt: 1.5,
+                mb: 2,
+                textAlign: 'center',
+                fontWeight: 500,
+                lineHeight: 1.7,
+                color: '#444',
+              }}
+            >
               업로드가 완료되었습니다.
               <br />
-              초기 화면으로 이동합니다.
+              처음 화면으로 이동합니다.
             </Typography>
           </DialogContent>
-          <DialogActions>
+          <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
             <Button
               onClick={handleUploadSuccessDialogClose}
               variant="contained"
-              color="error"
-              sx={{ fontWeight: 700, minWidth: 120 }}
+              color="success"
+              sx={{
+                fontWeight: 700,
+                minWidth: 120,
+                fontSize: { xs: 15, sm: 16 },
+                py: 1,
+                boxShadow: 'none',
+                textTransform: 'none',
+                letterSpacing: 0.2,
+              }}
+              size="medium"
             >
               확인
             </Button>

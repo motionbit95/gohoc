@@ -106,7 +106,10 @@ export async function createOrder(orderData) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/order`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(orderData),
+      body: JSON.stringify({
+        ...orderData,
+        customer: createdCustomer.customer,
+      }),
     });
     if (!res.ok) {
       throw new Error('주문 생성에 실패했습니다.');
