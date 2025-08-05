@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useCallback, useEffect } from 'react';
 
 import { Box, Button, useTheme, Container, useMediaQuery } from '@mui/material';
 
@@ -67,9 +67,16 @@ export default function Ourwedding() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
 
+  // 여기오면 localstorage 초기화
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.clear();
+    }
+  }, []);
+
   const handleButtonClick = useCallback(
     (page) => {
-      router.push(`/ourwedding/${page}`);
+      router.push(`/ourwedding/login/?target=${page}`);
     },
     [router]
   );

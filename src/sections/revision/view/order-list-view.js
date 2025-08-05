@@ -62,6 +62,12 @@ const OrderListView = () => {
             setMessage(error.message || '유저 정보를 불러오지 못했습니다.');
             setMessageType('error');
             setMessageOpen(true);
+
+            if (typeof window !== 'undefined') {
+              setTimeout(() => {
+                window.location.href = '/ourwedding/login?target=revision';
+              }, 1200); // 1.2초 후 이동 (스낵바 보이게)
+            }
           });
       } catch (err) {
         setMessage('유저 정보를 불러오지 못했습니다.');

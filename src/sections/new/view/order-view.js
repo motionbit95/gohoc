@@ -241,7 +241,7 @@ export default function OrderView() {
             const result = await uploadToS3(
               fileToUpload,
               [
-                'ourwedding',
+                '아워웨딩',
                 formData.orderForm?.grade,
                 user.userName || user.name || user.nickname || user.id || 'unknown',
                 user.userId || user.id || 'unknown',
@@ -280,6 +280,7 @@ export default function OrderView() {
         uploadedOrderImages,
         uploadedReferenceImages,
         status: '아워웨딩',
+        label: uploadedOrderImages.grade === '샘플' ? '샘플' : '신규',
       };
 
       // customer 데이터 추가

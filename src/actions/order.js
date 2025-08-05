@@ -1,8 +1,11 @@
 // S3에 파일 업로드하는 action 함수
 
+import axiosInstance from 'src/lib/axios';
 import { createCustomer } from './customer';
 import { createFile } from './file';
 import { createTimeline } from './timeline';
+
+const url = process.env.NEXT_PUBLIC_API_URL;
 
 // 파일 해시 계산 함수 (SHA-256)
 async function calculateHash(file) {
@@ -211,3 +214,19 @@ export async function getOrderByNaverId(naver_id) {
     throw err;
   }
 }
+
+export const getOrderById = async (id) => {
+  const response = await axiosInstance.get(`${url}/order/${id}`);
+  return response.data.order;
+};
+
+export const updateOrderById = async (id, updateData) => {
+  try {
+    const response = await axiosInstance.put(`${url}/order/${id}`, updateData);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    console.error('[ORDER][UPDATE_ORDER_BY_ID] Error:', err);
+    throw err.message;
+  }
+};

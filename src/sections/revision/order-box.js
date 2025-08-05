@@ -1,6 +1,15 @@
 import { useMemo } from 'react';
 
-import { Box, Stack , Input, Paper, Divider, useTheme, Typography, useMediaQuery } from '@mui/material';
+import {
+  Box,
+  Stack,
+  Input,
+  Paper,
+  Divider,
+  useTheme,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 
 import { HOLIDAY_NOTICE, SAMPLE_DOWNLOAD_NOTICE } from 'src/constant/ourwedding';
 
@@ -26,7 +35,7 @@ const OrderBox = ({ order }) => {
   // 주문자 정보 문자열
   const customerStr = useMemo(
     () =>
-      `${order.customer?.name || ''} / ${order.customer?.id || ''} / ${order.orderNumber || ''} ${
+      `${order.customer?.name || ''} / ${order.customer?.email || ''} / ${order.orderNumber || ''} ${
         typeof order.orderIndex === 'number' ? `(${order.orderIndex + 1}차)` : ''
       }`,
     [order]

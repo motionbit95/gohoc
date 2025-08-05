@@ -31,7 +31,7 @@ const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
 const PAPER_BG = COLORS.DETAIL_ALERT_BG;
 
 // maxCount prop: undefined/null이면 무제한 허용
-export default function ImageUploader({ onChange, title, alert, maxCount = 0 }) {
+export default function ImageUploader({ onChange, title, alert, maxCount = 0, isRevision }) {
   const [images, setImages] = useState([]); // [{file, url}]
   const [error, setError] = useState(null); // 업로드 제한 에러 메시지
   const fileInputRef = useRef(null);
@@ -214,9 +214,9 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0 }) 
           },
           boxShadow: '0 2px 8px 0 rgba(255,224,130,0.15)',
         }}
-        disabled={isUnlimited && images.length >= maxCount}
+        disabled={!isRevision && isUnlimited && images.length >= maxCount}
       >
-        {isUnlimited ? '이미지 업로드(사진 수량를 입력하세요)' : '이미지 업로드'}
+        {!isRevision && isUnlimited ? '이미지 업로드(사진 수량을 입력하세요)' : '이미지 업로드'}
       </Button>
       <Box
         sx={{
