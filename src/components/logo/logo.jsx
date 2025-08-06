@@ -193,7 +193,7 @@ export function Logo({ sx, disabled, className, href = '/', isSingle = true, ...
       ]}
       {...other}
     >
-      {isSingle ? singleLogo : fullLogo}
+      {/* {isSingle ? singleLogo : fullLogo} */}
     </LogoRoot>
   );
 }

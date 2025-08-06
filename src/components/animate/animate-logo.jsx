@@ -19,7 +19,7 @@ export function AnimateLogoZoom({ logo, slotProps, sx, ...other }) {
           ease: 'easeInOut',
         }}
       >
-        {logo ?? (
+        {/* {logo ?? (
           <Logo
             disabled
             {...slotProps?.logo}
@@ -30,7 +30,7 @@ export function AnimateLogoZoom({ logo, slotProps, sx, ...other }) {
                 : [slotProps?.logo?.sx]),
             ]}
           />
-        )}
+        )} */}
       </m.span>
 
       <LogoZoomPrimaryOutline
@@ -84,7 +84,7 @@ const LogoZoomSecondaryOutline = styled(m.span)(({ theme }) => ({
 export function AnimateLogoRotate({ logo, sx, slotProps, ...other }) {
   return (
     <LogoRotateRoot sx={sx} {...other}>
-      {logo ?? (
+      {/* {logo ?? (
         <Logo
           {...slotProps?.logo}
           sx={[
@@ -94,7 +94,7 @@ export function AnimateLogoRotate({ logo, sx, slotProps, ...other }) {
               : [slotProps?.logo?.sx]),
           ]}
         />
-      )}
+      )} */}
 
       <LogoRotateBackground
         animate={{ rotate: 360 }}
