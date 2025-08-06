@@ -27,6 +27,10 @@ import {
   PHOTO_UPLOAD_GUIDE,
   REFERENCE_UPLOAD_GUIDE,
   DEFAULT_TEXTAREA_CONTENT,
+  REVISE_PHOTO_UPLOAD_GUIDE,
+  REVISE_REFERENCE_UPLOAD_GUIDE,
+  REVISE_DEFAULT_TEXTAREA_CONTENT,
+  REVISE_CAUTION_GUIDE,
 } from 'src/constant/ourwedding';
 
 import OrderRequest from '../../new/order-request';
@@ -53,7 +57,7 @@ export default function RevisionFormView() {
     orderForm: {},
     orderImages: [],
     referenceImages: [],
-    orderRequest: DEFAULT_TEXTAREA_CONTENT,
+    orderRequest: REVISE_DEFAULT_TEXTAREA_CONTENT,
     cautionAgree: {},
   });
 
@@ -447,7 +451,7 @@ export default function RevisionFormView() {
           >
             <ImageUploader
               title="재수정 사진 업로드"
-              alert={PHOTO_UPLOAD_GUIDE}
+              alert={REVISE_PHOTO_UPLOAD_GUIDE}
               onChange={handleOrderImagesChange}
               isRevision={true}
             />
@@ -462,7 +466,7 @@ export default function RevisionFormView() {
           >
             <ImageUploader
               title="참고 사진 업로드"
-              alert={REFERENCE_UPLOAD_GUIDE}
+              alert={REVISE_REFERENCE_UPLOAD_GUIDE}
               onChange={handleReferenceImagesChange}
               isRevision={true}
             />
@@ -484,7 +488,11 @@ export default function RevisionFormView() {
           </Box>
           <OurWeddingDivider text="Ourdrama" isBorder />
 
-          <CautionAgree checked={formData.cautionAgree} onChange={handleCautionAgreeChange} />
+          <CautionAgree
+            checked={formData.cautionAgree}
+            content={REVISE_CAUTION_GUIDE}
+            onChange={handleCautionAgreeChange}
+          />
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Button
               variant="contained"

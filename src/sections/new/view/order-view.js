@@ -26,6 +26,7 @@ import {
   PHOTO_UPLOAD_GUIDE,
   REFERENCE_UPLOAD_GUIDE,
   DEFAULT_TEXTAREA_CONTENT,
+  CAUTION_GUIDE,
 } from 'src/constant/ourwedding';
 
 import OrderForm from '../order-form';
@@ -435,7 +436,11 @@ export default function OrderView() {
           </Box>
           <OurWeddingDivider text="Ourdrama" isBorder />
 
-          <CautionAgree checked={formData.cautionAgree} onChange={handleCautionAgreeChange} />
+          <CautionAgree
+            checked={formData.cautionAgree}
+            content={CAUTION_GUIDE}
+            onChange={handleCautionAgreeChange}
+          />
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Button
               variant="contained"

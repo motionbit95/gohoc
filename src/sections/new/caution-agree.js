@@ -54,18 +54,18 @@ const allAgreeLabelSx = {
   },
 };
 
-function getAllChecked(checked) {
-  return CAUTION_GUIDE.every((item) => !!checked[item.key]);
-}
+export default function CautionAgree({ checked = {}, content, onChange }) {
+  function getAllChecked(checked) {
+    return content.every((item) => !!checked[item.key]);
+  }
 
-export default function CautionAgree({ checked = {}, onChange }) {
   // 체크박스 변경 핸들러
   const handleChange = (key) => (e) => {
     const { checked: isChecked } = e.target;
     if (key === ALL_AGREE_KEY) {
       // 전체 동의 체크 시 모든 항목 일괄 변경
       const newChecked = {};
-      CAUTION_GUIDE.forEach((item) => {
+      content.forEach((item) => {
         newChecked[item.key] = isChecked;
       });
       newChecked[ALL_AGREE_KEY] = isChecked;
@@ -120,7 +120,7 @@ export default function CautionAgree({ checked = {}, onChange }) {
           Caution
         </span>
         <FormGroup>
-          {CAUTION_GUIDE.map((item) => (
+          {content.map((item) => (
             <FormControlLabel
               key={item.key}
               control={
