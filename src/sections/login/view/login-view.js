@@ -51,7 +51,7 @@ export default function LoginView() {
     else if (isNew && !noUnderscoreRule(form.user_name))
       newErrors.user_name = '언더바(_)는 입력할 수 없습니다.';
     if (!form.email) newErrors.email = '이메일을 입력해주세요.';
-    else if (!isValidEmail(form.email)) newErrors.email = '올바른 이메일 형식을 입력해주세요.';
+    // else if (!isValidEmail(form.email)) newErrors.email = '올바른 이메일 형식을 입력해주세요.';
     return newErrors;
   };
 
@@ -75,7 +75,7 @@ export default function LoginView() {
     if (Object.keys(newErrors).length > 0) return;
     setSubmitting(true);
     // 값 출력
-     
+
     console.log('이메일:', form.email, '성함:', form.user_name);
 
     let data = await login({
