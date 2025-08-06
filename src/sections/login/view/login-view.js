@@ -248,15 +248,15 @@ export default function LoginView() {
                 <TextField
                   id="email"
                   name="email"
-                  type="email"
+                  type="text"
                   value={form.email}
                   onChange={handleChange}
                   required
                   fullWidth
                   variant="filled"
-                  placeholder="example@naver.com"
+                  // placeholder="example@naver.com"
                   error={!!errors.email}
-                  helperText={errors.email}
+                  // helperText={errors.email}
                   InputProps={{
                     style: {
                       background: ACCENT_COLOR,
