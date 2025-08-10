@@ -22,6 +22,7 @@ import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
 import MarkdownWithCodeFix from './markdown-with-code-fix';
+import { Upload } from 'src/components/upload';
 
 // 컬러 팔레트 (조화롭게 변경)
 const BG_COLOR = 'white';
@@ -43,9 +44,8 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
   // maxCount가 undefined, null, Infinity, 0 이하 등일 때 무제한으로 간주
   const isUnlimited = !maxCount || maxCount === Infinity || maxCount <= 0;
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (files) => {
     setError(null);
-    const files = Array.from(e.target.files);
 
     if (!isUnlimited) {
       // 현재 업로드된 이미지 수 + 새로 선택한 파일 수가 maxCount를 넘는지 체크
@@ -72,9 +72,6 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
       };
       reader.readAsDataURL(file);
     });
-
-    // reset input value so same file can be uploaded again if needed
-    e.target.value = '';
   };
 
   const handleButtonClick = () => {
@@ -189,7 +186,7 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
       >
         현재 업로드: <b style={{ color: TEXT_COLOR, fontWeight: 800 }}>{images.length}</b>장
       </Box>
-      <input
+      {/* <input
         type="file"
         accept="image/*"
         multiple
@@ -197,8 +194,8 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
         style={{ display: 'none' }}
         onChange={handleFileChange}
         disabled={!isUnlimited && images.length >= maxCount}
-      />
-      <Button
+      /> */}
+      {/* <Button
         variant="contained"
         onClick={handleButtonClick}
         sx={{
@@ -217,7 +214,9 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
         disabled={!isRevision && isUnlimited && images.length >= maxCount}
       >
         {!isRevision && isUnlimited ? '이미지 업로드(사진 수량을 입력하세요)' : '이미지 업로드'}
-      </Button>
+      </Button> */}
+
+      <Upload multiple onDrop={(files) => handleFileChange(files)} />
       <Box
         sx={{
           mt: 2,

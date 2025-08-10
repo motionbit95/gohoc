@@ -243,7 +243,7 @@ export default function OrderView() {
               fileToUpload,
               [
                 '아워웨딩',
-                formData.orderForm?.grade,
+                formData.orderForm?.grade === '샘플' ? '샘플' : '신규',
                 user.userName || user.name || user.nickname || user.id || 'unknown',
                 user.userId || user.id || 'unknown',
                 formData.orderForm?.orderNumber || 'noOrderNum',
@@ -555,6 +555,8 @@ export default function OrderView() {
               }}
             >
               업로드가 완료되었습니다.
+              <br />
+              작업 완료일정은 [접수 내역 → 진행 상황]에서 확인 가능합니다.
               <br />
               처음 화면으로 이동합니다.
             </Typography>

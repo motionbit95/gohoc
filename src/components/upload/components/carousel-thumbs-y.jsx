@@ -113,7 +113,7 @@ export function CarouselThumbsY({ order, data }) {
               height: '100vh',
             }}
           >
-            <OptimizedImage alt={item.title} src={item.webpUrl} />
+            <OptimizedImage alt={item.title} src={item.webpUrl || item.s3ViewLink} />
           </Box>
         ))}
       </Carousel>

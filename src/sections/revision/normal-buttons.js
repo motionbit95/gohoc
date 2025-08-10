@@ -70,9 +70,9 @@ async function downloadZipFiles({ worksubmission, label, order, originalFiles = 
       if (ext && !filename.endsWith(`.${ext}`)) {
         filename += `.${ext}`;
       }
-      // 원본 파일이면 prefix 붙이기
+      // 원본 파일이면 prefix 붙이기 -> 제거
       if (fileObj._originalPrefix) {
-        filename = `원본_${filename}`;
+        filename = `${filename}`;
       }
       zip.file(filename, blob);
     } catch (err) {

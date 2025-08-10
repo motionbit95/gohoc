@@ -56,7 +56,7 @@ export default async function RootLayout({ children }) {
   const appConfig = await getAppConfig();
 
   return (
-    <html lang="en" dir={appConfig.dir} suppressHydrationWarning>
+    <html lang="en" dir={appConfig.dir} suppressHydrationWarning translate="no">
       <body>
         <InitColorSchemeScript
           modeStorageKey={themeConfig.modeStorageKey}

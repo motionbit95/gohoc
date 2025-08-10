@@ -17,7 +17,7 @@ const getFileName = (fileObj, idx, url) => {
   }
   // 원본 파일 prefix
   if (fileObj._originalPrefix) {
-    filename = `원본_${filename}`;
+    filename = `${filename}`;
   }
   return filename;
 };
@@ -57,7 +57,9 @@ const SampleButtons = ({ order }) => {
   const handlePreviewAll = useCallback(() => {
     if (isPreviewDisabled) return;
     if (items.length > 0) {
-      setShowImage(items[0]?.previewUrl || items[0]?.webpUrl || items[0]?.url);
+      setShowImage(
+        items[0]?.previewUrl || items[0]?.webpUrl || items[0]?.url || items[0]?.s3ViewLink
+      );
     }
   }, [isPreviewDisabled, items]);
 

@@ -48,8 +48,8 @@ export default function LoginView() {
   const validate = () => {
     const newErrors = {};
     if (!form.user_name) newErrors.user_name = '성함을 입력해주세요.';
-    else if (isNew && !noUnderscoreRule(form.user_name))
-      newErrors.user_name = '언더바(_)는 입력할 수 없습니다.';
+    // else if (isNew && !noUnderscoreRule(form.user_name))
+    //   newErrors.user_name = '언더바(_)는 입력할 수 없습니다.';
     if (!form.email) newErrors.email = '이메일을 입력해주세요.';
     // else if (!isValidEmail(form.email)) newErrors.email = '올바른 이메일 형식을 입력해주세요.';
     return newErrors;
@@ -211,7 +211,7 @@ export default function LoginView() {
                   required
                   fullWidth
                   variant="filled"
-                  placeholder={isNew ? '언더바(_)는 입력할 수 없습니다.' : undefined}
+                  // placeholder={isNew ? '언더바(_)는 입력할 수 없습니다.' : undefined}
                   error={!!errors.user_name}
                   helperText={errors.user_name}
                   InputProps={{
@@ -254,9 +254,9 @@ export default function LoginView() {
                   required
                   fullWidth
                   variant="filled"
-                  // placeholder="example@naver.com"
+                  // placeholder=""
                   error={!!errors.email}
-                  // helperText={errors.email}
+                  helperText={errors.email}
                   InputProps={{
                     style: {
                       background: ACCENT_COLOR,

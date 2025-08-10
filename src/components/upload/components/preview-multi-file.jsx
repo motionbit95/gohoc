@@ -21,8 +21,6 @@ export function MultiFilePreview({
   firstNode,
   files = [],
   className,
-  uploadProgress = {},
-  uploadStatus = {}, // 파일별 상태 추가
   ...other
 }) {
   return (
@@ -36,28 +34,6 @@ export function MultiFilePreview({
 
       {files.map((file) => {
         const { name, size } = fileData(file);
-        const progress = uploadProgress[name] ?? 0; // 진행률 없으면 0
-
-        const status = uploadStatus[name] ?? 'waiting'; // 기본 상태
-
-        // 상태별 텍스트를 정리하는 함수
-        const getStatusText = (status, progress) => {
-          switch (status) {
-            case 'uploading':
-              return `업로드 중`;
-            case 'processing':
-              return '서버 처리 중';
-            case 'done':
-              return '완료';
-            case 'error':
-              return '오류 발생';
-            case 'waiting':
-            default:
-              return progress === 0 ? '대기 중' : `${progress}%`;
-          }
-        };
-
-        const statusText = getStatusText(status, progress);
 
         if (thumbnail) {
           return (
@@ -92,19 +68,6 @@ export function MultiFilePreview({
                 secondary: { sx: { typography: 'caption' } },
               }}
             />
-
-            <StatusText>{statusText}</StatusText>
-
-            {/* 진행률 표시 */}
-            <ProgressWrapper>
-              <ProgressBar
-                style={{ width: `${progress}%` }}
-                aria-valuenow={progress}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-              <ProgressLabel>{progress}%</ProgressLabel>
-            </ProgressWrapper>
 
             {onRemove && (
               <IconButton size="small" onClick={() => onRemove(file)}>
@@ -146,41 +109,4 @@ const ItemNode = styled('li', {
   shouldForwardProp: (prop) => !['thumbnail', 'sx'].includes(prop),
 })(({ thumbnail }) => ({
   ...(thumbnail && { width: 'auto', display: 'inline-flex' }),
-}));
-
-// 진행률 관련 스타일
-
-const ProgressWrapper = styled('div')(({ theme }) => ({
-  position: 'relative',
-  width: 100,
-  height: 8,
-  borderRadius: 4,
-  backgroundColor: theme.palette.grey[300],
-  marginRight: theme.spacing(1),
-  alignSelf: 'center',
-  flexShrink: 0,
-}));
-
-const ProgressBar = styled('div')(({ theme }) => ({
-  height: '100%',
-  borderRadius: 4,
-  backgroundColor: theme.palette.primary.main,
-  transition: 'width 0.3s ease',
-}));
-
-const ProgressLabel = styled('span')(({ theme }) => ({
-  minWidth: 30,
-  fontSize: 12,
-  textAlign: 'right',
-  color: theme.palette.text.secondary,
-  alignSelf: 'center',
-}));
-
-const StatusText = styled('div')(({ theme }) => ({
-  fontSize: 12,
-  color: theme.palette.text.secondary,
-  alignSelf: 'center',
-  marginLeft: theme.spacing(1),
-  marginRight: theme.spacing(1),
-  whiteSpace: 'nowrap',
 }));

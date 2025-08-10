@@ -34,9 +34,14 @@ export const GRADE_OPTIONS = [
 ];
 
 export const ADDITIONAL_OPTIONS = [
-  { value: '필름 추가', label: '필름 추가', price: 1500 },
+  { value: '필름 추가', label: '색감작업(필름)', price: 1500 },
   { value: '인원 추가', label: '인원 추가', price: 2000 },
   { value: '합성', label: '합성', price: 2000 },
+];
+
+export const REVISION_OPTIONS = [
+  { value: '2회 재수정', label: '2회 재수정' },
+  { value: '한달 무제한 재수정', label: '한달 무제한 재수정' },
 ];
 
 function getCurrentDateTimeString() {
@@ -109,7 +114,7 @@ const unifiedInputLabelProps = {
 };
 
 export default function OrderForm({ value = {}, onChange, userId, userName }) {
-  // value: { userName, userId, orderNumber, grade, additionalOptions }
+  // value: { userName, userId, orderNumber, grade, additionalOptions, revisionOptions }
   // onChange: (newFormData) => void
 
   // 자동 접수일
@@ -160,6 +165,21 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
     onChange?.({
       ...value,
       additionalOptions: newOptions,
+    });
+  };
+
+  // 재수정 체크박스용 핸들러
+  const handleRevisionOptionsChange = (e) => {
+    const { value: optionValue, checked } = e.target;
+    let newOptions;
+    if (checked) {
+      newOptions = [...(value.revisionOptions || []), optionValue];
+    } else {
+      newOptions = (value.revisionOptions || []).filter((opt) => opt !== optionValue);
+    }
+    onChange?.({
+      ...value,
+      revisionOptions: newOptions,
     });
   };
 
@@ -449,6 +469,80 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
                     >
                       (+{option.price.toLocaleString()}원)
                     </Box>
+                  </Box>
+                }
+                sx={{
+                  mr: 2,
+                  mb: 0.5,
+                  borderRadius: UNIFIED_RADIUS,
+                  minHeight: UNIFIED_HEIGHT - 8,
+                  alignItems: 'center',
+                  '& .MuiFormControlLabel-label': {
+                    color: TEXT_COLOR,
+                  },
+                }}
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
+
+        <FormControl
+          component="fieldset"
+          variant="standard"
+          sx={{
+            mt: 1,
+            px: 1,
+            py: 1,
+            background: BG_COLOR,
+            borderRadius: UNIFIED_RADIUS,
+            minHeight: UNIFIED_HEIGHT + 12,
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            sx={{
+              mb: 0.5,
+              color: ACCENT_COLOR,
+              fontWeight: 700,
+              letterSpacing: 0.5,
+              fontSize: 16,
+              textShadow: '0 1px 2px rgba(0,0,0,0.18)',
+            }}
+          >
+            재수정
+          </Typography>
+          <FormGroup row>
+            {REVISION_OPTIONS.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Checkbox
+                    checked={(value.revisionOptions || []).includes(option.value)}
+                    onChange={handleRevisionOptionsChange}
+                    value={option.value}
+                    sx={{
+                      color: ACCENT_COLOR,
+                      borderRadius: UNIFIED_RADIUS,
+                      width: 28,
+                      height: 28,
+                      p: 0.5,
+                      '&.Mui-checked': {
+                        color: ACCENT_COLOR_DARK,
+                      },
+                    }}
+                  />
+                }
+                label={
+                  <Box
+                    component="span"
+                    sx={{
+                      color: TEXT_COLOR,
+                      fontWeight: 500,
+                      fontSize: 15,
+                      letterSpacing: 0.2,
+                    }}
+                  >
+                    {option.label}
                   </Box>
                 }
                 sx={{

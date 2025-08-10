@@ -86,12 +86,48 @@ const OrderBox = ({ order }) => {
       value: order.totalQuantity,
     },
     {
+      label: '요청사항',
+      value: Array.isArray(order.comments)
+        ? order.comments.map((c) => c.comment).join('\n\n')
+        : order.comments || '',
+    },
+    {
+      label: '접수파일목록',
+      value:
+        order.label === '신규' || order.label === '샘플'
+          ? Array.isArray(order.workSubmissions)
+            ? order.workSubmissions
+                .filter((ws) => ws.type === 'origin' && Array.isArray(ws.files))
+                .flatMap((ws) => ws.files)
+                .map((file) => file.originalFileName || file.fileName || file.title || file.id)
+                .join('\n')
+            : ''
+          : order.label === '재수정'
+            ? Array.isArray(order.workSubmissions)
+              ? order.workSubmissions
+                  .filter((ws) => ws.type === 'revise' && Array.isArray(ws.files))
+                  .flatMap((ws) => ws.files)
+                  .map((file) => file.originalFileName || file.fileName || file.title || file.id)
+                  .join('\n')
+              : ''
+            : '',
+    },
+    {
       label: '진행상황',
-      value: `${order?.process || '주문접수'}${
-        order?.process?.includes('진행중') && order.expiredDate
-          ? ` (${fDateTime(order.expiredDate)})`
-          : ''
-      }`,
+      value: (() => {
+        let str = `${order?.process || '주문접수'}`;
+        if (order?.process?.includes('진행중') && order.expiredDate) {
+          let extraDays = 0;
+          if (order.grade === '씨앗') extraDays = 2;
+          if (order.grade === '새싹') extraDays = 1;
+          if (extraDays > 0) {
+            const date = new Date(order.expiredDate);
+            date.setDate(date.getDate() + extraDays);
+            str += ` (${fDateTime(date)})`;
+          }
+        }
+        return str;
+      })(),
       help: processHelp,
     },
   ];
@@ -182,6 +218,8 @@ const OrderBox = ({ order }) => {
                   value={field.value}
                   readOnly
                   disableUnderline
+                  multiline
+                  minRows={1}
                   sx={{
                     fontSize: isMobile ? 15 : 17,
                     background: 'rgba(245,245,240,0.7)',
@@ -193,6 +231,15 @@ const OrderBox = ({ order }) => {
                     boxShadow: '0 1px 2px 0 rgba(79,52,21,0.04)',
                     transition: 'background 0.2s',
                     ml: 0,
+                    wordBreak: 'break-all',
+                    whiteSpace: 'pre-line',
+                  }}
+                  inputProps={{
+                    style: {
+                      wordBreak: 'break-all',
+                      whiteSpace: 'pre-line',
+                      overflowWrap: 'break-word',
+                    },
                   }}
                 />
                 {field.help && <Box sx={{ width: '100%' }}>{field.help}</Box>}

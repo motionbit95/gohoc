@@ -40,7 +40,7 @@ export const GRADE_OPTIONS = [
 
 // 추가 옵션 목록
 export const ADDITIONAL_OPTIONS = [
-  { value: '필름 추가', label: '필름 추가', price: 1500 },
+  { value: '필름 추가', label: '색감작업(필름)', price: 1500 },
   { value: '인원 추가', label: '인원 추가', price: 2000 },
   { value: '합성', label: '합성', price: 2000 },
 ];

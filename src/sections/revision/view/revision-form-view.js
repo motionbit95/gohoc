@@ -569,16 +569,8 @@ export default function RevisionFormView() {
           open={uploadSuccessDialogOpen}
           onClose={handleUploadSuccessDialogClose}
           aria-labelledby="upload-success-dialog-title"
-          maxWidth="xs"
+          maxWidth="sm"
           fullWidth
-          PaperProps={{
-            sx: {
-              borderRadius: 3,
-              p: { xs: 2, sm: 3 },
-              minWidth: { xs: 260, sm: 340, md: 400 },
-              boxShadow: 6,
-            },
-          }}
         >
           <DialogTitle
             id="upload-success-dialog-title"
@@ -607,6 +599,8 @@ export default function RevisionFormView() {
               }}
             >
               재수정 신청이 완료되었습니다.
+              <br />
+              작업 완료일정은 [접수 내역 → 진행 상황]에서 확인 가능합니다.
               <br />
               처음 화면으로 이동합니다.
             </Typography>
