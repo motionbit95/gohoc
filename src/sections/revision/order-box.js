@@ -91,27 +91,27 @@ const OrderBox = ({ order }) => {
         ? order.comments.map((c) => c.comment).join('\n\n')
         : order.comments || '',
     },
-    {
-      label: '접수파일목록',
-      value:
-        order.label === '신규' || order.label === '샘플'
-          ? Array.isArray(order.workSubmissions)
-            ? order.workSubmissions
-                .filter((ws) => ws.type === 'origin' && Array.isArray(ws.files))
-                .flatMap((ws) => ws.files)
-                .map((file) => file.originalFileName || file.fileName || file.title || file.id)
-                .join('\n')
-            : ''
-          : order.label === '재수정'
-            ? Array.isArray(order.workSubmissions)
-              ? order.workSubmissions
-                  .filter((ws) => ws.type === 'revise' && Array.isArray(ws.files))
-                  .flatMap((ws) => ws.files)
-                  .map((file) => file.originalFileName || file.fileName || file.title || file.id)
-                  .join('\n')
-              : ''
-            : '',
-    },
+    // {
+    //   label: '접수파일목록',
+    //   value:
+    //     order.label === '신규' || order.label === '샘플'
+    //       ? Array.isArray(order.workSubmissions)
+    //         ? order.workSubmissions
+    //             .filter((ws) => ws.type === 'origin' && Array.isArray(ws.files))
+    //             .flatMap((ws) => ws.files)
+    //             .map((file) => file.originalFileName || file.fileName || file.title || file.id)
+    //             .join('\n')
+    //         : ''
+    //       : order.label === '재수정'
+    //         ? Array.isArray(order.workSubmissions)
+    //           ? order.workSubmissions
+    //               .filter((ws) => ws.type === 'revise' && Array.isArray(ws.files))
+    //               .flatMap((ws) => ws.files)
+    //               .map((file) => file.originalFileName || file.fileName || file.title || file.id)
+    //               .join('\n')
+    //           : ''
+    //         : '',
+    // },
     {
       label: '진행상황',
       value: (() => {
@@ -119,12 +119,25 @@ const OrderBox = ({ order }) => {
         if (order?.process?.includes('진행중') && order.expiredDate) {
           let extraDays = 0;
           if (order.grade === '씨앗') extraDays = 2;
-          if (order.grade === '새싹') extraDays = 1;
-          if (extraDays > 0) {
-            const date = new Date(order.expiredDate);
-            date.setDate(date.getDate() + extraDays);
-            str += ` (${fDateTime(date)})`;
+          else if (order.grade === '새싹') extraDays = 1;
+
+          // expiredDate가 UTC일 수도 있고, 이미 KST일 수도 있으니, 타임존을 강제하지 않고 extraDays만 더해서 출력
+          // new Date로 하는게 문젠가? → 문자열 파싱이 브라우저마다 다를 수 있으니, ISO 포맷이 아니면 명확히 처리
+          let baseDate;
+          if (
+            typeof order.expiredDate === 'string' &&
+            order.expiredDate.length === 10 &&
+            order.expiredDate.match(/^\d{4}-\d{2}-\d{2}$/)
+          ) {
+            // YYYY-MM-DD 형식이면, 로컬 타임존으로 해석됨
+            const [y, m, d] = order.expiredDate.split('-').map(Number);
+            baseDate = new Date(y, m - 1, d);
+          } else {
+            // 그 외에는 Date가 알아서 파싱 (ISO면 UTC, 그 외면 브라우저 로컬)
+            baseDate = new Date(order.expiredDate);
           }
+          baseDate.setDate(baseDate.getDate() + extraDays);
+          str += ` (${fDateTime(baseDate)})`;
         }
         return str;
       })(),

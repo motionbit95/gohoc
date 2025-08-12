@@ -243,7 +243,7 @@ export default function LoginView() {
                     fontSize: isMobile ? 15 : 17,
                   }}
                 >
-                  네이버 이메일
+                  네이버 아이디
                 </Box>
                 <TextField
                   id="email"
