@@ -121,8 +121,7 @@ const OrderBox = ({ order }) => {
           if (order.grade === '씨앗') extraDays = 2;
           else if (order.grade === '새싹') extraDays = 1;
 
-          // expiredDate가 UTC일 수도 있고, 이미 KST일 수도 있으니, 타임존을 강제하지 않고 extraDays만 더해서 출력
-          // new Date로 하는게 문젠가? → 문자열 파싱이 브라우저마다 다를 수 있으니, ISO 포맷이 아니면 명확히 처리
+          // 타임존 변환 없이, expiredDate를 그대로 Date로 파싱해서 extraDays만 더함
           let baseDate;
           if (
             typeof order.expiredDate === 'string' &&
@@ -133,7 +132,7 @@ const OrderBox = ({ order }) => {
             const [y, m, d] = order.expiredDate.split('-').map(Number);
             baseDate = new Date(y, m - 1, d);
           } else {
-            // 그 외에는 Date가 알아서 파싱 (ISO면 UTC, 그 외면 브라우저 로컬)
+            // ISO 8601 등 그 외는 Date가 알아서 파싱 (타임존 변환 없음)
             baseDate = new Date(order.expiredDate);
           }
           baseDate.setDate(baseDate.getDate() + extraDays);
