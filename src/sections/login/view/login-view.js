@@ -73,14 +73,27 @@ export default function LoginView() {
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
-    setSubmitting(true);
-    // 값 출력
 
-    console.log('이메일:', form.email, '성함:', form.user_name);
+    // 공백 체크 및 제거
+    const trimmedUserName = form.user_name.replace(/\s/g, '');
+    const trimmedEmail = form.email.replace(/\s/g, '');
+
+    if (/\s/.test(form.user_name) || /\s/.test(form.email)) {
+      if (typeof window !== 'undefined') {
+        window.alert('성함과 네이버 아이디에는 공백이 없어야 합니다.');
+      }
+      setSubmitting(false);
+      return;
+    }
+
+    setSubmitting(true);
+
+    // 값 출력
+    console.log('이메일:', trimmedEmail, '성함:', trimmedUserName);
 
     let data = await login({
-      naver_id: form.email,
-      user_name: form.user_name,
+      naver_id: trimmedEmail,
+      user_name: trimmedUserName,
     });
 
     console.log(data);
