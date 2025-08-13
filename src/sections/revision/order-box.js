@@ -17,15 +17,14 @@ import NormalButtons from './normal-buttons';
 import SampleButtons from './sample-buttons';
 
 // 날짜 포맷 함수 (간단 버전, 실제로는 dayjs 등 사용 권장)
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 function fDateTime(date) {
   if (!date) return '';
-  const d = new Date(date);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
-    d.getDate()
-  ).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(
-    2,
-    '0'
-  )}`;
+  return dayjs(date).utc().format('YYYY-MM-DD HH:mm');
 }
 
 const OrderBox = ({ order }) => {
