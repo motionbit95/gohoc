@@ -8,6 +8,7 @@ import { COLORS } from 'src/constant/colors';
 import { REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
 
 import MarkdownWithCodeFix from './markdown-with-code-fix';
+import { Markdown } from 'src/components/markdown';
 
 export default function OrderRequest({ value = '', onChange }) {
   // 상세페이지 전용 색상 적용
@@ -57,6 +58,91 @@ export default function OrderRequest({ value = '', onChange }) {
       >
         <MarkdownWithCodeFix>{REQUEST_INSTRUCTIONS}</MarkdownWithCodeFix>
       </Alert>
+      <Box
+        sx={{
+          position: 'relative',
+          display: 'inline-block',
+          mb: 2,
+        }}
+      >
+        <Typography
+          variant="h6"
+          sx={{
+            color: TEXT_COLOR,
+            fontWeight: 800,
+            letterSpacing: 0.5,
+            fontSize: { xs: 20, sm: 22 },
+            textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+            pb: 0.5,
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
+          유의사항 (요청작성 시 필독사항)
+        </Typography>
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            bottom: 4, // 글씨와 겹치게 약간 위로
+            height: 16,
+            zIndex: 0,
+            background: '#FBEDE3',
+            borderRadius: 3,
+            pointerEvents: 'none',
+            filter: 'blur(0.5px)',
+            opacity: 0.95,
+            fontWeight: 900,
+          }}
+        />
+      </Box>
+      <Alert
+        severity="info"
+        icon={false}
+        sx={{
+          px: { xs: 2.5, sm: 4, md: 5 },
+          py: { xs: 2, sm: 2.5, md: 3 },
+          mb: 2,
+          fontSize: { xs: 15, sm: 16 },
+          wordBreak: 'keep-all',
+          borderRadius: 2,
+          background: '#FBEDE3',
+          color: TEXT_COLOR,
+          fontWeight: 600,
+          lineHeight: 1.7,
+          letterSpacing: 0.1,
+          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+        }}
+      >
+        <Box component="span" sx={{ fontWeight: 800, fontSize: 17, color: TEXT_COLOR }}>
+          [ 하나의 부위당 하나의 요청사항 작성바랍니다 ]
+        </Box>
+
+        <Box sx={{ fontWeight: 800, fontSize: 16, color: TEXT_COLOR, mt: 1 }}>
+          <div>(o) 1. 입꼬리 올려주세요.</div>
+          <div>2. 콧볼 줄여주세요.</div>
+          <div>3. 얼굴 줄여주세요.</div>
+          <br />
+          <div
+            style={{
+              fontWeight: 800,
+              background: 'rgba(255,255,255,0.85)',
+              borderRadius: 4,
+              padding: '0px 6px',
+              display: 'inline-block',
+            }}
+          >
+            (x) 1. 입꼬리 올려주시고, 콧볼 줄여주시고 얼굴 줄여주세요.
+          </div>
+          <br />
+          <br />
+          <div style={{ fontWeight: 800 }}>
+            (2인 기준) 전체 요청사항(10가지) / 개별 요청사항(5가지) 초과 시 추가금 있습니다.
+          </div>
+        </Box>
+      </Alert>
+      <br />
       <TextField
         label="요청사항을 입력해 주세요"
         multiline

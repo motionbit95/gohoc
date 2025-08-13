@@ -18,6 +18,7 @@ import {
 
 // 색상 상수 import
 import { COLORS, STYLES } from 'src/constant/colors';
+import { REVISION_OPTIONS } from '../revision/order-form';
 
 // 색감 수정: 상세페이지 전용 색상 사용
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -134,6 +135,21 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
     onChange?.({
       ...value,
       additionalOptions: newOptions,
+    });
+  };
+
+  // 재수정 옵션: 1개만 선택 가능하도록 변경
+  const handleRevisionOptionsChange = (e) => {
+    const { value: optionValue, checked } = e.target;
+    let newOptions;
+    if (checked) {
+      newOptions = [optionValue]; // Only one can be selected
+    } else {
+      newOptions = [];
+    }
+    onChange?.({
+      ...value,
+      revisionOptions: newOptions,
     });
   };
 
@@ -413,6 +429,85 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
                     >
                       (+{option.price.toLocaleString()}원)
                     </Box>
+                  </Box>
+                }
+                sx={{
+                  mr: 2,
+                  mb: 0.5,
+                  borderRadius: UNIFIED_RADIUS,
+                  minHeight: UNIFIED_HEIGHT - 8,
+                  alignItems: 'center',
+                  '& .MuiFormControlLabel-label': {
+                    color: TEXT_COLOR,
+                  },
+                }}
+              />
+            ))}
+          </FormGroup>
+        </FormControl>
+
+        <FormControl
+          component="fieldset"
+          variant="standard"
+          sx={{
+            mt: 1,
+            px: 1,
+            py: 1,
+            background: BG_COLOR,
+            borderRadius: UNIFIED_RADIUS,
+            minHeight: UNIFIED_HEIGHT + 12,
+          }}
+        >
+          <Typography
+            variant="subtitle1"
+            sx={{
+              mb: 0.5,
+              color: ACCENT_COLOR,
+              fontWeight: 700,
+              letterSpacing: 0.5,
+              fontSize: 16,
+              textShadow: '0 1px 2px rgba(0,0,0,0.18)',
+            }}
+          >
+            재수정
+          </Typography>
+          <FormGroup row>
+            {REVISION_OPTIONS.map((option) => (
+              <FormControlLabel
+                key={option.value}
+                control={
+                  <Checkbox
+                    checked={(value.revisionOptions || []).includes(option.value)}
+                    onChange={handleRevisionOptionsChange}
+                    value={option.value}
+                    sx={{
+                      color: ACCENT_COLOR,
+                      borderRadius: UNIFIED_RADIUS,
+                      width: 28,
+                      height: 28,
+                      p: 0.5,
+                      '&.Mui-checked': {
+                        color: ACCENT_COLOR_DARK,
+                      },
+                    }}
+                    // // 한 가지만 선택 가능하도록 나머지 옵션은 disable 처리
+                    // disabled={
+                    //   (value.revisionOptions || []).length > 0 &&
+                    //   !(value.revisionOptions || []).includes(option.value)
+                    // }
+                  />
+                }
+                label={
+                  <Box
+                    component="span"
+                    sx={{
+                      color: TEXT_COLOR,
+                      fontWeight: 500,
+                      fontSize: 15,
+                      letterSpacing: 0.2,
+                    }}
+                  >
+                    {option.label}
                   </Box>
                 }
                 sx={{

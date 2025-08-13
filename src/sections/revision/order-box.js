@@ -121,21 +121,21 @@ const OrderBox = ({ order }) => {
           if (order.grade === '씨앗') extraDays = 2;
           else if (order.grade === '새싹') extraDays = 1;
 
-          // 타임존 변환 없이, expiredDate를 그대로 Date로 파싱해서 extraDays만 더함
+          // Amplify 배포 환경에서 Date 파싱 문제 대응: YYYY-MM-DD는 UTC로 해석되도록 보정
           let baseDate;
           if (
             typeof order.expiredDate === 'string' &&
             order.expiredDate.length === 10 &&
             order.expiredDate.match(/^\d{4}-\d{2}-\d{2}$/)
           ) {
-            // YYYY-MM-DD 형식이면, 로컬 타임존으로 해석됨
+            // YYYY-MM-DD 형식이면, UTC 자정으로 명시적으로 파싱 (로컬/서버 환경 차이 방지)
             const [y, m, d] = order.expiredDate.split('-').map(Number);
-            baseDate = new Date(y, m - 1, d);
+            baseDate = new Date(Date.UTC(y, m - 1, d));
           } else {
-            // ISO 8601 등 그 외는 Date가 알아서 파싱 (타임존 변환 없음)
+            // 그 외는 기존대로 파싱
             baseDate = new Date(order.expiredDate);
           }
-          baseDate.setDate(baseDate.getDate() + extraDays);
+          baseDate.setUTCDate(baseDate.getUTCDate() + extraDays);
           str += ` (${fDateTime(baseDate)})`;
         }
         return str;
