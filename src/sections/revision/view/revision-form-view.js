@@ -342,7 +342,7 @@ export default function RevisionFormView() {
           step: '재수정',
           process: '재수정 작업 진행중',
           createdAt: new Date().toISOString(),
-          expireDate: baseDate.toISOString(),
+          expiredDate: baseDate.toISOString(),
           isClear: false,
           sendStatus: false,
           reviseQuantity: uploadedOrderImages.length || 0,
