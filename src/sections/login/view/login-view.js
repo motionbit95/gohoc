@@ -101,9 +101,9 @@ export default function LoginView() {
     if (typeof window !== 'undefined') {
       let targetPath = '/';
       if (nextPage === 'new') {
-        targetPath = '/ourwedding/new';
+        targetPath = '/new';
       } else if (nextPage === 'revision') {
-        targetPath = '/ourwedding/revision';
+        targetPath = '/revision';
       } else if (nextPage) {
         targetPath = nextPage;
       }

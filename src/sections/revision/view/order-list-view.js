@@ -38,7 +38,7 @@ const OrderListView = () => {
           setMessageOpen(true);
           if (typeof window !== 'undefined') {
             setTimeout(() => {
-              window.location.href = '/ourwedding/login?target=revision';
+              window.location.href = '/login?target=revision';
             }, 1200); // 1.2초 후 이동 (스낵바 보이게)
           }
           setLoading(false);
@@ -65,7 +65,7 @@ const OrderListView = () => {
 
             if (typeof window !== 'undefined') {
               setTimeout(() => {
-                window.location.href = '/ourwedding/login?target=revision';
+                window.location.href = '/login?target=revision';
               }, 1200); // 1.2초 후 이동 (스낵바 보이게)
             }
           });

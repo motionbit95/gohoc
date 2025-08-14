@@ -90,7 +90,7 @@ export default function OrderView() {
       setMessageOpen(true);
       // 로그인 페이지로 이동
       if (typeof window !== 'undefined') {
-        window.location.href = '/ourwedding/login?target=new';
+        window.location.href = '/login?target=new';
       }
       return;
     }
@@ -107,7 +107,7 @@ export default function OrderView() {
         setMessageOpen(true);
         // 에러 발생 시 로그인 페이지로 이동
         if (typeof window !== 'undefined') {
-          window.location.href = '/ourwedding/login?target=new';
+          window.location.href = '/login?target=new';
         }
       });
   }, []);

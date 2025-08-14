@@ -134,7 +134,7 @@ export default function RevisionFormView() {
       setMessageType('error');
       setMessageOpen(true);
       if (typeof window !== 'undefined') {
-        window.location.href = '/ourwedding/login?target=revision';
+        window.location.href = '/login?target=revision';
       }
       return;
     }
@@ -150,7 +150,7 @@ export default function RevisionFormView() {
         setMessageType('error');
         setMessageOpen(true);
         if (typeof window !== 'undefined') {
-          window.location.href = '/ourwedding/login?target=revision';
+          window.location.href = '/login?target=revision';
         }
       });
   }, []);

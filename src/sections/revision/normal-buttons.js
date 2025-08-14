@@ -15,7 +15,7 @@ const Flex = ({ children, style, ...props }) => (
 // MUI 스타일 및 유틸 함수
 const paths = {
   ourwedding: {
-    form: '/ourwedding/revision',
+    form: '/revision',
   },
 };
 

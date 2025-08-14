@@ -76,7 +76,7 @@ export default function Ourwedding() {
 
   const handleButtonClick = useCallback(
     (page) => {
-      router.push(`/ourwedding/login/?target=${page}`);
+      router.push(`/login/?target=${page}`);
     },
     [router]
   );
