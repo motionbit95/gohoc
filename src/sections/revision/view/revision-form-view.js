@@ -328,10 +328,10 @@ export default function RevisionFormView() {
       let baseDate = new Date(now);
       if (now.getHours() < 19) {
         // 오늘이 1일, 다음날 21시
-        baseDate.setDate(baseDate.getDate() + 1);
+        baseDate.setDate(baseDate.getDate() + 2);
       } else {
         // 내일이 1일, 다다음날 21시
-        baseDate.setDate(baseDate.getDate() + 2);
+        baseDate.setDate(baseDate.getDate() + 3);
       }
       baseDate.setHours(21, 0, 0, 0); // 21:00:00.000
 
@@ -433,7 +433,11 @@ export default function RevisionFormView() {
             }}
           >
             <OrderForm
-              value={{ ...formData.orderForm, additionalOptions: order?.additionalOptions || [] }}
+              value={{
+                ...formData.orderForm,
+                additionalOptions: order?.additionalOptions || [],
+                revisionOptions: order?.revisionOptions || [],
+              }}
               onChange={handleOrderFormChange}
               userId={user?.userId || user?.id || ''}
               userName={user?.userName || user?.name || user?.nickname || ''}

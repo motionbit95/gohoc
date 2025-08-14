@@ -518,7 +518,8 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
                 control={
                   <Checkbox
                     checked={(value.revisionOptions || []).includes(option.value)}
-                    onChange={handleRevisionOptionsChange}
+                    // onChange={handleRevisionOptionsChange}
+                    disabled={true}
                     value={option.value}
                     sx={{
                       color: ACCENT_COLOR,
