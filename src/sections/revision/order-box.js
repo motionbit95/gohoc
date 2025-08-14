@@ -24,7 +24,7 @@ dayjs.extend(utc);
 
 function fDateTime(date) {
   if (!date) return '';
-  return dayjs(date).utc().format('YYYY-MM-DD HH:mm');
+  return dayjs(date).format('YYYY-MM-DD HH:mm');
 }
 
 const OrderBox = ({ order }) => {
@@ -122,6 +122,8 @@ const OrderBox = ({ order }) => {
 
           // Amplify 배포 환경에서 Date 파싱 문제 대응: YYYY-MM-DD는 UTC로 해석되도록 보정
           let baseDate;
+
+          console.log(order.expiredDate);
           if (
             typeof order.expiredDate === 'string' &&
             order.expiredDate.length === 10 &&
@@ -134,7 +136,7 @@ const OrderBox = ({ order }) => {
             // 그 외는 기존대로 파싱
             baseDate = new Date(order.expiredDate);
           }
-          baseDate.setUTCDate(baseDate.getUTCDate() + extraDays);
+          baseDate.setDate(baseDate.getDate() + extraDays);
           str += ` (${fDateTime(baseDate)})`;
         }
         return str;

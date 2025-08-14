@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { Box, Alert, TextField, Typography } from '@mui/material';
+import { Box, Alert, TextField, Typography, Stack, Divider } from '@mui/material';
 
 import { COLORS } from 'src/constant/colors';
 import { REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
@@ -42,8 +42,8 @@ export default function OrderRequest({ value = '', onChange }) {
         severity="info"
         icon={false}
         sx={{
-          px: { xs: 2.5, sm: 4, md: 5 },
-          py: { xs: 2, sm: 2.5, md: 3 },
+          px: 0,
+          py: 0,
           mb: 2,
           fontSize: { xs: 15, sm: 16 },
           wordBreak: 'keep-all',
@@ -54,11 +54,105 @@ export default function OrderRequest({ value = '', onChange }) {
           lineHeight: 1.7,
           letterSpacing: 0.1,
           textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
+          boxSizing: 'border-box',
         }}
       >
-        <MarkdownWithCodeFix>{REQUEST_INSTRUCTIONS}</MarkdownWithCodeFix>
+        <Box
+          sx={{
+            px: { xs: 2.5, sm: 4, md: 5 },
+            py: { xs: 2, sm: 2.5, md: 3 },
+            width: '100%',
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'stretch',
+            boxSizing: 'border-box',
+          }}
+        >
+          <MarkdownWithCodeFix>{REQUEST_INSTRUCTIONS}</MarkdownWithCodeFix>
+          <Box
+            sx={{
+              mt: 2,
+              px: 0,
+              py: 0,
+              borderRadius: 2,
+              background: '#fef3d2',
+              color: TEXT_COLOR,
+              fontWeight: 600,
+              lineHeight: 1.7,
+              letterSpacing: 0.1,
+              textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+              width: '100%',
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                fontWeight: 800,
+                fontSize: 17,
+                color: TEXT_COLOR,
+                display: 'block',
+                px: { xs: 2.5, sm: 4, md: 5 },
+                pt: { xs: 2, sm: 2.5, md: 3 },
+              }}
+            >
+              [ 하나의 부위당 하나의 요청사항 작성바랍니다 ]
+            </Box>
+
+            <br />
+
+            <Box
+              sx={{
+                fontWeight: 800,
+                fontSize: 16,
+                color: TEXT_COLOR,
+                mt: 1,
+                px: { xs: 2.5, sm: 4, md: 5 },
+                pb: { xs: 2, sm: 2.5, md: 3 },
+              }}
+            >
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={{ xs: 2, sm: 6 }}
+                alignItems="stretch"
+              >
+                <Box>
+                  <div>예시 (O)</div>
+                  <div>1. 입꼬리 올려주세요.</div>
+                  <div>2. 콧볼 줄여주세요.</div>
+                  <div>3. 얼굴 줄여주세요.</div>
+                </Box>
+
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{
+                    mx: 3,
+                    borderStyle: 'dashed',
+                    borderRightWidth: 3,
+                  }}
+                />
+
+                <Box>
+                  <div>예시 (X)</div>
+                  <div>1. 입꼬리 올려주시고, 콧볼 줄여주시고 얼굴 줄여주세요.</div>
+                </Box>
+              </Stack>
+
+              <br />
+
+              <div style={{ fontWeight: 800 }}>
+                (2인 기준) 전체 요청사항(10가지) / 개별 요청사항(5가지) 초과 시 추가금 있습니다.
+              </div>
+            </Box>
+          </Box>
+        </Box>
       </Alert>
-      <Box
+      {/* <Box
         sx={{
           position: 'relative',
           display: 'inline-block',
@@ -141,7 +235,7 @@ export default function OrderRequest({ value = '', onChange }) {
             (2인 기준) 전체 요청사항(10가지) / 개별 요청사항(5가지) 초과 시 추가금 있습니다.
           </div>
         </Box>
-      </Alert>
+      </Alert> */}
       <br />
       <TextField
         label="요청사항을 입력해 주세요"
