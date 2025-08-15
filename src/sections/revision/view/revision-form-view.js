@@ -366,7 +366,7 @@ export default function RevisionFormView() {
   const handleUploadSuccessDialogClose = () => {
     setUploadSuccessDialogOpen(false);
     if (typeof window !== 'undefined') {
-      window.location.replace('/ourwedding');
+      window.location.replace('/');
     }
   };
 
