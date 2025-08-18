@@ -28,7 +28,7 @@ export const REQUEST_INSTRUCTIONS = `
 export const DEFAULT_TEXTAREA_CONTENT = `1. 보정강도 (약,약중,중,중강,강)  
 (추천 : 자연스러운 보정을 위해 생각하시는 보정단계보다 한단계 낮춰서 진행 하시는걸 추천드립니다 ! )
 
-▶️
+▶︎
 
 2. 전체 사진 공통 요청사항
 
@@ -38,7 +38,7 @@ export const DEFAULT_TEXTAREA_CONTENT = `1. 보정강도 (약,약중,중,중강,
 3. 개별 추가 요청사항  
 (색감작업은 아워웨딩 유료 필름 결제 해주셔야 합니다.)
 
-▶️ 파일명 - 요청사항 :
+▶︎ 파일명 - 요청사항 :
 `;
 
 export const CAUTION_GUIDE = [
@@ -135,7 +135,7 @@ export const REVISE_REFERENCE_UPLOAD_GUIDE = `
 
 export const REVISE_DEFAULT_TEXTAREA_CONTENT = `개별 추가 요청사항 (색감 작업은 필름 결제 해주셔야 합니다.)
                         
-▶️ 파일명 - 요청사항 :
+▶︎ 파일명 - 요청사항 :
 `;
 
 export const REVISE_CAUTION_GUIDE = [
