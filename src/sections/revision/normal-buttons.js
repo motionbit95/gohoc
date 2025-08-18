@@ -3,7 +3,20 @@ import { useRouter } from 'next/navigation';
 import { BsCaretRightFill } from 'react-icons/bs';
 
 import { useTheme } from '@mui/material/styles';
-import { Box, Button, useMediaQuery, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Button,
+  useMediaQuery,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  LinearProgress,
+  Typography,
+  DialogActions,
+} from '@mui/material';
+import axiosInstance from 'src/lib/axios';
+import axios from 'axios';
 
 // MUI Flex 대체
 const Flex = ({ children, style, ...props }) => (
@@ -20,8 +33,8 @@ const paths = {
 };
 
 // 실제 다운로드 함수 (동적으로 zip 생성)
-// worksubmission이 배열일 수도 있으니 배열로 처리
-async function downloadZipFiles({ worksubmission, label, order, originalFiles = [] }) {
+// 진행률 콜백 추가
+async function downloadZipFiles({ worksubmission, label, order, originalFiles = [], onProgress }) {
   // worksubmission이 배열이 아니면 배열로 변환
   const workSubmissions = Array.isArray(worksubmission) ? worksubmission : [worksubmission];
 
@@ -47,13 +60,23 @@ async function downloadZipFiles({ worksubmission, label, order, originalFiles = 
   const JSZip = (await import('jszip')).default;
   const zip = new JSZip();
 
+  let completed = 0;
+  const total = allFiles.length;
+
   // 파일 다운로드 및 zip에 추가
   const fetchAndAddToZip = async (fileObj, idx) => {
     try {
       // 각 파일 객체에서 url 추출
       const url = fileObj.s3ViewLink || fileObj.fileUrl;
       if (!url) throw new Error('No file url');
-      const response = await fetch(url);
+
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/s3/presign-from-url`, {
+        s3Url: url,
+      });
+      const presignedUrl = res.data.presignedUrl;
+
+      const response = await fetch(presignedUrl);
+
       if (!response.ok) throw new Error('Network response was not ok');
       const blob = await response.blob();
 
@@ -75,9 +98,36 @@ async function downloadZipFiles({ worksubmission, label, order, originalFiles = 
         filename = `${filename}`;
       }
       zip.file(filename, blob);
+
+      completed += 1;
+      if (onProgress) {
+        onProgress({
+          completed,
+          total,
+          percent: Math.round((completed / total) * 100),
+          currentFile: filename,
+          error: null,
+        });
+      }
+      // 콘솔도 남겨둠
+      console.log(
+        `[ZIP] 진행률: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`
+      );
     } catch (err) {
-      // 실패한 파일은 무시
+      completed += 1;
+      if (onProgress) {
+        onProgress({
+          completed,
+          total,
+          percent: Math.round((completed / total) * 100),
+          currentFile: fileObj.fileName || fileObj.originalFileName || fileObj.title || fileObj.id,
+          error: err,
+        });
+      }
       console.error('파일 다운로드 실패:', fileObj, err);
+      console.log(
+        `[ZIP] 진행률: ${completed}/${total} (${Math.round((completed / total) * 100)}%)`
+      );
     }
   };
 
@@ -108,6 +158,15 @@ async function downloadZipFiles({ worksubmission, label, order, originalFiles = 
 const NormalButtons = ({ order }) => {
   const [loading, setLoading] = useState(false);
   const [loadingTarget, setLoadingTarget] = useState('');
+  const [zipProgress, setZipProgress] = useState({
+    open: false,
+    completed: 0,
+    total: 0,
+    percent: 0,
+    currentFile: '',
+    error: null,
+    label: '',
+  });
   const theme = useTheme();
   const isMobile = useMediaQuery('(max-width:726px)');
   const screens = { md: !isMobile };
@@ -155,99 +214,176 @@ const NormalButtons = ({ order }) => {
     async (worksubmission, label, originalFiles = []) => {
       setLoading(true);
       setLoadingTarget(label);
+      setZipProgress({
+        open: true,
+        completed: 0,
+        total: 0,
+        percent: 0,
+        currentFile: '',
+        error: null,
+        label,
+      });
       try {
-        await downloadZipFiles({ worksubmission, label, order, originalFiles });
+        await downloadZipFiles({
+          worksubmission,
+          label,
+          order,
+          originalFiles,
+          onProgress: (progress) => {
+            setZipProgress((prev) => ({
+              ...prev,
+              ...progress,
+              open: true,
+              label,
+            }));
+          },
+        });
       } catch (e) {
         alert('다운로드 중 오류가 발생했습니다.');
       }
       setLoading(false);
       setLoadingTarget('');
+      setZipProgress((prev) => ({
+        ...prev,
+        open: false,
+      }));
     },
     [order]
   );
 
+  // zip 진행률 Dialog 닫기 핸들러
+  const handleCloseZipDialog = () => {
+    setZipProgress((prev) => ({
+      ...prev,
+      open: false,
+    }));
+  };
+
   return (
-    <Flex
-      style={{
-        alignSelf: 'center',
-        paddingBlock: '36px',
-        width: screens.md ? '80%' : '100%',
-        flexDirection: screens.md ? 'row' : 'column',
-        gap: '20px',
-      }}
-    >
-      {/* 1차 보정본 다운로드 버튼 */}
-      <Button
-        variant="contained"
-        color="primary"
-        endIcon={
-          loading && loadingTarget === '보정본' ? (
-            <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+    <>
+      <Dialog open={zipProgress.open} onClose={handleCloseZipDialog} maxWidth="xs" fullWidth>
+        <DialogTitle>ZIP 압축 진행 중</DialogTitle>
+        <DialogContent>
+          <Box display="flex" alignItems="center" gap={1} mb={1}>
+            <LinearProgress
+              variant="determinate"
+              value={zipProgress.percent}
+              sx={{ flex: 1, height: 8, borderRadius: 2 }}
+            />
+            <Typography variant="body2" sx={{ minWidth: 48, textAlign: 'right' }}>
+              {zipProgress.percent}%
+            </Typography>
+          </Box>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            {zipProgress.completed}/{zipProgress.total} 파일 처리 중
+          </Typography>
+          {zipProgress.currentFile && (
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              현재 파일: {zipProgress.currentFile}
+            </Typography>
+          )}
+          {zipProgress.error && (
+            <Typography variant="body2" color="error">
+              에러: {zipProgress.error.message || String(zipProgress.error)}
+            </Typography>
+          )}
+        </DialogContent>
+        <DialogActions>
+          {zipProgress.percent === 100 || zipProgress.completed === zipProgress.total ? (
+            <Button onClick={handleCloseZipDialog} color="primary" autoFocus>
+              닫기
+            </Button>
           ) : (
-            <BsCaretRightFill />
-          )
-        }
-        sx={getButtonSx(isFirstDownloadDisabled)}
-        disabled={isFirstDownloadDisabled}
-        onClick={() => {
-          // workSubmissions에서 type === 'first'만 추출
-          const files =
-            Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-              ? order.workSubmissions.filter((ws) => ws.type === 'first')
-              : [];
-          // 원본 파일 추출: type === 'order' 또는 type === 'origin'
-          const originalFiles =
-            Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-              ? order.workSubmissions
-                  .filter((ws) => ws.type === 'order' || ws.type === 'origin' || ws.type === '원본')
-                  .flatMap((ws) => (Array.isArray(ws.files) ? ws.files : []))
-              : [];
-          handleDownloadZip(files, '보정본', originalFiles);
+            <Typography variant="caption" color="text.secondary" sx={{ px: 2 }}>
+              압축이 완료될 때까지 기다려주세요...
+            </Typography>
+          )}
+        </DialogActions>
+      </Dialog>
+      <Flex
+        style={{
+          alignSelf: 'center',
+          paddingBlock: '36px',
+          width: screens.md ? '80%' : '100%',
+          flexDirection: screens.md ? 'row' : 'column',
+          gap: '20px',
         }}
       >
-        1차 보정본 다운로드
-      </Button>
+        {/* 1차 보정본 다운로드 버튼 */}
+        <Button
+          variant="contained"
+          color="primary"
+          endIcon={
+            loading && loadingTarget === '보정본' ? (
+              <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+            ) : (
+              <BsCaretRightFill />
+            )
+          }
+          sx={getButtonSx(isFirstDownloadDisabled)}
+          disabled={isFirstDownloadDisabled}
+          onClick={() => {
+            // workSubmissions에서 type === 'first'만 추출
+            const files =
+              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                ? order.workSubmissions.filter((ws) => ws.type === 'first')
+                : [];
+            // 원본 파일 추출: type === 'order' 또는 type === 'origin'
+            const originalFiles =
+              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                ? order.workSubmissions
+                    .filter(
+                      (ws) => ws.type === 'order' || ws.type === 'origin' || ws.type === '원본'
+                    )
+                    .flatMap((ws) => (Array.isArray(ws.files) ? ws.files : []))
+                : [];
+            handleDownloadZip(files, '보정본', originalFiles);
+          }}
+        >
+          1차 보정본 다운로드
+        </Button>
 
-      {/* 최근 재수정본 다운로드 버튼 */}
-      <Button
-        variant="contained"
-        color="primary"
-        endIcon={
-          loading && loadingTarget === '재수정본' ? (
-            <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
-          ) : (
-            <BsCaretRightFill />
-          )
-        }
-        sx={getButtonSx(isReviseDownloadDisabled)}
-        disabled={isReviseDownloadDisabled}
-        onClick={() => {
-          // workSubmissions에서 type === 'revwork'만 추출
-          const files =
-            Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-              ? order.workSubmissions.filter((ws) => ws.type === 'revwork')
-              : [];
-          handleDownloadZip(files, '재수정본');
-        }}
-      >
-        최근 재수정본 다운로드
-      </Button>
+        {/* 최근 재수정본 다운로드 버튼 */}
+        <Button
+          variant="contained"
+          color="primary"
+          endIcon={
+            loading && loadingTarget === '재수정본' ? (
+              <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+            ) : (
+              <BsCaretRightFill />
+            )
+          }
+          sx={getButtonSx(isReviseDownloadDisabled)}
+          disabled={isReviseDownloadDisabled}
+          onClick={() => {
+            // workSubmissions에서 type === 'revwork'만 추출
+            const files =
+              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                ? order.workSubmissions.filter((ws) => ws.type === 'revwork')
+                : [];
+            handleDownloadZip(files, '재수정본');
+          }}
+        >
+          최근 재수정본 다운로드
+        </Button>
 
-      {/* 재수정 신청 버튼 */}
-      <Button
-        variant="contained"
-        color="primary"
-        endIcon={<BsCaretRightFill />}
-        disabled={isReapplyDisabled}
-        sx={getButtonSx(isReapplyDisabled)}
-        onClick={() => {
-          // 이 페이지로 이동함
-          router.push(`${paths.ourwedding.form}/${order.id}`);
-        }}
-      >
-        재수정 신청
-      </Button>
-    </Flex>
+        {/* 재수정 신청 버튼 */}
+        <Button
+          variant="contained"
+          color="primary"
+          endIcon={<BsCaretRightFill />}
+          disabled={isReapplyDisabled}
+          sx={getButtonSx(isReapplyDisabled)}
+          onClick={() => {
+            // 이 페이지로 이동함
+            router.push(`${paths.ourwedding.form}/${order.id}`);
+          }}
+        >
+          재수정 신청
+        </Button>
+      </Flex>
+    </>
   );
 };
 
