@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 
-import { HOLIDAY_NOTICE, SAMPLE_DOWNLOAD_NOTICE } from 'src/constant/ourwedding';
+import { HOLIDAY_NOTICE, SAMPLE_DOWNLOAD_NOTICE } from 'src/constant/taility';
 
 import NormalButtons from './normal-buttons';
 import SampleButtons from './sample-buttons';

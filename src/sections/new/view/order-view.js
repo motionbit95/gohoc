@@ -27,7 +27,7 @@ import {
   REFERENCE_UPLOAD_GUIDE,
   DEFAULT_TEXTAREA_CONTENT,
   CAUTION_GUIDE,
-} from 'src/constant/ourwedding';
+} from 'src/constant/taility';
 
 import OrderForm from '../order-form';
 import OrderRequest from '../order-request';

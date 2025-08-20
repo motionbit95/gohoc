@@ -102,14 +102,47 @@ function MarkdownWithCodeFix({ children }) {
             </p>
           );
         },
+        ul({ children, ...props }) {
+          // 가장 상위 ul(리스트)에는 말머리(점, 대시 등) 없애기
+          // (모든 ul에 적용: list-style-type: none)
+          return (
+            <ul
+              {...props}
+              style={{
+                listStyleType: 'none',
+                paddingLeft: 0,
+                margin: '12px 0',
+              }}
+            >
+              {children}
+            </ul>
+          );
+        },
+        ol({ children, ...props }) {
+          // 가장 상위 ol(숫자 리스트)도 말머리(숫자) 없애기
+          // (모든 ol에 적용: list-style-type: none)
+          return (
+            <ol
+              {...props}
+              style={{
+                listStyleType: 'none',
+                paddingLeft: 0,
+                margin: '12px 0',
+              }}
+            >
+              {children}
+            </ol>
+          );
+        },
         li({ children, ...props }) {
-          // 리스트 줄간격 늘리기
+          // 리스트 줄간격 늘리기, 말머리(점, 대시 등) 제거 효과 유지
           return (
             <li
               {...props}
               style={{
                 lineHeight: 2,
                 marginBottom: 8,
+                // listStyleType: 'none'은 ul/ol에서 처리
               }}
             >
               {children}

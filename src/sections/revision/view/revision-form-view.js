@@ -31,7 +31,7 @@ import {
   REVISE_REFERENCE_UPLOAD_GUIDE,
   REVISE_DEFAULT_TEXTAREA_CONTENT,
   REVISE_CAUTION_GUIDE,
-} from 'src/constant/ourwedding';
+} from 'src/constant/taility';
 
 import OrderRequest from '../../new/order-request';
 import CautionAgree from '../../new/caution-agree';
