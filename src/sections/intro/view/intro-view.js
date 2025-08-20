@@ -12,11 +12,12 @@ import { Iconify } from 'src/components/iconify';
 import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
 
 // 스타일 상수
-const BG_COLOR = COLORS.BG_COLOR;
-const TEXT_COLOR = COLORS.TEXT_COLOR;
-const ACCENT_COLOR = COLORS.LOGIN_ACCENT_COLOR; // 인트로 페이지는 로그인과 동일한 컬러 사용
-const ACCENT_COLOR_DARK = COLORS.LOGIN_ACCENT_COLOR_DARK;
-const FONT_HEADING = FONTS.HEADING;
+// Taility 전용 블랙&화이트 스타일
+const BG_COLOR = '#fff'; // 흰색 배경
+const TEXT_COLOR = '#111'; // 진한 검정 텍스트
+const ACCENT_COLOR = '#fff'; // 버튼: 흰색
+const ACCENT_COLOR_DARK = '#fff'; // 버튼 hover: 더 진한 흰색
+const FONT_HEADING = 'Pretendard, Noto Sans KR, sans-serif';
 
 const BUTTON_CONFIGS = [
   {
@@ -40,18 +41,22 @@ function ActionButton({ label, icon, onClick, isMobile }) {
       onClick={onClick}
       sx={{
         background: ACCENT_COLOR,
-        color: TEXT_COLOR,
+        color: '#111',
         fontSize: isMobile ? 16 : 20,
         fontFamily: FONT_HEADING,
-        borderRadius: 2,
+        borderRadius: 0,
         boxShadow: 'none',
         py: isMobile ? 2.5 : 3.5,
         px: isMobile ? 3 : 6,
         width: '100%',
         maxWidth: isMobile ? 360 : 420,
         minHeight: isMobile ? 64 : 80,
+        letterSpacing: 1.2,
+        fontWeight: 700,
+        borderBottom: '2px solid #111',
         '&:hover': {
           background: ACCENT_COLOR_DARK,
+          color: '#111',
           boxShadow: 'none',
         },
         transition: 'background 0.2s',
@@ -101,6 +106,7 @@ export default function Ourwedding() {
       sx={{
         minHeight: '100vh',
         background: BG_COLOR,
+        color: TEXT_COLOR,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -111,7 +117,6 @@ export default function Ourwedding() {
         gap: 4,
       }}
     >
-      <OurWeddingDivider text="Ourwedding Ourdrama" />
       <Container
         maxWidth="xs"
         sx={{
