@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Box, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 
 // 컬러 팔레트 (image-uploader.js와 통일)
 const BG_COLOR = COLORS.DETAIL_PAPER_BG;
@@ -18,6 +18,7 @@ const ALL_AGREE_KEY = 'allAgree';
 // 체크박스 스타일 공통화
 const checkboxSx = {
   color: ACCENT_COLOR_DARK,
+
   '&.Mui-checked': {
     color: ACCENT_COLOR_DARK,
   },
@@ -91,8 +92,7 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
     <Box
       sx={{
         my: 2,
-        background: BG_COLOR,
-        p: { xs: 2, sm: 3 },
+        py: { xs: 2, sm: 3 },
         color: TEXT_COLOR,
       }}
     >
@@ -103,22 +103,23 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
           width: '100%',
           px: { xs: 1, sm: 2, md: 0 },
           py: 4,
+          mt: { xs: -21, md: -25 },
+          fontSize: { xs: 30, md: 55 },
         }}
       >
         <span
           style={{
             width: '100%',
             maxWidth: '1000px',
-            color: 'transparent',
-            WebkitTextStroke: '0.6px #A79166',
-            fontFamily: 'Noto Serif KR, serif',
+            fontFamily: 'Baskervville',
             fontWeight: 400,
-            fontSize: 64,
+            background: 'white',
+            padding: 16,
           }}
         >
-          Caution
+          CAUTION
         </span>
-        <FormGroup>
+        <FormGroup sx={{ mt: 4 }}>
           {content.map((item) => (
             <FormControlLabel
               key={item.key}
@@ -144,30 +145,35 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
             />
           ))}
           {/* 모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄 */}
-          <FormControlLabel
-            key={ALL_AGREE_KEY}
-            control={
-              <Checkbox
-                checked={!!checked?.[ALL_AGREE_KEY]}
-                //   onChange={handleChange(ALL_AGREE_KEY)}
-                sx={checkboxSx}
-              />
-            }
-            sx={allAgreeLabelSx}
-            label={
-              <span
-                style={{
-                  color: TEXT_COLOR,
-                  fontWeight: 800,
-                  fontSize: 'inherit',
-                  lineHeight: 2.0,
-                }}
-              >
-                위의 내용을 모두 숙지했습니다
-              </span>
-            }
-          />
+          <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
+            <FormControlLabel
+              key={ALL_AGREE_KEY}
+              control={
+                <Checkbox
+                  checked={!!checked?.[ALL_AGREE_KEY]}
+                  //   onChange={handleChange(ALL_AGREE_KEY)}
+                  sx={checkboxSx}
+                />
+              }
+              sx={allAgreeLabelSx}
+              label={
+                <span
+                  style={{
+                    color: TEXT_COLOR,
+                    fontWeight: 800,
+                    fontSize: 'inherit',
+                    lineHeight: 2.0,
+                  }}
+                >
+                  위의 내용을 모두 숙지했습니다
+                </span>
+              }
+            />
+          </Box>
         </FormGroup>
+      </Box>
+      <Box sx={{ width: '100%', textAlign: 'center' }}>
+        <hr style={{ border: 'none', borderTop: '1.5px solid #111' }} />
       </Box>
     </Box>
   );

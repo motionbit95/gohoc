@@ -34,11 +34,11 @@ export const COLORS = {
   DETAIL_SECTION_BG: '#f5f5f5', // 박스 배경 (연한 그레이)
   DETAIL_HIGHLIGHT_BG: '#e0e0e0', // 강조 배경 (밝은 그레이)
   DETAIL_SUBTEXT_COLOR: '#888888', // 설명, 서브텍스트 (중간 그레이)
-  DETAIL_WARNING_COLOR: '#d32f2f', // 경고 텍스트 (빨강, 유지)
+  DETAIL_WARNING_COLOR: '#934343', // 경고 텍스트 (빨강, 유지)
 
   // 상태 컬러 (흑백 테마에 맞게 단순화)
   DIVIDER_COLOR: '#e0e0e0',
-  ERROR_COLOR: '#d32f2f',
+  ERROR_COLOR: '#934343',
   SUCCESS_COLOR: '#111111',
   WARNING_COLOR: '#111111',
   INFO_COLOR: '#111111',
@@ -51,7 +51,7 @@ export const FONTS = {
 };
 
 export const STYLES = {
-  UNIFIED_RADIUS: 1, // theme.spacing 단위
+  UNIFIED_RADIUS: 0, // theme.spacing 단위
   UNIFIED_HEIGHT: 44, // px, 모든 input/셀렉트 높이 통일
 
   // 그림자 설정 (흑백에 맞게 약하게)
@@ -152,7 +152,7 @@ export const sxHelpers = {
     const colors = getThemeColors(themeSet);
     return {
       background: colors.bgColor,
-      borderRadius: 3,
+      borderRadius: 0,
       color: colors.textColor,
       boxShadow: STYLES.SHADOW_LIGHT,
     };
@@ -177,7 +177,7 @@ export const sxHelpers = {
       fontWeight: 700,
       fontSize: 16,
       letterSpacing: 0.5,
-      borderRadius: 2,
+      borderRadius: 0,
       transition: 'background 0.2s, color 0.2s',
     };
 

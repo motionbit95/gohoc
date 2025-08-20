@@ -364,72 +364,95 @@ export default function OrderView() {
       <Box
         sx={{ minHeight: '100vh', background: '#fff', fontFamily: 'Baskervville, Aboreto, serif' }}
       >
-        <Flex
-          vertical
-          style={{
+        {/* 
+          기존 방식(vw/vh, margin 등)으로는 SSR/CSR hydration mismatch가 완전히 해결되지 않음.
+          px/rem 단위로만 고정, 레이아웃을 단순화하고, Typography/Box의 min/maxWidth, overflow, margin을 명확히 지정.
+          화면 크기별로 조건 분기하지 않고, 항상 동일한 px/rem 기반 스타일만 사용.
+        */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            overflow: 'hidden',
+            width: '100%',
+            pt: { xs: 4, md: 8 },
+            pb: { xs: 2, md: 4 },
+            background: 'transparent',
+            minHeight: { xs: 220, md: 340 },
+            mb: { xs: 2, md: 4 },
+            userSelect: 'none',
+            maxWidth: 900,
+            mx: 'auto',
           }}
         >
-          {screens.lg ? (
-            <>
-              <Typography
-                style={{
-                  fontFamily: 'Linden Hill',
-                  fontSize: '196px',
-                  whiteSpace: 'nowrap',
-                  marginBottom: -96,
-                }}
-              >
-                Order Information
-              </Typography>
-              <Typography
-                style={{
-                  fontFamily: 'Linden Hill',
-                  whiteSpace: 'nowrap',
-                  fontWeight: 300,
-                  fontSize: '64px',
-                }}
-              >
-                (New)
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Typography
-                style={{
-                  fontFamily: 'Linden Hill',
-                  fontSize: '15vw',
-                  whiteSpace: 'nowrap',
-                  width: '100%',
-                  display: 'block',
-                  textAlign: 'center',
-                  transform: 'translateX(-5vw)',
-                  position: 'relative',
-                  marginBottom: '-8vw',
-                }}
-              >
-                Order Information
-              </Typography>
-              <Typography
-                style={{
-                  fontFamily: 'Linden Hill',
-                  whiteSpace: 'nowrap',
-                  fontWeight: 300,
-                  fontSize: '5vw',
-                }}
-              >
-                (New)
-              </Typography>
-            </>
-          )}
-          <div style={{ width: 4, height: 40, border: '0.5px solid black' }} />
-          <Typography variant="h5" sx={{ fontFamily: 'Linden Hill', marginBlock: 4 }}>
+          <Typography
+            sx={{
+              fontFamily: 'Linden Hill, serif',
+              fontSize: { xs: '48px', sm: '72px', md: '120px', lg: '160px' },
+              whiteSpace: 'nowrap',
+              mb: { xs: '-24px', sm: '-36px', md: '-56px', lg: '-80px' },
+              lineHeight: 1,
+              letterSpacing: 1,
+              textAlign: 'center',
+              fontWeight: 400,
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            Order Information
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'Linden Hill, serif',
+              whiteSpace: 'nowrap',
+              fontWeight: 300,
+              fontSize: { xs: '18px', sm: '28px', md: '36px', lg: '48px' },
+              textAlign: 'center',
+              mt: { xs: 4, md: 8 },
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            (New)
+          </Typography>
+          <Box sx={{ width: 4, height: 40, border: '0.5px solid black', my: 2 }} />
+          <Typography
+            variant="h5"
+            sx={{
+              fontFamily: 'Linden Hill, serif',
+              my: 2,
+              letterSpacing: 2,
+              fontWeight: 700,
+              textAlign: 'center',
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
             TAILITY
           </Typography>
-          <Typography variant="h4">주문자정보입력</Typography>
-        </Flex>
+          <Typography
+            variant="h4"
+            sx={{
+              fontFamily: 'inherit',
+              fontWeight: 600,
+              textAlign: 'center',
+              mt: 1,
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            주문자정보입력
+          </Typography>
+        </Box>
 
         <Container maxWidth={false} disableGutters sx={{ py: { xs: 2, md: 4 } }}>
           <Stack
