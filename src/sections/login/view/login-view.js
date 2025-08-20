@@ -70,6 +70,13 @@ export default function LoginView() {
   // 제출 핸들러: 값 출력
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 공백이 있으면 Alert
+    if (form.user_name.includes(' ') || form.email.includes(' ')) {
+      alert('입력값에 공백이 포함되어 있습니다. 공백 없이 입력해주세요.');
+      return;
+    }
+
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
@@ -107,9 +114,9 @@ export default function LoginView() {
     if (typeof window !== 'undefined') {
       let targetPath = '/';
       if (nextPage === 'new') {
-        targetPath = '/ourwedding/new';
+        targetPath = '/new';
       } else if (nextPage === 'revision') {
-        targetPath = '/ourwedding/revision';
+        targetPath = '/revision';
       } else if (nextPage) {
         targetPath = nextPage;
       }

@@ -134,7 +134,7 @@ export default function RevisionFormView() {
       setMessageType('error');
       setMessageOpen(true);
       if (typeof window !== 'undefined') {
-        window.location.href = '/ourwedding/login?target=revision';
+        window.location.href = '/login?target=revision';
       }
       return;
     }
@@ -150,7 +150,7 @@ export default function RevisionFormView() {
         setMessageType('error');
         setMessageOpen(true);
         if (typeof window !== 'undefined') {
-          window.location.href = '/ourwedding/login?target=revision';
+          window.location.href = '/login?target=revision';
         }
       });
   }, []);
@@ -328,10 +328,10 @@ export default function RevisionFormView() {
       let baseDate = new Date(now);
       if (now.getHours() < 19) {
         // 오늘이 1일, 다음날 21시
-        baseDate.setDate(baseDate.getDate() + 1);
+        baseDate.setDate(baseDate.getDate() + 2);
       } else {
         // 내일이 1일, 다다음날 21시
-        baseDate.setDate(baseDate.getDate() + 2);
+        baseDate.setDate(baseDate.getDate() + 3);
       }
       baseDate.setHours(21, 0, 0, 0); // 21:00:00.000
 
@@ -342,7 +342,7 @@ export default function RevisionFormView() {
           step: '재수정',
           process: '재수정 작업 진행중',
           createdAt: new Date().toISOString(),
-          expireDate: baseDate.toISOString(),
+          expiredDate: baseDate.toISOString(),
           isClear: false,
           sendStatus: false,
           reviseQuantity: uploadedOrderImages.length || 0,
@@ -366,7 +366,7 @@ export default function RevisionFormView() {
   const handleUploadSuccessDialogClose = () => {
     setUploadSuccessDialogOpen(false);
     if (typeof window !== 'undefined') {
-      window.location.replace('/ourwedding');
+      window.location.replace('/');
     }
   };
 
@@ -433,7 +433,11 @@ export default function RevisionFormView() {
             }}
           >
             <OrderForm
-              value={{ ...formData.orderForm, additionalOptions: order?.additionalOptions || [] }}
+              value={{
+                ...formData.orderForm,
+                additionalOptions: order?.additionalOptions || [],
+                revisionOptions: order?.revisionOptions || [],
+              }}
               onChange={handleOrderFormChange}
               userId={user?.userId || user?.id || ''}
               userName={user?.userName || user?.name || user?.nickname || ''}

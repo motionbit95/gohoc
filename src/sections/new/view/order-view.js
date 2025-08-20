@@ -90,7 +90,7 @@ export default function OrderView() {
       setMessageOpen(true);
       // 로그인 페이지로 이동
       if (typeof window !== 'undefined') {
-        window.location.href = '/ourwedding/login?target=new';
+        window.location.href = '/login?target=new';
       }
       return;
     }
@@ -107,7 +107,7 @@ export default function OrderView() {
         setMessageOpen(true);
         // 에러 발생 시 로그인 페이지로 이동
         if (typeof window !== 'undefined') {
-          window.location.href = '/ourwedding/login?target=new';
+          window.location.href = '/login?target=new';
         }
       });
   }, []);
@@ -158,6 +158,14 @@ export default function OrderView() {
       setMessageOpen(true);
       return false;
     }
+
+    if (!orderForm.revisionOptions || !orderForm.revisionOptions.length) {
+      setMessage('재수정 옵션을 선택해주세요.');
+      setMessageType('error');
+      setMessageOpen(true);
+      return false;
+    }
+
     // 2. 주문 이미지 1개 이상
     if (!orderImages || orderImages.length === 0) {
       setMessage('주문 이미지를 1개 이상 업로드해 주세요.');
@@ -330,7 +338,7 @@ export default function OrderView() {
   const handleUploadSuccessDialogClose = () => {
     setUploadSuccessDialogOpen(false);
     if (typeof window !== 'undefined') {
-      window.location.replace('/ourwedding');
+      window.location.replace('/');
     }
   };
 

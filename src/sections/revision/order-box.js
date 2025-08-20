@@ -17,15 +17,14 @@ import NormalButtons from './normal-buttons';
 import SampleButtons from './sample-buttons';
 
 // 날짜 포맷 함수 (간단 버전, 실제로는 dayjs 등 사용 권장)
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 function fDateTime(date) {
   if (!date) return '';
-  const d = new Date(date);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(
-    d.getDate()
-  ).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(
-    2,
-    '0'
-  )}`;
+  return dayjs(date).format('YYYY-MM-DD HH:mm');
 }
 
 const OrderBox = ({ order }) => {
@@ -121,19 +120,20 @@ const OrderBox = ({ order }) => {
           if (order.grade === '씨앗') extraDays = 2;
           else if (order.grade === '새싹') extraDays = 1;
 
-          // expiredDate가 UTC일 수도 있고, 이미 KST일 수도 있으니, 타임존을 강제하지 않고 extraDays만 더해서 출력
-          // new Date로 하는게 문젠가? → 문자열 파싱이 브라우저마다 다를 수 있으니, ISO 포맷이 아니면 명확히 처리
+          // Amplify 배포 환경에서 Date 파싱 문제 대응: YYYY-MM-DD는 UTC로 해석되도록 보정
           let baseDate;
+
+          console.log(order.expiredDate);
           if (
             typeof order.expiredDate === 'string' &&
             order.expiredDate.length === 10 &&
             order.expiredDate.match(/^\d{4}-\d{2}-\d{2}$/)
           ) {
-            // YYYY-MM-DD 형식이면, 로컬 타임존으로 해석됨
+            // YYYY-MM-DD 형식이면, UTC 자정으로 명시적으로 파싱 (로컬/서버 환경 차이 방지)
             const [y, m, d] = order.expiredDate.split('-').map(Number);
-            baseDate = new Date(y, m - 1, d);
+            baseDate = new Date(Date.UTC(y, m - 1, d));
           } else {
-            // 그 외에는 Date가 알아서 파싱 (ISO면 UTC, 그 외면 브라우저 로컬)
+            // 그 외는 기존대로 파싱
             baseDate = new Date(order.expiredDate);
           }
           baseDate.setDate(baseDate.getDate() + extraDays);

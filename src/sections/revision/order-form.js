@@ -168,14 +168,14 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
     });
   };
 
-  // 재수정 체크박스용 핸들러
+  // 재수정 옵션: 1개만 선택 가능하도록 변경
   const handleRevisionOptionsChange = (e) => {
     const { value: optionValue, checked } = e.target;
     let newOptions;
     if (checked) {
-      newOptions = [...(value.revisionOptions || []), optionValue];
+      newOptions = [optionValue]; // Only one can be selected
     } else {
-      newOptions = (value.revisionOptions || []).filter((opt) => opt !== optionValue);
+      newOptions = [];
     }
     onChange?.({
       ...value,
@@ -518,7 +518,8 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
                 control={
                   <Checkbox
                     checked={(value.revisionOptions || []).includes(option.value)}
-                    onChange={handleRevisionOptionsChange}
+                    // onChange={handleRevisionOptionsChange}
+                    disabled={true}
                     value={option.value}
                     sx={{
                       color: ACCENT_COLOR,
@@ -530,6 +531,11 @@ export default function OrderForm({ value = {}, onChange, userId, userName }) {
                         color: ACCENT_COLOR_DARK,
                       },
                     }}
+                    // // 한 가지만 선택 가능하도록 나머지 옵션은 disable 처리
+                    // disabled={
+                    //   (value.revisionOptions || []).length > 0 &&
+                    //   !(value.revisionOptions || []).includes(option.value)
+                    // }
                   />
                 }
                 label={
