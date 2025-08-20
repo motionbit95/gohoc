@@ -31,7 +31,7 @@ function OptimizedImage({ src, alt }) {
         />
       )}
 
-      <Watermark content="Ourwedding">
+      <Watermark content="Taility">
         <Box
           component="img"
           src={src}

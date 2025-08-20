@@ -30,6 +30,18 @@ export async function uploadToS3(file, parts, onProgress, onServerProcessing, fo
 
     const [rootLabel, type, userName, userId, orderNumber] = parts;
 
+    console.log(
+      JSON.stringify({
+        fileName: file.name,
+        contentType: file.type,
+        rootLabel,
+        type,
+        userName,
+        userId,
+        orderNumber,
+      })
+    );
+
     // presigned URL 요청
     const presignedRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/s3/presigned-upload`, {
       method: 'POST',

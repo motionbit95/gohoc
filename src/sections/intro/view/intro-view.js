@@ -9,8 +9,6 @@ import { FONTS, COLORS } from 'src/constant/colors';
 
 import { Iconify } from 'src/components/iconify';
 
-import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
-
 // 스타일 상수
 // Taility 전용 블랙&화이트 스타일
 const BG_COLOR = '#fff'; // 흰색 배경
@@ -67,7 +65,7 @@ function ActionButton({ label, icon, onClick, isMobile }) {
   );
 }
 
-export default function Ourwedding() {
+export default function Taility() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();

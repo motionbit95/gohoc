@@ -76,7 +76,7 @@ export default function Taility() {
 
   const handleButtonClick = useCallback(
     (page) => {
-      router.push(`/ourwedding/login/?target=${page}`);
+      router.push(`/taility/login/?target=${page}`);
     },
     [router]
   );

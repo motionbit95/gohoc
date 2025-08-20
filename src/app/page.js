@@ -1,13 +1,13 @@
-import Ourwedding from 'src/sections/intro/view/intro-view';
+import Taility from 'src/sections/intro/view/intro-view';
 
 export const metadata = {
-  title: '아워웨딩',
+  title: '테일리티',
   icons: {
-    icon: '/아워웨딩.ico', // 또는 .png, .svg 등
+    icon: '/테일리티.ico', // 또는 .png, .svg 등
   },
-  description: 'Ourwedding Ourdrama',
+  description: 'Taility Ourdrama',
 };
 
 export default function Page() {
-  return <Ourwedding />;
+  return <Taility />;
 }

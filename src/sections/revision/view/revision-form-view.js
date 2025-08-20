@@ -36,7 +36,6 @@ import {
 import OrderRequest from '../../new/order-request';
 import CautionAgree from '../../new/caution-agree';
 import ImageUploader from '../../new/image-uploader';
-import OurWeddingDivider from '../../new/ourwedding-divier';
 import OrderForm from '../order-form';
 import { createWorkSubmission } from 'src/actions/work-submission';
 import { createOrderComment } from 'src/actions/comment';
@@ -266,7 +265,7 @@ export default function RevisionFormView() {
             const result = await uploadToS3(
               fileToUpload,
               [
-                '아워웨딩',
+                '테일리티',
                 '재수정',
                 user.userName || user.name || user.nickname || user.id || 'unknown',
                 user.userId || user.id || 'unknown',
@@ -444,7 +443,6 @@ export default function RevisionFormView() {
               isRevision
             />
           </Box>
-          <OurWeddingDivider text="Ourwedding Ourdrama" />
           <Box
             sx={{
               maxWidth: 'md',
@@ -490,8 +488,6 @@ export default function RevisionFormView() {
               isRevision={true}
             />
           </Box>
-          <OurWeddingDivider text="Ourdrama" isBorder />
-
           <CautionAgree
             checked={formData.cautionAgree}
             content={REVISE_CAUTION_GUIDE}

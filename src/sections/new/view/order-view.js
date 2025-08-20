@@ -33,9 +33,7 @@ import OrderForm from '../order-form';
 import OrderRequest from '../order-request';
 import CautionAgree from '../caution-agree';
 import ImageUploader from '../image-uploader';
-import OurWeddingDivider from '../ourwedding-divier';
 import { Grid } from 'antd';
-import { Flex } from 'antd';
 import { Divider } from 'antd';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
@@ -253,7 +251,7 @@ export default function OrderView() {
             const result = await uploadToS3(
               fileToUpload,
               [
-                '아워웨딩',
+                '테일리티',
                 formData.orderForm?.grade === '샘플' ? '샘플' : '신규',
                 user.userName || user.name || user.nickname || user.id || 'unknown',
                 user.userId || user.id || 'unknown',
@@ -291,7 +289,7 @@ export default function OrderView() {
         ...restFormData,
         uploadedOrderImages,
         uploadedReferenceImages,
-        status: '아워웨딩',
+        status: '테일리티',
         label: uploadedOrderImages.grade === '샘플' ? '샘플' : '신규',
       };
 
@@ -321,7 +319,7 @@ export default function OrderView() {
       // 기존 자동 이동 제거, Dialog에서 이동하도록 변경
       // redirectTimeoutRef.current = setTimeout(() => {
       //   if (typeof window !== 'undefined') {
-      //     window.location.replace('/ourwedding');
+      //     window.location.replace('/taility');
       //   }
       // }, 1500);
     } catch (e) {

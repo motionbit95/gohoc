@@ -3,8 +3,7 @@ import React from 'react';
 import Divider from '@mui/material/Divider';
 import { useMediaQuery } from '@mui/material';
 
-
-const OurWeddingDivider = ({ text, isBorder = false }) => {
+const TailityDivider = ({ text, isBorder = false }) => {
   const isMobile = useMediaQuery('(max-width:726px)');
   const fontSize = isMobile ? '1.7rem' : '3rem'; // 기존 28/36 → 38/54로 증가
 
@@ -40,4 +39,4 @@ const OurWeddingDivider = ({ text, isBorder = false }) => {
   );
 };
 
-export default OurWeddingDivider;
+export default TailityDivider;

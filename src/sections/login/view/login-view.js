@@ -8,9 +8,6 @@ import { useState } from 'react';
 import { Box, Button, useTheme, Container, TextField, useMediaQuery } from '@mui/material';
 
 import { login } from 'src/actions/user';
-import { FONTS, COLORS } from 'src/constant/colors';
-
-import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
 import { CONFIG } from 'src/global-config';
 import { Image } from 'src/components/image';
 

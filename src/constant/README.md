@@ -1,13 +1,13 @@
-# Ourwedding 색상 시스템
+# Taility 색상 시스템
 
-이 디렉토리는 Ourwedding 프로젝트의 색상과 스타일을 중앙 집중식으로 관리하는 constant 파일들을 포함합니다.
+이 디렉토리는 Taility 프로젝트의 색상과 스타일을 중앙 집중식으로 관리하는 constant 파일들을 포함합니다.
 
 ## 파일 구조
 
 ```
 src/constant/
 ├── colors.js          # 색상 팔레트 및 스타일 상수
-├── ourwedding.js      # Ourwedding 관련 텍스트 상수
+├── taility.js      # Taility 관련 텍스트 상수
 └── README.md          # 이 파일
 ```
 
