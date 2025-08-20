@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 
 import { getMe } from 'src/actions/user';
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 import { uploadToS3, createOrder } from 'src/actions/order';
 import {
   PHOTO_UPLOAD_GUIDE,
@@ -34,6 +34,8 @@ import OrderRequest from '../order-request';
 import CautionAgree from '../caution-agree';
 import ImageUploader from '../image-uploader';
 import OurWeddingDivider from '../ourwedding-divier';
+import { Grid } from 'antd';
+import { Flex } from 'antd';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -351,245 +353,321 @@ export default function OrderView() {
     },
     []
   );
+  const { useBreakpoint } = Grid;
+  const screens = useBreakpoint();
 
   return (
-    <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>
-      <Container maxWidth={false} disableGutters sx={{ py: { xs: 2, md: 4 } }}>
-        <Stack
-          spacing={4}
-          alignItems="stretch"
-          sx={{
-            // maxWidth: 'md',
-            mx: 'auto',
-            width: '100%',
-            px: { xs: 1, sm: 2, md: 0 },
+    <>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Aboreto&family=Baskervville:ital@0;1&display=swap');`}</style>
+
+      <Box
+        sx={{ minHeight: '100vh', background: '#fff', fontFamily: 'Baskervville, Aboreto, serif' }}
+      >
+        <Flex
+          vertical
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: 24, md: 30 },
-              color: COLORS.DETAIL_ACCENT_COLOR_DARK,
-              letterSpacing: 1,
-              textShadow: '0 1px 2px rgba(35,41,31,0.18)',
-              mb: 1.5,
-              textAlign: 'center',
-              mt: '10vh',
-              mb: '5vh',
-            }}
-          >
-            신규 주문 접수
+          {screens.lg ? (
+            <>
+              <Typography
+                style={{
+                  fontFamily: 'Linden Hill',
+                  fontSize: '196px',
+                  whiteSpace: 'nowrap',
+                  marginBottom: -96,
+                }}
+              >
+                Order Information
+              </Typography>
+              <Typography
+                style={{
+                  fontFamily: 'Linden Hill',
+                  whiteSpace: 'nowrap',
+                  fontWeight: 300,
+                  fontSize: '64px',
+                }}
+              >
+                (New)
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography
+                style={{
+                  fontFamily: 'Linden Hill',
+                  fontSize: '15vw',
+                  whiteSpace: 'nowrap',
+                  width: '100%',
+                  display: 'block',
+                  textAlign: 'center',
+                  transform: 'translateX(-5vw)',
+                  position: 'relative',
+                  marginBottom: '-8vw',
+                }}
+              >
+                Order Information
+              </Typography>
+              <Typography
+                style={{
+                  fontFamily: 'Linden Hill',
+                  whiteSpace: 'nowrap',
+                  fontWeight: 300,
+                  fontSize: '5vw',
+                }}
+              >
+                (New)
+              </Typography>
+            </>
+          )}
+          <div style={{ width: 4, height: 40, border: '0.5px solid black' }} />
+          <Typography variant="h5" sx={{ fontFamily: 'Linden Hill', marginBlock: 4 }}>
+            TAILITY
           </Typography>
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
-            <OrderForm
-              value={formData.orderForm}
-              onChange={handleOrderFormChange}
-              userId={user?.userId || user?.id || ''}
-              userName={user?.userName || user?.name || user?.nickname || ''}
-            />
-          </Box>
-          <OurWeddingDivider text="Ourwedding Ourdrama" />
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
-            <ImageUploader
-              title="사진 업로드"
-              alert={PHOTO_UPLOAD_GUIDE}
-              onChange={handleOrderImagesChange}
-              maxCount={formData.orderForm?.photoCount || undefined}
-            />
-          </Box>
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
-            <ImageUploader
-              title="참고 사진 업로드"
-              alert={REFERENCE_UPLOAD_GUIDE}
-              onChange={handleReferenceImagesChange}
-              maxCount={1}
-            />
-          </Box>
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
-            <OrderRequest
-              title="요청사항 작성"
-              value={formData.orderRequest}
-              onChange={handleOrderRequestChange}
-            />
-          </Box>
-          <OurWeddingDivider text="Ourdrama" isBorder />
+          <Typography variant="h4">주문자정보입력</Typography>
+        </Flex>
 
-          <CautionAgree
-            checked={formData.cautionAgree}
-            content={CAUTION_GUIDE}
-            onChange={handleCautionAgreeChange}
-          />
-          <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleUploadClick}
-              disabled={uploading}
+        <Container maxWidth={false} disableGutters sx={{ py: { xs: 2, md: 4 } }}>
+          <Stack
+            spacing={4}
+            alignItems="stretch"
+            sx={{
+              mx: 'auto',
+              width: '100%',
+              px: { xs: 1, sm: 2, md: 0 },
+              fontFamily: 'Baskervville, Aboreto, serif',
+            }}
+          >
+            <Box
               sx={{
-                mb: 2,
-                background: ACCENT_COLOR,
-                color: BG_COLOR,
-                fontWeight: 800,
-                fontSize: 16,
-                letterSpacing: 0.5,
-                textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-                '&:hover': {
-                  background: ACCENT_COLOR_DARK,
-                },
-                boxShadow: '0 2px 8px 0 rgba(255,224,130,0.15)',
-                minWidth: '256px',
+                maxWidth: 'md',
+                mx: 'auto',
+                width: '100%',
+                px: { xs: 1, sm: 2, md: 0 },
               }}
             >
-              {uploading ? '업로드 중...' : '업로드'}
-            </Button>
-          </Box>
-        </Stack>
-        <Snackbar
-          open={messageOpen}
-          autoHideDuration={3500}
-          onClose={handleMessageClose}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        >
-          <Alert
-            onClose={handleMessageClose}
-            severity={messageType}
-            sx={{ width: '100%', fontWeight: 600, fontSize: 16 }}
-            variant="filled"
-          >
-            {message}
-          </Alert>
-        </Snackbar>
-        <Backdrop
-          sx={{ color: '#000', zIndex: (theme) => theme.zIndex.drawer + 100 }}
-          open={uploading}
-        >
-          <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            minWidth={500}
-            sx={{ bgcolor: 'white', borderRadius: 3, padding: 5 }}
-          >
-            <CircularProgress color="inherit" />
-            <Box sx={{ width: '100%', mt: 3 }}>
-              <LinearProgress
-                variant="determinate"
-                value={uploadPercent}
-                sx={{
-                  height: 10,
-                  borderRadius: 5,
-                  background: '#eee',
-                  '& .MuiLinearProgress-bar': { background: '#1976d2' },
-                }}
+              <OrderForm
+                value={formData.orderForm}
+                onChange={handleOrderFormChange}
+                userId={user?.userId || user?.id || ''}
+                userName={user?.userName || user?.name || user?.nickname || ''}
               />
             </Box>
-            <Typography sx={{ mt: 2, fontWeight: 500 }}>
-              업로드 중입니다. 잠시만 기다려주세요...
-            </Typography>
-            <Typography sx={{ mt: 1, fontWeight: 400, color: '#000' }}>
-              {uploadPercent}% 완료
-            </Typography>
-          </Box>
-        </Backdrop>
-        <Dialog
-          open={uploadSuccessDialogOpen}
-          onClose={handleUploadSuccessDialogClose}
-          aria-labelledby="upload-success-dialog-title"
-          maxWidth="xs"
-          fullWidth
-          PaperProps={{
-            sx: {
-              borderRadius: 3,
-              p: { xs: 2, sm: 3 },
-              minWidth: { xs: 260, sm: 340, md: 400 },
-              boxShadow: 6,
-            },
-          }}
-        >
-          <DialogTitle
-            id="upload-success-dialog-title"
-            sx={{
-              fontWeight: 700,
-              fontSize: { xs: 20, sm: 22, md: 24 },
-              textAlign: 'center',
-              letterSpacing: 0.5,
-              mt: 1,
-              mb: 0.5,
-              color: '#222',
+            <Box sx={{ width: '100%', textAlign: 'center', my: 2 }}>
+              <img
+                src="/assets/taility/s.png"
+                alt="Taility Logo"
+                style={{ height: 60, opacity: 0.8 }}
+              />
+            </Box>
+            <Box
+              sx={{
+                maxWidth: 'md',
+                mx: 'auto',
+                width: '100%',
+                px: { xs: 1, sm: 2, md: 0 },
+              }}
+            >
+              <ImageUploader
+                title="사진 업로드"
+                alert={PHOTO_UPLOAD_GUIDE}
+                onChange={handleOrderImagesChange}
+                maxCount={formData.orderForm?.photoCount || undefined}
+              />
+            </Box>
+            <Box
+              sx={{
+                maxWidth: 'md',
+                mx: 'auto',
+                width: '100%',
+                px: { xs: 1, sm: 2, md: 0 },
+              }}
+            >
+              <ImageUploader
+                title="참고 사진 업로드"
+                alert={REFERENCE_UPLOAD_GUIDE}
+                onChange={handleReferenceImagesChange}
+                maxCount={1}
+              />
+            </Box>
+            <Box
+              sx={{
+                maxWidth: 'md',
+                mx: 'auto',
+                width: '100%',
+                px: { xs: 1, sm: 2, md: 0 },
+              }}
+            >
+              <OrderRequest
+                title="요청사항 작성"
+                value={formData.orderRequest}
+                onChange={handleOrderRequestChange}
+              />
+            </Box>
+            <Box sx={{ width: '100%', textAlign: 'center', my: 2 }}>
+              <hr style={{ border: 'none', borderTop: '1.5px solid #111', margin: '32px 0' }} />
+            </Box>
+            <CautionAgree
+              checked={formData.cautionAgree}
+              content={CAUTION_GUIDE}
+              onChange={handleCautionAgreeChange}
+            />
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <Button
+                variant="text"
+                size="large"
+                onClick={handleUploadClick}
+                disabled={uploading}
+                sx={{
+                  mb: 2,
+                  background: '#111',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: 18,
+                  letterSpacing: 1,
+                  borderRadius: 0,
+                  borderBottom: '2px solid #111',
+                  minWidth: '256px',
+                  boxShadow: 'none',
+                  fontFamily: 'Baskervville',
+                  '&:hover': {
+                    background: '#000',
+                    color: '#fff',
+                    boxShadow: 'none',
+                  },
+                  transition: 'background 0.2s',
+                }}
+              >
+                {uploading ? '업로드 중...' : '사진 업로드'}
+              </Button>
+            </Box>
+          </Stack>
+          {/* Snackbar, Backdrop, Dialog 등은 기존 스타일 유지 */}
+          <Snackbar
+            open={messageOpen}
+            autoHideDuration={3500}
+            onClose={handleMessageClose}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          >
+            <Alert
+              onClose={handleMessageClose}
+              severity={messageType}
+              sx={{ width: '100%', fontWeight: 600, fontSize: 16 }}
+              variant="filled"
+            >
+              {message}
+            </Alert>
+          </Snackbar>
+          <Backdrop
+            sx={{ color: '#000', zIndex: (theme) => theme.zIndex.drawer + 100 }}
+            open={uploading}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              minWidth={500}
+              sx={{ bgcolor: 'white', borderRadius: 3, padding: 5 }}
+            >
+              <CircularProgress color="inherit" />
+              <Box sx={{ width: '100%', mt: 3 }}>
+                <LinearProgress
+                  variant="determinate"
+                  value={uploadPercent}
+                  sx={{
+                    height: 10,
+                    borderRadius: 5,
+                    background: '#eee',
+                    '& .MuiLinearProgress-bar': { background: '#1976d2' },
+                  }}
+                />
+              </Box>
+              <Typography sx={{ mt: 2, fontWeight: 500 }}>
+                업로드 중입니다. 잠시만 기다려주세요...
+              </Typography>
+              <Typography sx={{ mt: 1, fontWeight: 400, color: '#000' }}>
+                {uploadPercent}% 완료
+              </Typography>
+            </Box>
+          </Backdrop>
+          <Dialog
+            open={uploadSuccessDialogOpen}
+            onClose={handleUploadSuccessDialogClose}
+            aria-labelledby="upload-success-dialog-title"
+            maxWidth="xs"
+            fullWidth
+            PaperProps={{
+              sx: {
+                borderRadius: 3,
+                p: { xs: 2, sm: 3 },
+                minWidth: { xs: 260, sm: 340, md: 400 },
+                boxShadow: 6,
+              },
             }}
           >
-            업로드 완료
-          </DialogTitle>
-          <DialogContent>
-            <Typography
-              sx={{
-                fontSize: { xs: 15, sm: 16, md: 17 },
-                mt: 1.5,
-                mb: 2,
-                textAlign: 'center',
-                fontWeight: 500,
-                lineHeight: 1.7,
-                color: '#444',
-              }}
-            >
-              업로드가 완료되었습니다.
-              <br />
-              작업 완료일정은 [접수 내역 → 진행 상황]에서 확인 가능합니다.
-              <br />
-              처음 화면으로 이동합니다.
-            </Typography>
-          </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button
-              onClick={handleUploadSuccessDialogClose}
-              variant="contained"
-              color="success"
+            <DialogTitle
+              id="upload-success-dialog-title"
               sx={{
                 fontWeight: 700,
-                minWidth: 120,
-                fontSize: { xs: 15, sm: 16 },
-                py: 1,
-                boxShadow: 'none',
-                textTransform: 'none',
-                letterSpacing: 0.2,
+                fontSize: { xs: 20, sm: 22, md: 24 },
+                textAlign: 'center',
+                letterSpacing: 0.5,
+                mt: 1,
+                mb: 0.5,
+                color: '#222',
               }}
-              size="medium"
             >
-              확인
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Container>
-    </Box>
+              업로드 완료
+            </DialogTitle>
+            <DialogContent>
+              <Typography
+                sx={{
+                  fontSize: { xs: 15, sm: 16, md: 17 },
+                  mt: 1.5,
+                  mb: 2,
+                  textAlign: 'center',
+                  fontWeight: 500,
+                  lineHeight: 1.7,
+                  color: '#444',
+                }}
+              >
+                업로드가 완료되었습니다.
+                <br />
+                작업 완료일정은 [접수 내역 → 진행 상황]에서 확인 가능합니다.
+                <br />
+                처음 화면으로 이동합니다.
+              </Typography>
+            </DialogContent>
+            <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
+              <Button
+                onClick={handleUploadSuccessDialogClose}
+                variant="contained"
+                color="success"
+                sx={{
+                  fontWeight: 700,
+                  minWidth: 120,
+                  fontSize: { xs: 15, sm: 16 },
+                  py: 1,
+                  boxShadow: 'none',
+                  textTransform: 'none',
+                  letterSpacing: 0.2,
+                }}
+                size="medium"
+              >
+                확인
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Container>
+      </Box>
+
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=Aboreto&family=Baskervville:ital@0;1&family=Castoro+Titling&family=Linden+Hill:ital@0;1&display=swap');
+      </style>
+    </>
   );
 }

@@ -17,17 +17,17 @@ import {
 } from '@mui/material';
 
 // 색상 상수 import
-import { COLORS, STYLES } from 'src/constant/colors';
+import { COLORS, STYLES } from 'src/constant/taility-colors';
 import { REVISION_OPTIONS } from '../revision/order-form';
 
 // 색감 수정: 상세페이지 전용 색상 사용
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
-const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
+const ACCENT_COLOR = '#000';
+const ACCENT_COLOR_DARK = '#888';
 
 // 통일된 input 스타일 변수
-const UNIFIED_RADIUS = STYLES.UNIFIED_RADIUS;
+const UNIFIED_RADIUS = 0;
 const UNIFIED_HEIGHT = STYLES.UNIFIED_HEIGHT;
 
 // 등급 옵션
@@ -67,24 +67,34 @@ const unifiedInputSx = {
   letterSpacing: 0.5,
   height: UNIFIED_HEIGHT,
   minHeight: UNIFIED_HEIGHT,
+  boxSizing: 'border-box',
+  mb: 2,
   '& .MuiInputBase-input': {
     color: TEXT_COLOR,
-    height: UNIFIED_HEIGHT - 2, // 내부 padding 고려
+    height: UNIFIED_HEIGHT - 2,
     minHeight: UNIFIED_HEIGHT - 2,
     boxSizing: 'border-box',
     padding: '0 14px',
     display: 'flex',
     alignItems: 'center',
+    background: 'none',
   },
   '& .MuiOutlinedInput-root': {
     borderRadius: UNIFIED_RADIUS,
     minHeight: UNIFIED_HEIGHT,
     height: UNIFIED_HEIGHT,
+    background: BG_COLOR,
+    boxShadow: 'none',
     '& fieldset': {
       borderRadius: UNIFIED_RADIUS,
+      borderColor: ACCENT_COLOR,
+    },
+    '&:hover fieldset': {
+      borderColor: ACCENT_COLOR,
     },
     '&.Mui-focused fieldset': {
       borderColor: ACCENT_COLOR,
+      borderWidth: 2,
     },
   },
   '& .MuiInputLabel-root': {
@@ -95,12 +105,38 @@ const unifiedInputSx = {
     textShadow: '0 1px 2px rgba(0,0,0,0.18)',
     lineHeight: 1.2,
   },
+  // 밑줄을 검정색으로
+  '& .MuiInput-underline:before': {
+    borderBottom: `1px solid ${ACCENT_COLOR}`,
+  },
+  '& .MuiInput-underline:after': {
+    borderBottom: `1px solid ${ACCENT_COLOR}`,
+  },
+  '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+    borderBottom: `1px solid ${ACCENT_COLOR}`,
+  },
 };
 
 const unifiedInputProps = {
+  disableUnderline: false, // underline만 보이도록
   sx: {
     ...unifiedInputSx,
+    background: 'none',
+    borderRadius: 0,
+    boxShadow: 'none',
+    px: 0,
+    py: 0,
     pointerEvents: 'none', // readOnly용
+    // 밑줄을 검정색으로
+    '&:before': {
+      borderBottom: `1px solid ${ACCENT_COLOR}`,
+    },
+    '&:after': {
+      borderBottom: `1px solid ${ACCENT_COLOR}`,
+    },
+    '&:hover:not(.Mui-disabled):before': {
+      borderBottom: `1px solid ${ACCENT_COLOR}`,
+    },
   },
   readOnly: true,
 };
@@ -176,20 +212,7 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
         mb: 2,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 3,
-          color: ACCENT_COLOR,
-          fontWeight: 800,
-          letterSpacing: 0.5,
-          fontSize: { xs: 20, sm: 22 },
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        주문자 정보(신규)
-      </Typography>
-      <Stack spacing={2}>
+      <Stack spacing={3} direction={'column'}>
         <TextField
           label="접수일"
           name="receivedDate"
@@ -200,9 +223,10 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           InputLabelProps={{
             ...unifiedInputLabelProps,
             shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
+            style: { color: ACCENT_COLOR },
           }}
           sx={unifiedInputSx}
+          variant="standard"
         />
         <TextField
           label="고객 ID (이메일)"
@@ -214,9 +238,10 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           InputLabelProps={{
             ...unifiedInputLabelProps,
             shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
+            style: { color: ACCENT_COLOR },
           }}
           sx={unifiedInputSx}
+          variant="standard"
         />
         <TextField
           label="고객명"
@@ -231,7 +256,9 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
             style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
           }}
           sx={unifiedInputSx}
+          variant="standard"
         />
+
         <TextField
           label="주문번호"
           name="orderNumber"
@@ -240,13 +267,27 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           required
           fullWidth
           size="small"
-          sx={unifiedInputSx}
+          sx={{
+            ...unifiedInputSx,
+            '& .MuiInput-underline:before': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+            '& .MuiInput-underline:after': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+            '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+          }}
           InputLabelProps={{
             ...unifiedInputLabelProps,
             shrink: true,
             style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
           }}
+          placeholder="* 꼭 정확한 상품 주문번호 기재 바랍니다. *"
+          variant="standard"
         />
+
         <FormControl
           fullWidth
           size="small"
@@ -271,6 +312,7 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
               padding: '0 14px',
             },
           }}
+          variant="standard"
         >
           <InputLabel
             id="grade-label"
@@ -354,12 +396,24 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           size="small"
           type="number"
           inputProps={{ min: 1, style: { height: UNIFIED_HEIGHT - 2, padding: '0 14px' } }}
-          sx={unifiedInputSx}
+          sx={{
+            ...unifiedInputSx,
+            '& .MuiInput-underline:before': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+            '& .MuiInput-underline:after': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+            '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+              borderBottom: `1px solid ${ACCENT_COLOR}`,
+            },
+          }}
           InputLabelProps={{
             ...unifiedInputLabelProps,
             shrink: true,
             style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
           }}
+          variant="standard"
         />
         <FormControl
           component="fieldset"
@@ -376,7 +430,6 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           <Typography
             variant="subtitle1"
             sx={{
-              mb: 0.5,
               color: ACCENT_COLOR,
               fontWeight: 700,
               letterSpacing: 0.5,
@@ -450,7 +503,6 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           component="fieldset"
           variant="standard"
           sx={{
-            mt: 1,
             px: 1,
             py: 1,
             background: BG_COLOR,
