@@ -36,6 +36,7 @@ import ImageUploader from '../image-uploader';
 import OurWeddingDivider from '../ourwedding-divier';
 import { Grid } from 'antd';
 import { Flex } from 'antd';
+import { Divider } from 'antd';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -438,7 +439,7 @@ export default function OrderView() {
               mx: 'auto',
               width: '100%',
               px: { xs: 1, sm: 2, md: 0 },
-              fontFamily: 'Baskervville, Aboreto, serif',
+              fontFamily: 'inter',
             }}
           >
             <Box
@@ -456,13 +457,13 @@ export default function OrderView() {
                 userName={user?.userName || user?.name || user?.nickname || ''}
               />
             </Box>
-            <Box sx={{ width: '100%', textAlign: 'center', my: 2 }}>
+            <Divider plain style={{ borderColor: 'black' }}>
               <img
                 src="/assets/taility/s.png"
                 alt="Taility Logo"
                 style={{ height: 60, opacity: 0.8 }}
               />
-            </Box>
+            </Divider>
             <Box
               sx={{
                 maxWidth: 'md',
@@ -472,7 +473,8 @@ export default function OrderView() {
               }}
             >
               <ImageUploader
-                title="사진 업로드"
+                title="Photo upload"
+                subtitle="사진 업로드"
                 alert={PHOTO_UPLOAD_GUIDE}
                 onChange={handleOrderImagesChange}
                 maxCount={formData.orderForm?.photoCount || undefined}
@@ -487,7 +489,8 @@ export default function OrderView() {
               }}
             >
               <ImageUploader
-                title="참고 사진 업로드"
+                title="Reference photo upload"
+                subtitle="참고 사진 업로드"
                 alert={REFERENCE_UPLOAD_GUIDE}
                 onChange={handleReferenceImagesChange}
                 maxCount={1}

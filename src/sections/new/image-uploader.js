@@ -13,16 +13,19 @@ import {
   Backdrop,
   Typography,
   IconButton,
+  Stack,
 } from '@mui/material';
 
 // 색상 상수 import
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 
 import { Image } from 'src/components/image';
 import { Iconify } from 'src/components/iconify';
 
 import MarkdownWithCodeFix from './markdown-with-code-fix';
 import { Upload } from 'src/components/upload';
+import { Space } from 'antd';
+import { CONFIG } from 'src/global-config';
 
 // 컬러 팔레트 (조화롭게 변경)
 const BG_COLOR = 'white';
@@ -32,7 +35,14 @@ const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
 const PAPER_BG = COLORS.DETAIL_ALERT_BG;
 
 // maxCount prop: undefined/null이면 무제한 허용
-export default function ImageUploader({ onChange, title, alert, maxCount = 0, isRevision }) {
+export default function ImageUploader({
+  onChange,
+  title,
+  subtitle,
+  alert,
+  maxCount = 0,
+  isRevision,
+}) {
   const [images, setImages] = useState([]); // [{file, url}]
   const [error, setError] = useState(null); // 업로드 제한 에러 메시지
   const fileInputRef = useRef(null);
@@ -119,41 +129,42 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
         color: TEXT_COLOR,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 2,
-          color: TEXT_COLOR,
-          fontWeight: 800,
-          letterSpacing: 0.5,
-          fontSize: { xs: 20, sm: 22 },
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        {title}
-      </Typography>
+      <Stack direction={'row'} alignItems={'flex-end'} gap={2} sx={{ mb: 2 }}>
+        <Typography
+          variant="h6"
+          sx={{
+            mb: 2,
+            color: TEXT_COLOR,
+            letterSpacing: 0.5,
+            fontSize: { xs: 24, sm: 32 },
+            textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+            fontWeight: 300,
+            margin: '0 0 3px 0',
+            fontFamily: 'Baskervville',
+          }}
+        >
+          {title}
+        </Typography>
+        <Typography style={{ marginBottom: 8 }}>{subtitle}</Typography>
+      </Stack>
       {/* Alert 메시지는 부모에서 props로 전달받아 마크다운으로 Alert에 표시 */}
       {alert && (
-        <Alert
-          severity="info"
-          icon={false}
-          sx={{
-            px: { xs: 2.5, sm: 4, md: 5 },
-            py: { xs: 2, sm: 2.5, md: 3 },
-            mb: 2,
-            fontSize: { xs: 15, sm: 16 },
-            wordBreak: 'keep-all',
-            background: ACCENT_COLOR_DARK,
-            color: TEXT_COLOR,
-            // border: `1.5px solid ${ACCENT_COLOR}`, // border 제거
-            fontWeight: 600,
-            lineHeight: 1.7,
-            letterSpacing: 0.1,
-            textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+        <Box
+          style={{
+            // border: screens.lg ? '' : '1px solid black',
+            backgroundImage: subtitle.includes('참고')
+              ? ``
+              : `url(${CONFIG.assetsDir}/assets/taility/bg1.png)`,
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            backgroundSize: '100% 100%', // 강제로 늘리기
+            padding: 56,
+            position: 'relative',
+            borderBlock: subtitle.includes('참고') ? '1px solid black' : '',
           }}
         >
           <MarkdownWithCodeFix>{alert}</MarkdownWithCodeFix>
-        </Alert>
+        </Box>
       )}
       {/* 업로드 제한 에러 메시지 */}
       {error && (
@@ -176,6 +187,7 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
       )}
       <Box
         sx={{
+          mt: 1,
           mb: 1,
           fontSize: 16,
           color: ACCENT_COLOR,

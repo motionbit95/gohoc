@@ -1,4 +1,4 @@
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 
 import { Markdown } from 'src/components/markdown';
 
@@ -32,6 +32,7 @@ function MarkdownWithCodeFix({ children }) {
                   fontFamily:
                     'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                   border: `1.5px solid ${CODE_BORDER}`,
+                  lineHeight: 2, // 줄간격 늘리기
                 }}
               >
                 <code {...props} className={className}>
@@ -52,6 +53,7 @@ function MarkdownWithCodeFix({ children }) {
                 fontSize: 14,
                 fontFamily: 'Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
                 border: `1px solid ${CODE_BORDER}`,
+                lineHeight: 2, // 줄간격 늘리기
               }}
             >
               {children}
@@ -77,12 +79,41 @@ function MarkdownWithCodeFix({ children }) {
                 borderRadius: 3,
                 padding: '0 2px',
                 transition: 'color 0.15s, background 0.15s',
+                lineHeight: 2, // 줄간격 늘리기
               }}
               target="_blank"
               rel="noopener noreferrer"
             >
               {children}
             </a>
+          );
+        },
+        p({ children, ...props }) {
+          // 일반 문단 줄간격 늘리기
+          return (
+            <p
+              {...props}
+              style={{
+                lineHeight: 2,
+                margin: '12px 0',
+              }}
+            >
+              {children}
+            </p>
+          );
+        },
+        li({ children, ...props }) {
+          // 리스트 줄간격 늘리기
+          return (
+            <li
+              {...props}
+              style={{
+                lineHeight: 2,
+                marginBottom: 8,
+              }}
+            >
+              {children}
+            </li>
           );
         },
       }}
