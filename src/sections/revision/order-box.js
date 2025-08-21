@@ -19,6 +19,7 @@ import SampleButtons from './sample-buttons';
 // 날짜 포맷 함수 (간단 버전, 실제로는 dayjs 등 사용 권장)
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { Space } from 'antd';
 
 dayjs.extend(utc);
 
@@ -163,40 +164,24 @@ const OrderBox = ({ order }) => {
       }}
     >
       <Stack spacing={3}>
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2,
-            mb: 1,
-            flexWrap: 'wrap',
-          }}
-        >
+        <Stack direction={'row'} alignItems={'flex-end'} gap={2} sx={{ mb: 2 }}>
           <Typography
-            variant="h5"
+            variant="h6"
             sx={{
+              mb: 2,
               color: 'black',
-              fontWeight: 800,
-              fontSize: isMobile ? 18 : 24,
               letterSpacing: 0.5,
-              mr: 2,
+              fontSize: { xs: 24, sm: 32 },
+              textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+              fontWeight: 300,
+              margin: '0 0 3px 0',
+              fontFamily: 'Baskervville',
             }}
           >
-            주문일시
+            Date of reception
           </Typography>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              color: 'black',
-              fontWeight: 600,
-              fontSize: isMobile ? 15 : 18,
-              opacity: 0.85,
-            }}
-          >
-            {fDateTime(order.createdAt)}
-          </Typography>
-        </Box>
-        <Divider flexItem sx={{ my: 0 }} />
+          <Typography style={{ marginBottom: 8 }}>접수내역</Typography>
+        </Stack>
         <Stack spacing={2} sx={{ mb: 1 }}>
           {fields.map((field, idx) => (
             <Box
@@ -214,7 +199,7 @@ const OrderBox = ({ order }) => {
                 fontWeight={700}
                 gutterBottom
                 sx={{
-                  color: '#4F3415',
+                  color: 'black',
                   fontSize: isMobile ? 14 : 15.5,
                   mt: isMobile ? 0 : 1,
                   mb: isMobile ? 0.5 : 0,
@@ -235,17 +220,18 @@ const OrderBox = ({ order }) => {
                   minRows={1}
                   sx={{
                     fontSize: isMobile ? 15 : 17,
-                    background: 'rgba(245,245,240,0.7)',
-                    borderRadius: 1.5,
+                    background: 'none',
+                    borderRadius: 0,
                     px: 1.5,
                     py: 0.5,
                     fontWeight: 500,
                     color: '#333',
-                    boxShadow: '0 1px 2px 0 rgba(79,52,21,0.04)',
+                    boxShadow: 'none',
                     transition: 'background 0.2s',
                     ml: 0,
                     wordBreak: 'break-all',
                     whiteSpace: 'pre-line',
+                    borderBottom: '1px solid black',
                   }}
                   inputProps={{
                     style: {

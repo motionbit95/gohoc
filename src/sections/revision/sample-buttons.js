@@ -2,7 +2,7 @@ import { useCallback, useState, useMemo } from 'react';
 import { Stack, Button, useMediaQuery, CircularProgress } from '@mui/material';
 import { BsCaretRightFill } from 'react-icons/bs';
 
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 import ImagePreviewModal from 'src/components/upload/components/image-preview-modal';
 
 // 유틸: 파일명 생성
@@ -165,6 +165,7 @@ const SampleButtons = ({ order }) => {
           fullWidth
           onClick={handlePreviewAll}
           sx={{
+            borderRadius: 0,
             fontSize: { xs: 15, md: 17 },
             backgroundColor: isPreviewDisabled
               ? 'rgba(150,150,150,0.4)'
@@ -194,6 +195,7 @@ const SampleButtons = ({ order }) => {
           }
           fullWidth
           sx={{
+            borderRadius: 0,
             backgroundColor: isSampleDownloadDisabled
               ? 'rgba(150,150,150,0.4)'
               : COLORS.DETAIL_ACCENT_COLOR,
