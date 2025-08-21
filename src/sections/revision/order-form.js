@@ -94,11 +94,10 @@ const styles = {
 };
 
 export const GRADE_OPTIONS = [
-  { value: '샘플', label: '샘플 (4일 이내)' },
-  { value: '씨앗', label: '씨앗 (7일 이내)' },
-  { value: '새싹', label: '새싹 (4일 이내)' },
-  { value: '나무', label: '나무 (2일 이내)' },
-  { value: '숲', label: '숲 (3시간 이내)' },
+  { value: '샘플', label: '샘플' },
+  { value: '~4일까지', label: '~4일까지' },
+  { value: '~48시간안에', label: '~48시간안에' },
+  { value: '당일 6시간 안에(3장이상부터)', label: '당일 6시간 안에(3장이상부터)' },
 ];
 
 export const ADDITIONAL_OPTIONS = [

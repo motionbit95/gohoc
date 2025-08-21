@@ -205,8 +205,8 @@ const NormalButtons = ({ order }) => {
     order.grade !== '샘플' &&
     (order.label === '재수정' ? hasRevworkWorkSubmission : hasFirstWorkSubmission);
 
-  const isFirstDownloadDisabled = true;
-  loading || (order.label !== '재수정' && (!hasFirstWorkSubmission || !order.isClear));
+  const isFirstDownloadDisabled =
+    loading || (order.label !== '재수정' && (!hasFirstWorkSubmission || !order.isClear));
   const isReviseDownloadDisabled = !hasRevworkWorkSubmission || loading || !order.sendStatus;
   const isReapplyDisabled =
     loading ||

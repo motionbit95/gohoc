@@ -225,7 +225,7 @@ const OrderListView = () => {
                 {orders.map((order, idx) => (
                   <Box key={idx}>
                     <OrderBox order={order} />
-                    <Divider sx={styles.dividerBox} />
+                    {idx !== orders.length - 1 && <Divider sx={styles.dividerBox} />}
                   </Box>
                 ))}
               </Stack>
@@ -235,6 +235,49 @@ const OrderListView = () => {
               </Typography>
             )}
           </Stack>
+
+          <Box
+            sx={{
+              position: 'relative',
+              display: 'flex',
+              justifyContent: 'center',
+              my: 4,
+              alignItems: 'center',
+              minHeight: 60,
+            }}
+          >
+            <Divider
+              sx={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                borderColor: 'black',
+                zIndex: 1,
+              }}
+            />
+            <Box
+              sx={{
+                px: 4, // 이미지 양옆 여백(px: 4 = 32px)
+                background: 'white',
+                position: 'relative',
+                zIndex: 2,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <img
+                src="/assets/taility/s.png"
+                alt="Taility Logo"
+                style={{
+                  height: 60,
+                  background: 'transparent',
+                  display: 'block',
+                }}
+              />
+            </Box>
+          </Box>
         </Container>
         <Snackbar
           open={messageOpen}
