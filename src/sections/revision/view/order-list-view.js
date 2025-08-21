@@ -147,7 +147,9 @@ const OrderListView = () => {
 
             // 주문 정보도 await로 안전하게
             const orderData = await getOrderByNaverId(userData.userId);
-            setOrders(orderData || []);
+            // status가 "테일리티"인 것만 필터링
+            const filteredOrders = (orderData || []).filter((order) => order.status === '테일리티');
+            setOrders(filteredOrders);
           })
           .catch((error) => {
             setMessage(error.message || '유저 정보를 불러오지 못했습니다.');
