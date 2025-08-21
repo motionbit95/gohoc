@@ -47,7 +47,7 @@ const OrderBox = ({ order }) => {
         variant="body2"
         sx={{
           whiteSpace: 'pre-line',
-          color: 'rgba(147, 81, 23, 1)',
+          color: 'black',
           ml: 1,
         }}
       >
@@ -58,7 +58,7 @@ const OrderBox = ({ order }) => {
         variant="body2"
         sx={{
           whiteSpace: 'pre-line',
-          color: 'rgba(147, 81, 23, 1)',
+          color: 'black',
           ml: 1,
         }}
       >
@@ -175,7 +175,7 @@ const OrderBox = ({ order }) => {
           <Typography
             variant="h5"
             sx={{
-              color: 'rgba(79, 52, 21, 1)',
+              color: 'black',
               fontWeight: 800,
               fontSize: isMobile ? 18 : 24,
               letterSpacing: 0.5,
@@ -187,7 +187,7 @@ const OrderBox = ({ order }) => {
           <Typography
             variant="subtitle1"
             sx={{
-              color: '#6d4c1b',
+              color: 'black',
               fontWeight: 600,
               fontSize: isMobile ? 15 : 18,
               opacity: 0.85,

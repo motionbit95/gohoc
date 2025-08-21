@@ -11,6 +11,7 @@ import { getOrderByNaverId } from 'src/actions/order';
 
 import OrderBox from '../order-box';
 import OrderListCaution from '../order-list-caution';
+import { Flex } from 'antd';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
@@ -86,6 +87,90 @@ const OrderListView = () => {
     setMessageOpen(false);
   };
 
+  function renderTitleSection() {
+    return (
+      <Flex vertical style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Flex
+          vertical
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: 'Linden Hill, serif',
+              fontSize: { xs: '48px', sm: '72px', md: '120px', lg: '160px' },
+              whiteSpace: 'nowrap',
+              mb: { xs: '-24px', sm: '-36px', md: '-56px', lg: '-80px' },
+              lineHeight: 1,
+              letterSpacing: 1,
+              textAlign: 'center',
+              fontWeight: 400,
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            Receipt details
+          </Typography>
+          <Typography
+            sx={{
+              fontFamily: 'Linden Hill, serif',
+              whiteSpace: 'nowrap',
+              fontWeight: 300,
+              fontSize: { xs: '18px', sm: '28px', md: '36px', lg: '48px' },
+              textAlign: 'center',
+              mt: { xs: 4, md: 8 },
+              width: '100%',
+              maxWidth: 900,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            (Application for revision)
+          </Typography>
+        </Flex>
+
+        <Box sx={{ width: 4, height: 40, border: '0.5px solid black', my: 2 }} />
+
+        <Typography
+          variant="h5"
+          sx={{
+            fontFamily: 'Linden Hill, serif',
+            my: 2,
+            letterSpacing: 2,
+            fontWeight: 700,
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: 900,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          TAILITY
+        </Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: 'inherit',
+            fontWeight: 600,
+            textAlign: 'center',
+            mt: 1,
+            width: '100%',
+            maxWidth: 900,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          접수내역
+        </Typography>
+      </Flex>
+    );
+  }
+
   return (
     <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>
       <Container maxWidth={false} disableGutters sx={{ py: { xs: 2, md: 4 } }}>
@@ -98,23 +183,7 @@ const OrderListView = () => {
             px: { xs: 1, sm: 2, md: 0 },
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: 24, md: 30 },
-              color: COLORS.DETAIL_ACCENT_COLOR_DARK,
-              letterSpacing: 1,
-              textShadow: '0 1px 2px rgba(35,41,31,0.18)',
-              mb: 1.5,
-              textAlign: 'center',
-              mt: '10vh',
-              mb: '5vh',
-            }}
-          >
-            접수내역 (재수정 신청)
-          </Typography>
+          {renderTitleSection()}
 
           <OrderListCaution />
 
@@ -154,6 +223,11 @@ const OrderListView = () => {
           {message}
         </Alert>
       </Snackbar>
+
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=Aboreto&family=Baskervville:ital@0;1&family=Castoro+Titling&family=Linden+Hill:ital@0;1&display=swap');
+      </style>
     </Box>
   );
 };

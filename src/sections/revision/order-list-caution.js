@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 import { ORDER_LIST_CAUTION } from 'src/constant/taility';
 
 function OrderListCaution() {
@@ -17,8 +17,9 @@ function OrderListCaution() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        bgcolor: '#DCDECC',
         width: '100%',
+        mt: 10,
+        borderBlock: '1px solid black',
       }}
     >
       <Box
@@ -36,9 +37,35 @@ function OrderListCaution() {
             width: '100%',
           }}
         >
-          <Typography variant="h4" component="h2" sx={{ m: 0, color: '#4F3415', fontWeight: 700 }}>
-            안내사항
-          </Typography>
+          <Box
+            sx={{
+              display: 'inline-block',
+              bgcolor: 'white',
+              px: 2,
+              py: 1,
+              width: 'fit-content',
+              maxWidth: '100%',
+            }}
+          >
+            <Typography
+              variant="h4"
+              component="h2"
+              sx={{
+                fontFamily: 'Baskervville',
+                color: 'black',
+                fontWeight: 700,
+                fontSize: { xs: 30, md: 55 },
+                mt: { xs: -9, md: -11 },
+                lineHeight: 1.1,
+                textAlign: 'center',
+                whiteSpace: 'nowrap',
+                bgcolor: 'white',
+                px: 1,
+              }}
+            >
+              CAUTION
+            </Typography>
+          </Box>
           {ORDER_LIST_CAUTION.map(({ text }, index) => (
             <span
               key={index}
