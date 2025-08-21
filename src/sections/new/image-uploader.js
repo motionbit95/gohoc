@@ -152,7 +152,7 @@ export default function ImageUploader({
         <Box
           style={{
             // border: screens.lg ? '' : '1px solid black',
-            backgroundImage: subtitle.includes('참고')
+            backgroundImage: subtitle?.includes('참고')
               ? ``
               : `url(${CONFIG.assetsDir}/assets/taility/bg1.png)`,
             backgroundRepeat: 'no-repeat',
@@ -160,7 +160,7 @@ export default function ImageUploader({
             backgroundSize: '100% 100%', // 강제로 늘리기
             padding: 56,
             position: 'relative',
-            borderBlock: subtitle.includes('참고') ? '1px solid black' : '',
+            borderBlock: subtitle?.includes('참고') ? '1px solid black' : '',
           }}
         >
           <MarkdownWithCodeFix>{alert}</MarkdownWithCodeFix>

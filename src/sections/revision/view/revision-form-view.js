@@ -40,6 +40,7 @@ import OrderForm from '../order-form';
 import { createWorkSubmission } from 'src/actions/work-submission';
 import { createOrderComment } from 'src/actions/comment';
 import { timeline } from 'src/theme/core/components/timeline';
+import PageTitle from '../revision-title';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
@@ -406,23 +407,7 @@ export default function RevisionFormView() {
             px: { xs: 1, sm: 2, md: 0 },
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: 24, md: 30 },
-              color: COLORS.DETAIL_ACCENT_COLOR_DARK,
-              letterSpacing: 1,
-              textShadow: '0 1px 2px rgba(35,41,31,0.18)',
-              mb: 1.5,
-              textAlign: 'center',
-              mt: '10vh',
-              mb: '5vh',
-            }}
-          >
-            재수정 신청
-          </Typography>
+          <PageTitle />
           <Box
             sx={{
               maxWidth: 'md',

@@ -56,9 +56,14 @@ const SampleButtons = ({ order }) => {
   // 미리보기 버튼 클릭
   const handlePreviewAll = useCallback(() => {
     if (isPreviewDisabled) return;
+    console.log(items);
     if (items.length > 0) {
       setShowImage(
-        items[0]?.previewUrl || items[0]?.webpUrl || items[0]?.url || items[0]?.s3ViewLink
+        items[0]?.previewUrl ||
+          items[0]?.webpUrl ||
+          items[0]?.url ||
+          items[0]?.s3ViewLink ||
+          items[0]?.directViewUrl
       );
     }
   }, [isPreviewDisabled, items]);
