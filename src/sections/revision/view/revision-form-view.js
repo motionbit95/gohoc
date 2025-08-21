@@ -20,7 +20,7 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import { COLORS } from 'src/constant/colors';
+import { COLORS } from 'src/constant/taility-colors';
 import { uploadToS3, getOrderById, updateOrderById } from 'src/actions/order';
 import { getMe } from 'src/actions/user';
 import {
@@ -39,7 +39,6 @@ import ImageUploader from '../../new/image-uploader';
 import OrderForm from '../order-form';
 import { createWorkSubmission } from 'src/actions/work-submission';
 import { createOrderComment } from 'src/actions/comment';
-import { timeline } from 'src/theme/core/components/timeline';
 import PageTitle from '../revision-title';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -437,7 +436,8 @@ export default function RevisionFormView() {
             }}
           >
             <ImageUploader
-              title="재수정 사진 업로드"
+              title={'Photo Upload'}
+              subtitle="재수정 사진 업로드"
               alert={REVISE_PHOTO_UPLOAD_GUIDE}
               onChange={handleOrderImagesChange}
               isRevision={true}
@@ -452,7 +452,8 @@ export default function RevisionFormView() {
             }}
           >
             <ImageUploader
-              title="참고 사진 업로드"
+              title="Reference photo upload"
+              subtitle="참고 사진 업로드"
               alert={REVISE_REFERENCE_UPLOAD_GUIDE}
               onChange={handleReferenceImagesChange}
               isRevision={true}
@@ -473,6 +474,9 @@ export default function RevisionFormView() {
               isRevision={true}
             />
           </Box>
+          <Box sx={{ width: '100%', textAlign: 'center', my: 2 }}>
+            <hr style={{ border: 'none', borderTop: '1.5px solid #111', margin: '32px 0' }} />
+          </Box>
           <CautionAgree
             checked={formData.cautionAgree}
             content={REVISE_CAUTION_GUIDE}
@@ -485,6 +489,7 @@ export default function RevisionFormView() {
               onClick={handleUploadClick}
               disabled={uploading}
               sx={{
+                borderRadius: 0,
                 mb: 2,
                 background: ACCENT_COLOR,
                 color: BG_COLOR,

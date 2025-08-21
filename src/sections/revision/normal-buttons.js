@@ -154,7 +154,7 @@ const getButtonSx = (disabled) => ({
   boxShadow: 'none',
   transition: 'background 0.2s, color 0.2s',
   '&:hover': {
-    backgroundColor: !disabled ? '#222' : 'rgba(150,150,150,0.4)',
+    backgroundColor: !disabled ? '#888' : 'rgba(180,180,180,0.4)', // grayscale hover
     color: !disabled ? '#fff' : 'rgba(255,255,255,0.6)',
   },
 });
