@@ -4,9 +4,9 @@ import { CONFIG } from 'src/global-config';
 
 export const _workspaces = [
   {
-    id: 'ourwedding',
-    name: '아워웨딩',
-    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/아워웨딩.webp`,
+    id: 'wantswedding',
+    name: '원츠웨딩',
+    logo: `${CONFIG.assetsDir}/assets/icons/workspaces/원츠웨딩.webp`,
   },
   {
     id: 'taility',

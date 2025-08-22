@@ -1,9 +1,8 @@
-
 import OrderView from 'src/sections/new/view/order-view';
 
 export const metadata = {
-  title: '아워웨딩 | 주문접수',
-  description: '아워웨딩 주문 접수 페이지입니다.',
+  title: '원츠웨딩 | 주문접수',
+  description: '원츠웨딩 주문 접수 페이지입니다.',
 };
 
 export default function OrderPage() {

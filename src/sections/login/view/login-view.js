@@ -7,8 +7,6 @@ import { Box, Button, useTheme, Container, TextField, useMediaQuery } from '@mui
 import { login } from 'src/actions/user';
 import { FONTS, COLORS } from 'src/constant/colors';
 
-import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
-
 // 디자인 컬러 (image-uploader.js와 통일)
 const BG_COLOR = COLORS.BG_COLOR;
 const TEXT_COLOR = COLORS.TEXT_COLOR;
@@ -168,7 +166,6 @@ export default function LoginView() {
         px: isMobile ? 1 : 0,
       }}
     >
-      <OurWeddingDivider text="Ourwedding Ourdrama" />
       <Container maxWidth="xs" sx={{ px: isMobile ? 0.5 : 2 }}>
         <Box
           sx={{

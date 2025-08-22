@@ -27,7 +27,7 @@ const Flex = ({ children, style, ...props }) => (
 
 // MUI 스타일 및 유틸 함수
 const paths = {
-  ourwedding: {
+  wantswedding: {
     form: '/revision',
   },
 };
@@ -377,7 +377,7 @@ const NormalButtons = ({ order }) => {
           sx={getButtonSx(isReapplyDisabled)}
           onClick={() => {
             // 이 페이지로 이동함
-            router.push(`${paths.ourwedding.form}/${order.id}`);
+            router.push(`${paths.wantswedding.form}/${order.id}`);
           }}
         >
           재수정 신청

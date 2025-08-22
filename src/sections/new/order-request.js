@@ -5,7 +5,7 @@ import React from 'react';
 import { Box, Alert, TextField, Typography, Stack, Divider } from '@mui/material';
 
 import { COLORS } from 'src/constant/colors';
-import { REQUEST_INSTRUCTIONS } from 'src/constant/ourwedding';
+import { REQUEST_INSTRUCTIONS } from 'src/constant/wantswedding';
 
 import MarkdownWithCodeFix from './markdown-with-code-fix';
 import { Markdown } from 'src/components/markdown';

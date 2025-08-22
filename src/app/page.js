@@ -1,13 +1,13 @@
-import Ourwedding from 'src/sections/intro/view/intro-view';
+import WantsWedding from 'src/sections/intro/view/intro-view';
 
 export const metadata = {
-  title: '아워웨딩',
+  title: '원츠웨딩',
   icons: {
-    icon: '/아워웨딩.ico', // 또는 .png, .svg 등
+    icon: '/원츠웨딩.ico', // 또는 .png, .svg 등
   },
-  description: 'Ourwedding Ourdrama',
+  description: 'WantsWedding Ourdrama',
 };
 
 export default function Page() {
-  return <Ourwedding />;
+  return <WantsWedding />;
 }

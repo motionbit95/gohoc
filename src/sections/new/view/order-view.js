@@ -27,13 +27,12 @@ import {
   REFERENCE_UPLOAD_GUIDE,
   DEFAULT_TEXTAREA_CONTENT,
   CAUTION_GUIDE,
-} from 'src/constant/ourwedding';
+} from 'src/constant/wantswedding';
 
 import OrderForm from '../order-form';
 import OrderRequest from '../order-request';
 import CautionAgree from '../caution-agree';
 import ImageUploader from '../image-uploader';
-import OurWeddingDivider from '../ourwedding-divier';
 
 // View 전체를 BG_COLOR로 감싸기 위한 상수
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
@@ -250,7 +249,7 @@ export default function OrderView() {
             const result = await uploadToS3(
               fileToUpload,
               [
-                '아워웨딩',
+                '원츠웨딩',
                 formData.orderForm?.grade === '샘플' ? '샘플' : '신규',
                 user.userName || user.name || user.nickname || user.id || 'unknown',
                 user.userId || user.id || 'unknown',
@@ -288,7 +287,7 @@ export default function OrderView() {
         ...restFormData,
         uploadedOrderImages,
         uploadedReferenceImages,
-        status: '아워웨딩',
+        status: '원츠웨딩',
         label: uploadedOrderImages.grade === '샘플' ? '샘플' : '신규',
       };
 
@@ -318,7 +317,7 @@ export default function OrderView() {
       // 기존 자동 이동 제거, Dialog에서 이동하도록 변경
       // redirectTimeoutRef.current = setTimeout(() => {
       //   if (typeof window !== 'undefined') {
-      //     window.location.replace('/ourwedding');
+      //     window.location.replace('/wantswedding');
       //   }
       // }, 1500);
     } catch (e) {
@@ -397,7 +396,6 @@ export default function OrderView() {
               userName={user?.userName || user?.name || user?.nickname || ''}
             />
           </Box>
-          <OurWeddingDivider text="Ourwedding Ourdrama" />
           <Box
             sx={{
               maxWidth: 'md',
@@ -442,7 +440,6 @@ export default function OrderView() {
               onChange={handleOrderRequestChange}
             />
           </Box>
-          <OurWeddingDivider text="Ourdrama" isBorder />
 
           <CautionAgree
             checked={formData.cautionAgree}

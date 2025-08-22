@@ -5,7 +5,7 @@ import React from 'react';
 import { Box, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
 import { COLORS } from 'src/constant/colors';
-import { CAUTION_GUIDE } from 'src/constant/ourwedding';
+import { CAUTION_GUIDE } from 'src/constant/wantswedding';
 
 // 컬러 팔레트 (image-uploader.js와 통일)
 const BG_COLOR = COLORS.DETAIL_PAPER_BG;

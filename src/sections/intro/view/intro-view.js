@@ -9,8 +9,6 @@ import { FONTS, COLORS } from 'src/constant/colors';
 
 import { Iconify } from 'src/components/iconify';
 
-import OurWeddingDivider from 'src/sections/new/ourwedding-divier';
-
 // 스타일 상수
 const BG_COLOR = COLORS.BG_COLOR;
 const TEXT_COLOR = COLORS.TEXT_COLOR;
@@ -62,7 +60,7 @@ function ActionButton({ label, icon, onClick, isMobile }) {
   );
 }
 
-export default function Ourwedding() {
+export default function WantsWedding() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const router = useRouter();
@@ -111,7 +109,6 @@ export default function Ourwedding() {
         gap: 4,
       }}
     >
-      <OurWeddingDivider text="Ourwedding Ourdrama" />
       <Container
         maxWidth="xs"
         sx={{
