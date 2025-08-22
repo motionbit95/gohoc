@@ -1,530 +1,548 @@
-'use client';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { Form, Input, Checkbox, Typography, Flex } from 'antd';
+import { Stack, useMediaQuery } from '@mui/material';
+import { theme } from './theme';
+import { CONFIG } from 'src/global-config';
 
-import React, { useState } from 'react';
-
-import {
-  Box,
-  Stack,
-  Select,
-  MenuItem,
-  Checkbox,
-  TextField,
-  FormGroup,
-  Typography,
-  InputLabel,
-  FormControl,
-  FormControlLabel,
-} from '@mui/material';
-
-// 색상 상수 import
-import { COLORS, STYLES } from 'src/constant/colors';
-import { REVISION_OPTIONS } from '../revision/order-form';
-
-// 색감 수정: 상세페이지 전용 색상 사용
-const BG_COLOR = COLORS.DETAIL_BG_COLOR;
-const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
-const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
-
-// 통일된 input 스타일 변수
-const UNIFIED_RADIUS = STYLES.UNIFIED_RADIUS;
-const UNIFIED_HEIGHT = STYLES.UNIFIED_HEIGHT;
+const { Title, Text } = Typography;
 
 // 등급 옵션
 export const GRADE_OPTIONS = [
-  { value: '샘플', label: '샘플 (4일 이내)' },
-  { value: '씨앗', label: '씨앗 (7일 이내)' },
-  { value: '새싹', label: '새싹 (4일 이내)' },
-  { value: '나무', label: '나무 (2일 이내)' },
-  { value: '숲', label: '숲 (3시간 이내)' },
+  { value: '샘플', label: '샘플' },
+  { value: '~4일', label: '~4일 (기본)' },
+  { value: '~48시간', label: '~48시간 (추가금 : 1500원)' },
 ];
 
 // 추가 옵션 목록
 export const ADDITIONAL_OPTIONS = [
-  { value: '필름 추가', label: '색감작업(필름)', price: 1500 },
-  { value: '인원 추가', label: '인원 추가', price: 2000 },
-  { value: '합성', label: '합성', price: 2000 },
+  { value: 'skin', label: '피부', price: 1500 },
+  { value: 'body', label: '체형(+얼굴)', price: 2000 },
+  { value: 'edit', label: '합성', price: 2000 },
+  { value: 'filter', label: '색감', price: 2000 },
 ];
 
-// 현재 날짜와 시간을 yyyy-MM-dd HH:mm:ss 형식의 문자열로 반환
-function getCurrentDateTimeString() {
-  const now = new Date();
-  const yyyy = now.getFullYear();
-  const mm = String(now.getMonth() + 1).padStart(2, '0');
-  const dd = String(now.getDate()).padStart(2, '0');
-  const hh = String(now.getHours()).padStart(2, '0');
-  const min = String(now.getMinutes()).padStart(2, '0');
-  const ss = String(now.getSeconds()).padStart(2, '0');
+const labelStyle = {
+  color: theme.colors.label,
+  fontFamily: 'GumiRomanceTTF',
+};
+
+const checkboxContainerStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing.sm,
+};
+
+const gradeCheckboxStyle = {
+  borderRadius: '50%',
+};
+
+const additionalCheckboxStyle = {
+  borderRadius: '50%',
+};
+
+// 시간까지 포함된 오늘 날짜 문자열 반환
+function getTodayStringWithTime() {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const hh = String(today.getHours()).padStart(2, '0');
+  const min = String(today.getMinutes()).padStart(2, '0');
+  const ss = String(today.getSeconds()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
 }
 
-// 통일된 input 스타일
-const unifiedInputSx = {
-  color: TEXT_COLOR,
-  background: BG_COLOR,
-  borderRadius: UNIFIED_RADIUS,
-  fontWeight: 500,
-  letterSpacing: 0.5,
-  height: UNIFIED_HEIGHT,
-  minHeight: UNIFIED_HEIGHT,
-  '& .MuiInputBase-input': {
-    color: TEXT_COLOR,
-    height: UNIFIED_HEIGHT - 2, // 내부 padding 고려
-    minHeight: UNIFIED_HEIGHT - 2,
-    boxSizing: 'border-box',
-    padding: '0 14px',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  '& .MuiOutlinedInput-root': {
-    borderRadius: UNIFIED_RADIUS,
-    minHeight: UNIFIED_HEIGHT,
-    height: UNIFIED_HEIGHT,
-    '& fieldset': {
-      borderRadius: UNIFIED_RADIUS,
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: ACCENT_COLOR,
-    },
-  },
-  '& .MuiInputLabel-root': {
-    color: ACCENT_COLOR,
-    fontWeight: 700,
-    letterSpacing: 0.2,
-    fontSize: 16,
-    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-    lineHeight: 1.2,
-  },
-};
+// 구글 폰트 동적 로드 함수
+function loadGoogleFont() {
+  // 이미 로드된 경우 중복 삽입 방지
+  if (document.getElementById('lilita-one-font-link')) return;
+  const link = document.createElement('link');
+  link.id = 'lilita-one-font-link';
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Lilita+One&display=swap';
+  document.head.appendChild(link);
+}
 
-const unifiedInputProps = {
-  sx: {
-    ...unifiedInputSx,
-    pointerEvents: 'none', // readOnly용
-  },
-  readOnly: true,
-};
+// ===== 함수부분만 참고해서 바꿔궈 =====
 
-const unifiedInputLabelProps = {
-  sx: {
-    color: ACCENT_COLOR,
-    fontWeight: 700,
-    letterSpacing: 0.2,
-    fontSize: 16,
-    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-    lineHeight: 1.2,
-  },
-  shrink: true,
-};
+const getInitialFormData = (formData) => ({
+  userName: formData.userName || '',
+  userId: formData.userId || '',
+  orderNumber: formData.orderNumber || '',
+  grade: formData.grade || '',
+  additionalOptions: formData.additionalOptions || [],
+  photoCount: formData.photoCount || '',
+  photoReview: formData.photoReview || '',
+  receivedDate: formData.receivedDate || '',
+});
 
-export default function OrderForm({ value = {}, onChange, userId = '', userName = '' }) {
-  // value prop: { orderNumber, grade, photoCount, additionalOptions }
-  // onChange: (newFormData) => void
+const OrderForm = ({
+  formData = {},
+  onFormDataChange, // 부모로 전체 폼 데이터만 넘김
+}) => {
+  // 폰트 로드 (한 번만)
+  useEffect(() => {
+    loadGoogleFont();
+  }, []);
 
-  const [autoReceivedDate] = useState(getCurrentDateTimeString());
+  // 내부 상태로 폼 데이터 관리
+  const [localFormData, setLocalFormData] = useState(() => getInitialFormData(formData));
 
-  // 체크박스용 핸들러
-  const handleAdditionalOptionsChange = (e) => {
-    const { value: optionValue, checked } = e.target;
-    let newOptions;
-    if (checked) {
-      newOptions = [...(value.additionalOptions || []), optionValue];
-    } else {
-      newOptions = (value.additionalOptions || []).filter((opt) => opt !== optionValue);
+  // formData prop이 바뀌면 localFormData도 동기화 (단, 값이 실제로 바뀔 때만)
+  const prevFormDataRef = useRef(formData);
+
+  useEffect(() => {
+    // shallow compare: 만약 formData가 바뀌었으면 동기화
+    const prev = prevFormDataRef.current;
+    let changed = false;
+    for (const key of Object.keys(getInitialFormData({}))) {
+      if (formData[key] !== prev[key]) {
+        changed = true;
+        break;
+      }
     }
-    onChange?.({
-      ...value,
-      additionalOptions: newOptions,
-    });
-  };
-
-  // 재수정 옵션: 1개만 선택 가능하도록 변경
-  const handleRevisionOptionsChange = (e) => {
-    const { value: optionValue, checked } = e.target;
-    let newOptions;
-    if (checked) {
-      newOptions = [optionValue]; // Only one can be selected
-    } else {
-      newOptions = [];
+    if (changed) {
+      setLocalFormData(getInitialFormData(formData));
+      prevFormDataRef.current = formData;
     }
-    onChange?.({
-      ...value,
-      revisionOptions: newOptions,
-    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData]);
+
+  // localFormData가 바뀔 때마다 부모로 전체 데이터 전달
+  const prevOnFormDataChange = useRef(onFormDataChange);
+  useEffect(() => {
+    if (typeof onFormDataChange === 'function') {
+      onFormDataChange(localFormData);
+    }
+    prevOnFormDataChange.current = onFormDataChange;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localFormData, onFormDataChange]);
+
+  // 반응형 폰트 사이즈
+  const isXs = useMediaQuery('(max-width:600px)');
+  const isSm = useMediaQuery('(min-width:601px) and (max-width:900px)');
+  const isMd = useMediaQuery('(min-width:901px)');
+
+  let baseFontSize = 18;
+  if (isXs) baseFontSize = 16;
+  else if (isSm) baseFontSize = 18;
+  else if (isMd) baseFontSize = 20;
+
+  // input 글씨 너무 큼 -> input 폰트 사이즈를 더 작게 조정
+  const inputFontSize = Math.max(13, Math.round(baseFontSize * 0.75));
+  const labelFontSize = baseFontSize * 0.8;
+  const checkboxFontSize = baseFontSize * 0.8;
+
+  let headerMainFontSize, headerSubFontSize, headerKorFontSize;
+  if (isXs) {
+    headerMainFontSize = 36;
+    headerSubFontSize = 28;
+    headerKorFontSize = 18;
+  } else if (isSm) {
+    headerMainFontSize = 48;
+    headerSubFontSize = 36;
+    headerKorFontSize = 22;
+  } else {
+    headerMainFontSize = 64;
+    headerSubFontSize = 44;
+    headerKorFontSize = 28;
+  }
+
+  // 등급 체크박스 렌더링
+  const renderGradeCheckboxes = () =>
+    GRADE_OPTIONS.map((option) => (
+      <div key={option.value} style={checkboxContainerStyle}>
+        <Checkbox value={option.value} style={gradeCheckboxStyle}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              color: theme.colors.text,
+              fontFamily: 'GumiRomanceTTF',
+              fontSize: checkboxFontSize,
+            }}
+          >
+            {option.label}
+          </div>
+        </Checkbox>
+      </div>
+    ));
+
+  // 추가 옵션 체크박스 렌더링
+  const renderAdditionalOptions = () =>
+    ADDITIONAL_OPTIONS.map((option) => (
+      <div key={option.value} style={checkboxContainerStyle}>
+        <Checkbox value={option.value} style={additionalCheckboxStyle}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              color: theme.colors.text,
+              fontFamily: 'GumiRomanceTTF',
+              fontSize: checkboxFontSize,
+            }}
+          >
+            <span>{option.label}</span>
+            {/* <span>{option.price.toLocaleString()}원</span> */}
+          </div>
+        </Checkbox>
+      </div>
+    ));
+
+  // 접수날짜 자동 입력 (localFormData.receivedDate가 없으면 오늘 날짜+시간)
+  const receivedDate = useMemo(() => {
+    if (!localFormData.receivedDate) return getTodayStringWithTime();
+    if (/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/.test(localFormData.receivedDate)) {
+      if (localFormData.receivedDate.length > 10) return localFormData.receivedDate;
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const min = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      return `${localFormData.receivedDate} ${hh}:${min}:${ss}`;
+    }
+    return localFormData.receivedDate;
+  }, [localFormData.receivedDate]);
+
+  // 핸들러: input, number 등
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setLocalFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // 셀렉트, 텍스트필드용 핸들러
-  const handleChange = (e) => {
-    const { name, value: inputValue } = e.target;
-    onChange?.({
-      ...value,
-      [name]: name === 'photoCount' ? Math.max(1, Number(inputValue)) : inputValue,
-    });
+  // 핸들러: 등급(grade) 체크박스 (단일 선택)
+  const handleGradeChange = (values) => {
+    const lastValue = values[values.length - 1];
+    setLocalFormData((prev) => ({
+      ...prev,
+      grade: lastValue,
+    }));
   };
 
-  // 라벨이 사라지는 문제 해결: InputLabelProps에 shrink: true를 명시적으로 추가
-  // (unifiedInputLabelProps에 이미 shrink: true가 있지만, 혹시 모를 오버라이드 방지 위해 각 필드에 명시적으로 추가)
+  // 핸들러: 추가 옵션(복수 선택)
+  const handleAdditionalOptionsChange = (values) => {
+    setLocalFormData((prev) => ({
+      ...prev,
+      additionalOptions: values,
+    }));
+  };
+
+  // 핸들러: 포토리뷰 (라디오처럼 동작)
+  const handlePhotoReviewChange = (value) => {
+    setLocalFormData((prev) => ({
+      ...prev,
+      photoReview: value,
+    }));
+  };
 
   return (
-    <Box
-      sx={{
-        color: TEXT_COLOR,
-        borderRadius: 3,
-        px: { xs: 2, md: 4 },
-        py: { xs: 2, md: 3 },
-        mx: 'auto',
-        mb: 2,
+    <Form
+      labelCol={{ span: 8 }}
+      wrapperCol={{ span: 16 }}
+      style={{
+        padding: theme.spacing.lg,
+        paddingBlock: theme.spacing.xxl,
+        fontFamily: 'GumiRomanceTTF',
+        fontSize: baseFontSize,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 3,
-          color: ACCENT_COLOR,
-          fontWeight: 800,
-          letterSpacing: 0.5,
-          fontSize: { xs: 20, sm: 22 },
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        주문자 정보(신규)
-      </Typography>
-      <Stack spacing={2}>
-        <TextField
-          label="접수일"
-          name="receivedDate"
-          value={autoReceivedDate}
-          fullWidth
-          size="small"
-          InputProps={unifiedInputProps}
-          InputLabelProps={{
-            ...unifiedInputLabelProps,
-            shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
-          }}
-          sx={unifiedInputSx}
-        />
-        <TextField
-          label="고객 ID (이메일)"
-          name="userId"
-          value={userId}
-          fullWidth
-          size="small"
-          InputProps={unifiedInputProps}
-          InputLabelProps={{
-            ...unifiedInputLabelProps,
-            shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
-          }}
-          sx={unifiedInputSx}
-        />
-        <TextField
-          label="고객명"
-          name="userName"
-          value={userName}
-          fullWidth
-          size="small"
-          InputProps={unifiedInputProps}
-          InputLabelProps={{
-            ...unifiedInputLabelProps,
-            shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
-          }}
-          sx={unifiedInputSx}
-        />
-        <TextField
-          label="주문번호"
-          name="orderNumber"
-          value={value.orderNumber || ''}
-          onChange={handleChange}
-          required
-          fullWidth
-          size="small"
-          sx={unifiedInputSx}
-          InputLabelProps={{
-            ...unifiedInputLabelProps,
-            shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
-          }}
-        />
-        <FormControl
-          fullWidth
-          size="small"
-          required
-          sx={{
-            ...unifiedInputSx,
-            '& .MuiSelect-icon': { color: ACCENT_COLOR },
-            '& .MuiOutlinedInput-root': {
-              borderRadius: UNIFIED_RADIUS,
-              minHeight: UNIFIED_HEIGHT,
-              height: UNIFIED_HEIGHT,
-              '& fieldset': {
-                borderRadius: UNIFIED_RADIUS,
-              },
-            },
-            '& .MuiSelect-select': {
-              minHeight: UNIFIED_HEIGHT - 2,
-              height: UNIFIED_HEIGHT - 2,
-              display: 'flex',
-              alignItems: 'center',
-              color: TEXT_COLOR,
-              padding: '0 14px',
-            },
+      <Stack gap={2}>
+        {/* 폰트는 useEffect에서 동적으로 로드 */}
+        <div
+          style={{
+            position: 'relative',
+            marginBottom: theme.spacing.xl,
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: isXs ? 8 : 16,
           }}
         >
-          <InputLabel
-            id="grade-label"
-            sx={unifiedInputLabelProps.sx}
-            shrink
-            style={{ color: ACCENT_COLOR }}
+          <Title
+            level={1}
+            style={{
+              fontFamily: "'Lilita One', sans-serif",
+              whiteSpace: 'nowrap',
+              fontWeight: 300,
+              fontSize: headerMainFontSize,
+              color: 'white',
+              WebkitTextStroke: '0.5px #2E4B50',
+              marginBottom: isXs ? 6 : 10,
+              letterSpacing: 2,
+              lineHeight: 1.1,
+            }}
           >
-            등급
-          </InputLabel>
-          <Select
-            labelId="grade-label"
-            label="등급"
-            name="grade"
-            value={value.grade || ''}
-            onChange={handleChange}
-            sx={{
-              color: TEXT_COLOR,
-              background: BG_COLOR,
-              borderRadius: UNIFIED_RADIUS,
-              fontWeight: 500,
-              letterSpacing: 0.5,
-              minHeight: UNIFIED_HEIGHT,
-              height: UNIFIED_HEIGHT,
+            Order Information
+          </Title>
+          <Title
+            level={1}
+            style={{
+              fontFamily: "'Lilita One', sans-serif",
+              whiteSpace: 'nowrap',
+              fontWeight: 300,
+              fontSize: headerMainFontSize,
+              color: 'white',
+              WebkitTextStroke: '0.5px #2E4B50',
+              marginTop: 0,
+              marginBottom: isXs ? 6 : 10,
+              letterSpacing: 2,
+              lineHeight: 1.1,
+            }}
+          >
+            (New)
+          </Title>
+
+          <Title
+            level={3}
+            style={{
+              fontFamily: "'Lilita One', sans-serif",
+              fontSize: headerSubFontSize,
+              whiteSpace: 'nowrap',
+              color: '#F2FFF2',
+              WebkitTextStroke: '0.5px #4DA0FF',
+              marginTop: isXs ? 2 : 6,
+              marginBottom: isXs ? 6 : 10,
+              letterSpacing: 1,
+              lineHeight: 1.1,
+            }}
+          >
+            Wan&apos;t Wedding
+          </Title>
+          <Text
+            style={{
+              fontFamily: 'GumiRomanceTTF',
+              fontSize: headerKorFontSize,
+              whiteSpace: 'nowrap',
+              color: '#006C92',
+            }}
+          >
+            주문자정보입력
+          </Text>
+        </div>
+
+        <Form.Item
+          label={
+            <div style={{ ...labelStyle, fontSize: labelFontSize }}>{'(자동) 주문자 성함'}</div>
+          }
+          colon={false}
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Input
+            readOnly
+            value={localFormData.userName}
+            style={{ color: theme.colors.label, fontSize: inputFontSize }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'(자동) 접수 날짜'}</div>}
+          colon={false}
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Text
+            style={{
+              color: theme.colors.label,
+              fontFamily: 'GumiRomanceTTF',
+              fontSize: baseFontSize,
+            }}
+          >
+            {receivedDate}
+          </Text>
+          <div
+            style={{
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/line.png)`,
+              backgroundRepeat: 'repeat',
+              backgroundSize: 'contain',
+              backgroundPosition: 'center',
+              height: 12,
+            }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={
+            <div style={{ ...labelStyle, fontSize: labelFontSize }}>{'네이버 아이디(자동)'}</div>
+          }
+          colon={false}
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Input
+            readOnly
+            value={localFormData.userId}
+            style={{ color: theme.colors.label, fontSize: inputFontSize }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'상품주문번호'}</div>}
+          colon={false}
+          help={
+            <div style={{ color: '#FF7B00DD', fontSize: labelFontSize }}>
+              {'ㄴ * 오타없이 꼭 정확한 상품 주문번호 기재 바랍니다. *'}
+            </div>
+          }
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Input
+            name="orderNumber"
+            value={localFormData.orderNumber}
+            onChange={handleInputChange}
+            style={{ color: theme.colors.text, fontSize: inputFontSize }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'등급'}</div>}
+          colon={false}
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Checkbox.Group
+            onChange={handleGradeChange}
+            value={localFormData.grade ? [localFormData.grade] : []}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+            }}
+          >
+            {renderGradeCheckboxes()}
+          </Checkbox.Group>
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'상품'}</div>}
+          colon={false}
+        >
+          <Checkbox.Group
+            onChange={handleAdditionalOptionsChange}
+            value={localFormData.additionalOptions}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: theme.spacing.lg,
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/grid.png)`,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {renderAdditionalOptions()}
+          </Checkbox.Group>
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'사진 장수'}</div>}
+          colon={false}
+          style={{ marginBottom: theme.spacing.lg }}
+        >
+          <Input
+            name="photoCount"
+            value={localFormData.photoCount}
+            onChange={handleInputChange}
+            type="number"
+            style={{ color: theme.colors.text, fontSize: inputFontSize }}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'포토리뷰'}</div>}
+          colon={false}
+        >
+          <div
+            className="checkbox-group"
+            style={{
               display: 'flex',
-              alignItems: 'center',
-              '& .MuiSelect-select': {
-                color: TEXT_COLOR,
-                minHeight: UNIFIED_HEIGHT - 2,
-                height: UNIFIED_HEIGHT - 2,
-                display: 'flex',
-                alignItems: 'center',
-                padding: '0 14px',
-              },
+              flexDirection: 'row',
+              gap: theme.spacing.sm,
             }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  background: BG_COLOR,
-                  color: TEXT_COLOR,
-                  borderRadius: UNIFIED_RADIUS,
-                },
-              },
-            }}
-            // shrink 라벨 강제
-            inputProps={{ 'aria-label': '등급' }}
           >
-            {GRADE_OPTIONS.map((option) => (
-              <MenuItem
-                key={option.value}
-                value={option.value}
-                sx={{
-                  color: TEXT_COLOR,
-                  background: 'transparent',
-                  borderRadius: UNIFIED_RADIUS,
-                  minHeight: UNIFIED_HEIGHT - 2,
-                  height: UNIFIED_HEIGHT - 2,
+            <div
+              className="checkbox-item"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                padding: theme.spacing.sm,
+                borderRadius: '4px',
+                gap: 8,
+                fontFamily: 'GumiRomanceTTF',
+                width: '100%',
+                fontSize: checkboxFontSize,
+              }}
+            >
+              <Checkbox
+                checked={localFormData.photoReview === '포토리뷰 O'}
+                onChange={() => handlePhotoReviewChange('포토리뷰 O')}
+              />
+              <span
+                className="checkbox-label"
+                style={{
                   display: 'flex',
-                  alignItems: 'center',
-                  '&.Mui-selected': {
-                    background: ACCENT_COLOR_DARK,
-                    color: BG_COLOR,
-                  },
-                  '&:hover': {
-                    background: ACCENT_COLOR,
-                    color: BG_COLOR,
-                  },
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  color: theme.colors.text,
                 }}
               >
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <TextField
-          label="사진 수량"
-          name="photoCount"
-          value={value.photoCount || ''}
-          onChange={handleChange}
-          required
-          fullWidth
-          size="small"
-          type="number"
-          inputProps={{ min: 1, style: { height: UNIFIED_HEIGHT - 2, padding: '0 14px' } }}
-          sx={unifiedInputSx}
-          InputLabelProps={{
-            ...unifiedInputLabelProps,
-            shrink: true,
-            style: { color: ACCENT_COLOR }, // 라벨 색상 명시적으로 지정
-          }}
-        />
-        <FormControl
-          component="fieldset"
-          variant="standard"
-          sx={{
-            mt: 1,
-            px: 1,
-            py: 1,
-            background: BG_COLOR,
-            borderRadius: UNIFIED_RADIUS,
-            minHeight: UNIFIED_HEIGHT + 12,
-          }}
-        >
-          <Typography
-            variant="subtitle1"
-            sx={{
-              mb: 0.5,
-              color: ACCENT_COLOR,
-              fontWeight: 700,
-              letterSpacing: 0.5,
-              fontSize: 16,
-              textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-            }}
-          >
-            추가 옵션
-          </Typography>
-          <FormGroup row>
-            {ADDITIONAL_OPTIONS.map((option) => (
-              <FormControlLabel
-                key={option.value}
-                control={
-                  <Checkbox
-                    checked={(value.additionalOptions || []).includes(option.value)}
-                    onChange={handleAdditionalOptionsChange}
-                    value={option.value}
-                    sx={{
-                      color: ACCENT_COLOR,
-                      borderRadius: UNIFIED_RADIUS,
-                      width: 28,
-                      height: 28,
-                      p: 0.5,
-                      '&.Mui-checked': {
-                        color: ACCENT_COLOR_DARK,
-                      },
-                    }}
-                  />
-                }
-                label={
-                  <Box
-                    component="span"
-                    sx={{
-                      color: TEXT_COLOR,
-                      fontWeight: 500,
-                      fontSize: 15,
-                      letterSpacing: 0.2,
+                <Flex vertical>
+                  <span
+                    className="checkbox-title"
+                    style={{ fontSize: checkboxFontSize }}
+                  >{`포토리뷰 O`}</span>
+                  <span
+                    className="checkbox-price"
+                    style={{
+                      color: 'black',
+                      fontFamily: 'GumiRomanceTTF',
+                      fontSize: checkboxFontSize * 0.95,
                     }}
                   >
-                    {option.label}
-                    <Box
-                      component="span"
-                      sx={{
-                        color: ACCENT_COLOR,
-                        fontWeight: 700,
-                        fontSize: 14,
-                        ml: 0.5,
-                      }}
-                    >
-                      (+{option.price.toLocaleString()}원)
-                    </Box>
-                  </Box>
-                }
-                sx={{
-                  mr: 2,
-                  mb: 0.5,
-                  borderRadius: UNIFIED_RADIUS,
-                  minHeight: UNIFIED_HEIGHT - 8,
-                  alignItems: 'center',
-                  '& .MuiFormControlLabel-label': {
-                    color: TEXT_COLOR,
-                  },
-                }}
-              />
-            ))}
-          </FormGroup>
-        </FormControl>
+                    {`ㄴ 포토리뷰 작성 시 +1장 서비스장수로 작업 진행 가능합니다.`}
+                  </span>
+                </Flex>
+              </span>
+            </div>
 
-        <FormControl
-          component="fieldset"
-          variant="standard"
-          sx={{
-            mt: 1,
-            px: 1,
-            py: 1,
-            background: BG_COLOR,
-            borderRadius: UNIFIED_RADIUS,
-            minHeight: UNIFIED_HEIGHT + 12,
-          }}
-        >
-          <Typography
-            variant="subtitle1"
-            sx={{
-              mb: 0.5,
-              color: ACCENT_COLOR,
-              fontWeight: 700,
-              letterSpacing: 0.5,
-              fontSize: 16,
-              textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-            }}
-          >
-            재수정
-          </Typography>
-          <FormGroup row>
-            {REVISION_OPTIONS.map((option) => (
-              <FormControlLabel
-                key={option.value}
-                control={
-                  <Checkbox
-                    checked={(value.revisionOptions || []).includes(option.value)}
-                    onChange={handleRevisionOptionsChange}
-                    value={option.value}
-                    sx={{
-                      color: ACCENT_COLOR,
-                      borderRadius: UNIFIED_RADIUS,
-                      width: 28,
-                      height: 28,
-                      p: 0.5,
-                      '&.Mui-checked': {
-                        color: ACCENT_COLOR_DARK,
-                      },
-                    }}
-                    // // 한 가지만 선택 가능하도록 나머지 옵션은 disable 처리
-                    // disabled={
-                    //   (value.revisionOptions || []).length > 0 &&
-                    //   !(value.revisionOptions || []).includes(option.value)
-                    // }
-                  />
-                }
-                label={
-                  <Box
-                    component="span"
-                    sx={{
-                      color: TEXT_COLOR,
-                      fontWeight: 500,
-                      fontSize: 15,
-                      letterSpacing: 0.2,
-                    }}
-                  >
-                    {option.label}
-                  </Box>
-                }
-                sx={{
-                  mr: 2,
-                  mb: 0.5,
-                  borderRadius: UNIFIED_RADIUS,
-                  minHeight: UNIFIED_HEIGHT - 8,
-                  alignItems: 'center',
-                  '& .MuiFormControlLabel-label': {
-                    color: TEXT_COLOR,
-                  },
-                }}
+            <div
+              className="checkbox-item"
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                padding: theme.spacing.sm,
+                borderRadius: '4px',
+                gap: 8,
+                fontFamily: 'GumiRomanceTTF',
+                width: '100%',
+                fontSize: checkboxFontSize,
+              }}
+            >
+              <Checkbox
+                checked={localFormData.photoReview === '포토리뷰 X'}
+                onChange={() => handlePhotoReviewChange('포토리뷰 X')}
               />
-            ))}
-          </FormGroup>
-        </FormControl>
+              <span
+                className="checkbox-label"
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  justifyContent: 'flex-start',
+                  width: '100%',
+                  color: theme.colors.text,
+                }}
+              >
+                <Flex vertical>
+                  <span className="checkbox-title" style={{ fontSize: checkboxFontSize }}>
+                    {'포토리뷰 X'}
+                  </span>
+                </Flex>
+              </span>
+            </div>
+          </div>
+        </Form.Item>
       </Stack>
-    </Box>
+    </Form>
   );
-}
+};
+
+export default OrderForm;
