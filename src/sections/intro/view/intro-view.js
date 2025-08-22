@@ -1,77 +1,106 @@
 'use client';
 
+// React 및 필요한 훅, 컴포넌트 import
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import React, { useMemo, useCallback, useEffect } from 'react';
+import { Button, ConfigProvider, Flex } from 'antd';
 
-import { Box, Button, useTheme, Container, useMediaQuery } from '@mui/material';
-
-import { FONTS, COLORS } from 'src/constant/colors';
-
-import { Iconify } from 'src/components/iconify';
-
-// 스타일 상수
-const BG_COLOR = COLORS.BG_COLOR;
-const TEXT_COLOR = COLORS.TEXT_COLOR;
-const ACCENT_COLOR = COLORS.LOGIN_ACCENT_COLOR; // 인트로 페이지는 로그인과 동일한 컬러 사용
-const ACCENT_COLOR_DARK = COLORS.LOGIN_ACCENT_COLOR_DARK;
-const FONT_HEADING = FONTS.HEADING;
-
+// 버튼에 대한 라벨과 이동할 페이지 정보 설정
 const BUTTON_CONFIGS = [
-  {
-    label: '신규신청',
-    page: 'new',
-    icon: <Iconify icon="lucide:edit" sx={{ mr: 1 }} />,
-  },
-  {
-    label: '접수내역 (재수정신청)',
-    page: 'revision',
-    icon: <Iconify icon="si:clipboard-line" sx={{ mr: 1 }} />,
-  },
+  { label: '신규신청', page: 'new' },
+  { label: '접수내역 (재수정신청)', page: 'revision' },
 ];
 
-function ActionButton({ label, icon, onClick, isMobile }) {
+// 스타일 객체 정의
+const styles = {
+  wrapper: {
+    height: '100vh',
+    backgroundColor: '#EDF9FF',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  },
+  button: {
+    maxWidth: 300,
+    paddingInline: 40,
+    paddingBlock: 24,
+    fontSize: 16,
+    fontWeight: 500,
+    whiteSpace: 'pre-line',
+    color: '#6BB0FF',
+    fontFamily: 'GumiRomanceTTF',
+    backgroundColor: 'transparent',
+    border: 'none',
+    boxShadow: 'none',
+  },
+  // 버튼 컨테이너 스타일, 선택 여부에 따라 이미지 변경
+  buttonContainer: (isSelected) => ({
+    backgroundImage: `url(/assets/wantswedding/${isSelected ? 'button_click.png' : 'button.png'})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    width: 300,
+    height: 100,
+    display: 'flex',
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  // 링크 아이콘 스타일
+  linkIcon: {
+    backgroundImage: 'url(/assets/wantswedding/link.png)',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    width: 24,
+    height: 24,
+    position: 'absolute',
+    top: 24,
+    right: 24,
+  },
+};
+
+// 버튼과 링크 아이콘을 함께 렌더링하는 컴포넌트
+function ButtonWithIcon({
+  label,
+  page,
+  isSelected,
+  onClick,
+  onMouseDown,
+  onMouseLeave,
+  onMouseUp,
+}) {
   return (
-    <Button
-      variant="contained"
-      size="large"
-      startIcon={icon}
-      onClick={onClick}
-      sx={{
-        background: ACCENT_COLOR,
-        color: TEXT_COLOR,
-        fontSize: isMobile ? 16 : 20,
-        fontFamily: FONT_HEADING,
-        borderRadius: 2,
-        boxShadow: 'none',
-        py: isMobile ? 2.5 : 3.5,
-        px: isMobile ? 3 : 6,
-        width: '100%',
-        maxWidth: isMobile ? 360 : 420,
-        minHeight: isMobile ? 64 : 80,
-        '&:hover': {
-          background: ACCENT_COLOR_DARK,
-          boxShadow: 'none',
-        },
-        transition: 'background 0.2s',
-      }}
-    >
-      {label}
-    </Button>
+    <div style={styles.buttonContainer(isSelected)}>
+      <Button
+        type="text"
+        size="large"
+        style={styles.button}
+        onClick={onClick}
+        onMouseDown={onMouseDown}
+        onMouseLeave={onMouseLeave}
+        onMouseUp={onMouseUp}
+      >
+        {label}
+      </Button>
+      {/* 링크 아이콘 */}
+      <div style={styles.linkIcon} />
+    </div>
   );
 }
 
+// 메인 컴포넌트
 export default function WantsWedding() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  // 선택된 버튼의 페이지 상태 관리
+  const [selectedPage, setSelectedPage] = useState(null);
   const router = useRouter();
 
-  // 여기오면 localstorage 초기화
+  // 컴포넌트 마운트 시 localStorage 초기화
   useEffect(() => {
     if (typeof window !== 'undefined' && window.localStorage) {
       window.localStorage.clear();
     }
   }, []);
 
+  // 버튼 클릭 시 해당 페이지로 이동
   const handleButtonClick = useCallback(
     (page) => {
       router.push(`/login/?target=${page}`);
@@ -79,49 +108,27 @@ export default function WantsWedding() {
     [router]
   );
 
-  // useMemo로 버튼 목록 생성 (불필요한 리렌더 방지)
-  const buttons = useMemo(
-    () =>
-      BUTTON_CONFIGS.map(({ label, page, icon }) => (
-        <ActionButton
-          key={page}
-          label={label}
-          icon={icon}
-          isMobile={isMobile}
-          onClick={() => handleButtonClick(page)}
-        />
-      )),
-    [isMobile, handleButtonClick]
-  );
-
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        background: BG_COLOR,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        py: 6,
-        gap: 4,
-      }}
-    >
-      <Container
-        maxWidth="xs"
-        sx={{
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 3,
-          mt: 0,
-        }}
-      >
-        {buttons}
-      </Container>
-    </Box>
+    <ConfigProvider theme={{ components: { Button: {} } }}>
+      <div style={styles.wrapper}>
+        <Flex align="center" justify="center" style={{ height: '100%' }}>
+          <Flex vertical align="center" gap={48}>
+            {/* 버튼 목록 렌더링 */}
+            {BUTTON_CONFIGS.map(({ label, page }, idx) => (
+              <ButtonWithIcon
+                key={page}
+                label={label}
+                page={page}
+                isSelected={page === selectedPage}
+                onClick={() => handleButtonClick(page)}
+                onMouseDown={() => setSelectedPage(page)}
+                onMouseLeave={() => setSelectedPage(null)}
+                onMouseUp={() => setSelectedPage(null)}
+              />
+            ))}
+          </Flex>
+        </Flex>
+      </div>
+    </ConfigProvider>
   );
 }
