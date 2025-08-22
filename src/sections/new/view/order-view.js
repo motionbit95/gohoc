@@ -114,7 +114,8 @@ const getStyles = (assetsDir) => ({
   },
   imageUploaderFlex: {
     justifyContent: 'center',
-    maxWidth: '1000px',
+    maxWidth: '900px',
+    width: '100%',
   },
 });
 

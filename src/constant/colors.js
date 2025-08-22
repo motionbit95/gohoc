@@ -1,80 +1,34 @@
 // WantsWedding 프로젝트 색상 팔레트
 // 모든 컴포넌트에서 일관된 색상을 사용하기 위한 중앙 집중식 색상 관리
 
-// 기본 색상 팔레트
-// export const COLORS = {
-//   // 기본 배경 및 카드
-//   BG_COLOR: '#23291f', // 메인 배경색 (다크 그린)
-//   PAPER_BG: '#2e3527', // 카드/섹션 배경색 (BG보다 밝은 톤)
-
-//   // 텍스트
-//   TEXT_COLOR: '#fffbe9', // 기본 텍스트 색상 (밝은 베이지/화이트)
-
-//   // 메인 액센트 (버튼, 포인트 등)
-//   ACCENT_COLOR: '#ffe082b3', // 기본 액센트 색 (밝은 옐로우, 톤 다운)
-//   ACCENT_COLOR_DARK: '#e6c86a', // 액센트 hover 등 (톤다운)
-
-//   // 버튼
-//   BUTTON_COLOR: '#746D4B', // 버튼 배경 (모카 브라운)
-//   BUTTON_HOVER_COLOR: '#68644F', // 버튼 hover
-//   BUTTON_TEXT_COLOR: '#fffbe9', // 버튼 텍스트
-
-//   // 로그인 전용 (기존 버튼 색 활용)
-//   LOGIN_ACCENT_COLOR: '#746D4B',
-//   LOGIN_ACCENT_COLOR_DARK: '#68644F',
-
-//   // 상세페이지 전용 색상 (별도 페이지용 톤)
-//   DETAIL_BG_COLOR: '#FDFBF7', // 배경
-//   DETAIL_TEXT_COLOR: '#5B4C2B', // 텍스트 (소프트 브라운)
-//   DETAIL_SECTION_BG: '#E7E2D2', // 박스 배경
-//   DETAIL_HIGHLIGHT_BG: '#D9D1B4', // 강조 배경
-//   DETAIL_SUBTEXT_COLOR: '#9C937F', // 설명, 서브텍스트
-//   DETAIL_WARNING_COLOR: '#D7562B', // 경고 텍스트
-
-//   // 상태 컬러
-//   DIVIDER_COLOR: '#A79166',
-//   ERROR_COLOR: '#d32f2f',
-//   SUCCESS_COLOR: '#388e3c',
-//   WARNING_COLOR: '#ed6c02',
-//   INFO_COLOR: '#0288d1',
-// };
-
 export const COLORS = {
-  // 기본 배경 및 카드
-  BG_COLOR: '#23291f', // 메인 배경색 (다크 그린)
-  PAPER_BG: '#2e3527', // 카드/섹션 배경색 (BG보다 밝은 톤)
+  BG_COLOR: '#FDFBF7', // 메인 배경 (이미지 기준 밝은 화이트)
+  PAPER_BG: '#E7E2D2', // 카드/섹션 배경
+  TEXT_COLOR: '#5B4C2B', // 기본 텍스트 (소프트 브라운)
 
-  // 텍스트
-  TEXT_COLOR: '#fffbe9', // 기본 텍스트 색상 (밝은 베이지/화이트)
+  ACCENT_COLOR: '#ffe082', // 액센트 (밝은 옐로우)
+  ACCENT_COLOR_DARK: '#e6c86a', // 액센트 다크
 
-  // 메인 액센트 (버튼, 포인트 등)
-  ACCENT_COLOR: '#ffe082b3', // 기본 액센트 색 (밝은 옐로우, 톤 다운)
-  ACCENT_COLOR_DARK: '#e6c86a', // 액센트 hover 등 (톤다운)
-
-  // 버튼
-  BUTTON_COLOR: '#746D4B', // 버튼 배경 (모카 브라운)
+  BUTTON_COLOR: '#746D4B', // 버튼 배경
   BUTTON_HOVER_COLOR: '#68644F', // 버튼 hover
   BUTTON_TEXT_COLOR: '#fffbe9', // 버튼 텍스트
 
-  // 로그인 전용 (기존 버튼 색 활용)
   LOGIN_ACCENT_COLOR: '#746D4B',
   LOGIN_ACCENT_COLOR_DARK: '#68644F',
 
-  // 상세페이지 전용 색상 (별도 페이지용 톤)
-  DETAIL_BG_COLOR: 'white', // 배경
-  DETAIL_PAPER_BG: '#E7E0D1', // 카드/섹션 배경색
+  DETAIL_BG_COLOR: '#FDFBF7',
+  DETAIL_PAPER_BG: '#E7E2D2',
   DETAIL_ALERT_BG: 'rgba(110, 133, 87, 0.2)',
 
-  DETAIL_ACCENT_COLOR: '#6E8557', // 액센트 컬러
-  DETAIL_ACCENT_COLOR_DARK: '#5B4C2B', // 액센트 hover 등 (진한 그린)
+  DETAIL_ACCENT_COLOR: '#006C92',
+  DETAIL_ACCENT_COLOR_DARK: '#5B4C2B',
 
-  DETAIL_TEXT_COLOR: '#5B4C2B', // 텍스트 (소프트 브라운)
-  DETAIL_SECTION_BG: '#E7E2D2', // 박스 배경
-  DETAIL_HIGHLIGHT_BG: '#D9D1B4', // 강조 배경
-  DETAIL_SUBTEXT_COLOR: '#9C937F', // 설명, 서브텍스트
-  DETAIL_WARNING_COLOR: '#D7562B', // 경고 텍스트
+  DETAIL_TEXT_COLOR: 'black',
+  DETAIL_SECTION_BG: '#E7E2D2',
+  DETAIL_HIGHLIGHT_BG: '#D9D1B4',
+  DETAIL_SUBTEXT_COLOR: '#9C937F',
+  DETAIL_WARNING_COLOR: '#D7562B',
 
-  // 상태 컬러
   DIVIDER_COLOR: '#A79166',
   ERROR_COLOR: '#d32f2f',
   SUCCESS_COLOR: '#388e3c',
@@ -263,61 +217,6 @@ export const sxHelpers = {
     };
   },
 };
-
-// 사용 예시:
-/*
-// 1. 기본 색상 사용
-import { COLORS, FONTS } from 'src/constant/colors';
-
-const MyComponent = () => (
-  <Box sx={{ background: COLORS.BG_COLOR, color: COLORS.TEXT_COLOR }}>
-    <Typography sx={{ fontFamily: FONTS.HEADING }}>
-      Hello World
-    </Typography>
-  </Box>
-);
-
-// 2. 테마 세트 사용
-import { getThemeColors } from 'src/constant/colors';
-
-const LoginComponent = () => {
-  const colors = getThemeColors('login');
-  return (
-    <Box sx={{ background: colors.bgColor, color: colors.textColor }}>
-      <Button sx={{ background: colors.accentColor }}>
-        Login
-      </Button>
-    </Box>
-  );
-};
-
-// 3. 헬퍼 함수 사용
-import { sxHelpers } from 'src/constant/colors';
-
-const FormComponent = () => (
-  <Box sx={sxHelpers.box('main')}>
-    <Typography sx={sxHelpers.title('main')}>
-      Form Title
-    </Typography>
-    <TextField sx={sxHelpers.input('main')} />
-    <Button sx={sxHelpers.button('main')}>
-      Submit
-    </Button>
-  </Box>
-);
-
-// 4. 색상 유틸리티 사용
-import { colorUtils } from 'src/constant/colors';
-
-const CustomComponent = () => (
-  <Box sx={{ 
-    background: colorUtils.withOpacity(COLORS.ACCENT_COLOR, 0.1),
-    border: `1px solid ${colorUtils.lighten(COLORS.ACCENT_COLOR, 20)}`
-  }}>
-    Custom styled component
-  </Box>
-);
-*/
 
 // 기본 export (하위 호환성을 위해)
 export default {

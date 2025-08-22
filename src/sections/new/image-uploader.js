@@ -23,11 +23,13 @@ import { Iconify } from 'src/components/iconify';
 
 import MarkdownWithCodeFix from './markdown-with-code-fix';
 import { Upload } from 'src/components/upload';
+import { Space } from 'antd';
+import { CONFIG } from 'src/global-config';
 
 // 컬러 팔레트 (조화롭게 변경)
 const BG_COLOR = 'white';
 const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
+const ACCENT_COLOR_DARK = 'white';
 const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
 const PAPER_BG = COLORS.DETAIL_ALERT_BG;
 
@@ -117,21 +119,23 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
         borderRadius: 3,
         p: { xs: 2, sm: 3 },
         color: TEXT_COLOR,
+        fontFamily: 'GumiRomanceTTF',
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 2,
-          color: TEXT_COLOR,
-          fontWeight: 800,
-          letterSpacing: 0.5,
-          fontSize: { xs: 20, sm: 22 },
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        {title}
-      </Typography>
+      <Space>
+        <Typography
+          variant="h4"
+          style={{
+            margin: '0 0 3px 0',
+            color: ACCENT_COLOR,
+            fontFamily: 'GumiRomanceTTF',
+            fontWeight: 300,
+          }}
+        >
+          Photo upload
+        </Typography>
+        <Typography style={{ fontFamily: 'GumiRomanceTTF' }}>사진 업로드</Typography>
+      </Space>
       {/* Alert 메시지는 부모에서 props로 전달받아 마크다운으로 Alert에 표시 */}
       {alert && (
         <Alert
@@ -145,16 +149,18 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
             wordBreak: 'keep-all',
             background: ACCENT_COLOR_DARK,
             color: TEXT_COLOR,
-            // border: `1.5px solid ${ACCENT_COLOR}`, // border 제거
-            fontWeight: 600,
             lineHeight: 1.7,
             letterSpacing: 0.1,
             textShadow: '0 1px 2px rgba(0,0,0,0.10)',
+            border: '1px solid rgb(192, 235, 255)',
+            minHeight: 150,
+            alignItems: 'center',
           }}
         >
           <MarkdownWithCodeFix>{alert}</MarkdownWithCodeFix>
         </Alert>
       )}
+
       {/* 업로드 제한 에러 메시지 */}
       {error && (
         <Alert
@@ -174,47 +180,19 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
           {error}
         </Alert>
       )}
+
       <Box
         sx={{
           mb: 1,
           fontSize: 16,
           color: ACCENT_COLOR,
-          textAlign: 'right',
-          fontWeight: 600,
+          textAlign: 'center',
           textShadow: '0 1px 2px rgba(0,0,0,0.10)',
         }}
       >
-        현재 업로드: <b style={{ color: TEXT_COLOR, fontWeight: 800 }}>{images.length}</b>장
+        업로드 된 사진 파일 갯수 :{' '}
+        <b style={{ color: TEXT_COLOR, fontWeight: 800 }}>{images.length}</b>장
       </Box>
-      {/* <input
-        type="file"
-        accept="image/*"
-        multiple
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleFileChange}
-        disabled={!isUnlimited && images.length >= maxCount}
-      /> */}
-      {/* <Button
-        variant="contained"
-        onClick={handleButtonClick}
-        sx={{
-          mb: 2,
-          background: ACCENT_COLOR,
-          color: BG_COLOR,
-          fontWeight: 800,
-          fontSize: 16,
-          letterSpacing: 0.5,
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-          '&:hover': {
-            background: ACCENT_COLOR_DARK,
-          },
-          boxShadow: '0 2px 8px 0 rgba(255,224,130,0.15)',
-        }}
-        disabled={!isRevision && isUnlimited && images.length >= maxCount}
-      >
-        {!isRevision && isUnlimited ? '이미지 업로드(사진 수량을 입력하세요)' : '이미지 업로드'}
-      </Button> */}
 
       <Upload multiple onDrop={(files) => handleFileChange(files)} />
       <Box

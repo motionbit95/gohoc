@@ -23,8 +23,21 @@ export function UploadPlaceholder({ sx, className, ...other }) {
     >
       <UploadIllustration hideBackground sx={{ width: 200 }} />
       <PlaceholderContent>
-        <div className={uploadPlaceholderClasses.title}>파일을 드롭하거나 선택하세요</div>
-        <div className={uploadPlaceholderClasses.description}>
+        <div
+          className={uploadPlaceholderClasses.title}
+          style={{
+            fontFamily: 'GumiRomanceTTF',
+            fontWeight: 300,
+          }}
+        >
+          파일을 드롭하거나 선택하세요
+        </div>
+        <div
+          className={uploadPlaceholderClasses.description}
+          style={{
+            fontFamily: 'GumiRomanceTTF',
+          }}
+        >
           파일을 이곳에 드래그하거나 클릭하여
           <span>찾아보기</span>
           파일을 선택하세요.
