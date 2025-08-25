@@ -2,19 +2,20 @@
 
 import React from 'react';
 
-import { Box, Alert, TextField, Typography, Stack, Divider } from '@mui/material';
+import { Box, Alert, Typography, Stack } from '@mui/material';
 
 import { COLORS } from 'src/constant/colors';
 import { REQUEST_INSTRUCTIONS } from 'src/constant/wantswedding';
 
-import MarkdownWithCodeFix from './markdown-with-code-fix';
-import { Markdown } from 'src/components/markdown';
+import { Space } from 'antd';
+import { Flex } from 'antd';
+import { Input } from 'antd';
 
 export default function OrderRequest({ value = '', onChange }) {
   // 상세페이지 전용 색상 적용
   const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-  const ACCENT_COLOR = 'rgb(220, 222, 204)';
-  const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
+  const ACCENT_COLOR_DARK = 'white';
+  const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
   const PAPER_BG = COLORS.DETAIL_ALERT_BG;
 
   return (
@@ -25,19 +26,20 @@ export default function OrderRequest({ value = '', onChange }) {
         color: TEXT_COLOR,
       }}
     >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 2,
-          color: TEXT_COLOR,
-          fontWeight: 800,
-          letterSpacing: 0.5,
-          fontSize: { xs: 20, sm: 22 },
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        요청사항
-      </Typography>
+      <Space>
+        <Typography
+          variant="h3"
+          style={{
+            margin: '0 0 3px 0',
+            color: ACCENT_COLOR,
+            fontFamily: 'GumiRomanceTTF',
+            fontWeight: 300,
+          }}
+        >
+          Requests fill in
+        </Typography>
+        <Typography style={{ fontFamily: 'GumiRomanceTTF' }}>요청사항 작성</Typography>
+      </Space>
       <Alert
         severity="info"
         icon={false}
@@ -48,9 +50,9 @@ export default function OrderRequest({ value = '', onChange }) {
           fontSize: { xs: 15, sm: 16 },
           wordBreak: 'keep-all',
           borderRadius: 2,
-          background: ACCENT_COLOR,
+          background: 'white',
           color: TEXT_COLOR,
-          fontWeight: 600,
+          fontWeight: 300,
           lineHeight: 1.7,
           letterSpacing: 0.1,
           textShadow: '0 1px 2px rgba(0,0,0,0.10)',
@@ -59,6 +61,7 @@ export default function OrderRequest({ value = '', onChange }) {
           flexDirection: 'column',
           alignItems: 'stretch',
           boxSizing: 'border-box',
+          border: '1px solid rgb(192, 235, 255)',
         }}
       >
         <Box
@@ -73,199 +76,156 @@ export default function OrderRequest({ value = '', onChange }) {
             boxSizing: 'border-box',
           }}
         >
-          <MarkdownWithCodeFix>{REQUEST_INSTRUCTIONS}</MarkdownWithCodeFix>
-          <Box
-            sx={{
-              mt: 2,
-              px: 0,
-              py: 0,
-              borderRadius: 2,
-              background: '#fef3d2',
-              color: TEXT_COLOR,
-              fontWeight: 600,
-              lineHeight: 1.7,
-              letterSpacing: 0.1,
-              textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-              width: '100%',
-            }}
-          >
-            <Box
-              component="span"
-              sx={{
-                fontWeight: 800,
-                fontSize: 17,
-                color: TEXT_COLOR,
-                display: 'block',
-                px: { xs: 2.5, sm: 4, md: 5 },
-                pt: { xs: 2, sm: 2.5, md: 3 },
-              }}
-            >
-              [ 하나의 부위당 하나의 요청사항 작성바랍니다 ]
-            </Box>
-
-            <br />
-
-            <Box
-              sx={{
-                fontWeight: 800,
-                fontSize: 16,
-                color: TEXT_COLOR,
-                mt: 1,
-                px: { xs: 2.5, sm: 4, md: 5 },
-                pb: { xs: 2, sm: 2.5, md: 3 },
-              }}
-            >
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={{ xs: 2, sm: 6 }}
-                alignItems="stretch"
-              >
-                <Box>
-                  <div>예시 (O)</div>
-                  <div>1. 입꼬리 올려주세요.</div>
-                  <div>2. 콧볼 줄여주세요.</div>
-                  <div>3. 얼굴 줄여주세요.</div>
-                </Box>
-
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  sx={{
-                    mx: 3,
-                    borderStyle: 'dashed',
-                    borderRightWidth: 3,
-                  }}
-                />
-
-                <Box>
-                  <div>예시 (X)</div>
-                  <div>1. 입꼬리 올려주시고, 콧볼 줄여주시고 얼굴 줄여주세요.</div>
-                </Box>
-              </Stack>
-
+          <Flex vertical gap="40px" style={{ fontFamily: 'GumiRomanceTTF' }}>
+            <div>
+              안녕하세요~ 아름다운 신랑신부님! 🌸
               <br />
+              우리 원츠웨딩과 함께해주셔서 정말 고맙습니다 💕 보정 사항 기재 시 참고사항
+              안내드리겠습니다 :)
+            </div>
 
-              <div style={{ fontWeight: 800 }}>
-                (2인 기준) 전체 요청사항(10가지) / 개별 요청사항(5가지) 초과 시 추가금 있습니다.
+            <Stack direction={'row'} gap={2}>
+              <div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#79D2FF',
+                  borderRadius: '20px',
+                  marginTop: 2,
+                }}
+              />
+              <div>
+                {'보정사항에 대해 알려드릴게요! 📝'}
+                <br />
+                상세페이지에 나와있는 각 수정사항별로 원하시는 사항들을 요청사항에 기재해주시면
+                됩니다!
+                <br />
+                <br />
+                보정정도 / 2. 전체 사진에 적용될 요청사항 / 3. 사진별 요청사항
+                <br />
+                <br />
+                피부 주문 시 → 1 / 2 / 3
+                <br />
+                체형(+얼굴) 주문 시 → 1 / 2 / 3
+                <br />
+                합성 주문 시 → 3 : 원하시는 하늘
+                <br />
+                색감 주문 시 → 3 : 원하시는 색감
+                <br />
+                (주문하신 상품 외에 다른 상품 요청사항 기재 시에는 적용되지 않으니 참고
+                부탁드립니다!)
               </div>
-            </Box>
-          </Box>
+            </Stack>
+
+            <Stack direction={'row'} gap={2}>
+              <div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#79D2FF',
+                  borderRadius: '20px',
+                  marginTop: 2,
+                }}
+              />
+              <div>
+                {'방향 구분하는 방법이에요!'}
+                <br />
+                좌우는 모니터 보는 기준으로 말씀해주시면 됩니다! (사진 속 신랑신부님 기준이 아니라
+                모니터를 보시는 분 기준이에요~)
+              </div>
+            </Stack>
+
+            <Stack direction={'row'} gap={2}>
+              <div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#79D2FF',
+                  borderRadius: '20px',
+                  marginTop: 2,
+                }}
+              />
+              <div>
+                {'주문 외 다른 작업은 따로 결제해주셔야 해요! 💳'}
+                <br />
+                주문 해주신 상품외에는 다른 상품에 대한 요청사항은 적용되지 않습니다!
+                <br />
+                그러므로 다른 상품 요청 사항 기재시에는 따로 결제 부탁드리겠습니다!
+              </div>
+            </Stack>
+
+            <Stack direction={'row'} gap={2}>
+              <div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#79D2FF',
+                  borderRadius: '20px',
+                  marginTop: 2,
+                }}
+              />
+              <div>
+                {'보정 요청사항 기재 시에는 이렇게 해주세요~! ✨'}
+                <br />
+                요청 사항 작성 시 막연한 표현보다는 구체적으로 말씀해주시면 더욱더 예쁘게 만들어드릴
+                수 있답니다! 😊
+                <br />
+                더 예뻐 보이고 싶다면 ✨ → "눈을 키워주세요~"
+                <br />
+                듬직해보이고 싶으시다면🌟 → "키를 키워주시고 어깨도 넓혀주세요!"
+                <br />
+                자연스럽게 웃는 모습 원한다면 😄 → "입꼬리를 위로 올려주세요!"
+              </div>
+            </Stack>
+
+            <Stack direction={'row'} gap={2}>
+              <div
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  backgroundColor: '#79D2FF',
+                  borderRadius: '20px',
+                  marginTop: 2,
+                }}
+              />
+              <div>
+                마지막으로 꼭 확인해주세요! 🔍
+                <br />
+                접수 끝난 다음에는 요청사항 추가가 되지 않습니다. 그러므로 요청사항 빠뜨린 부분
+                없는지 다시 한 번 확인해주세요!
+                <br />
+                신랑신부님의 가장 행복한 순간을 더욱더 아름답게 만들어드리겠습니다! 🥰✨
+              </div>
+            </Stack>
+          </Flex>
         </Box>
       </Alert>
-      {/* <Box
-        sx={{
-          position: 'relative',
-          display: 'inline-block',
-          mb: 2,
-        }}
-      >
-        <Typography
-          variant="h6"
-          sx={{
-            color: TEXT_COLOR,
-            fontWeight: 800,
-            letterSpacing: 0.5,
-            fontSize: { xs: 20, sm: 22 },
-            textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-            pb: 0.5,
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          유의사항 (요청작성 시 필독사항)
-        </Typography>
-        <Box
-          sx={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            bottom: 4, // 글씨와 겹치게 약간 위로
-            height: 16,
-            zIndex: 0,
-            background: '#FBEDE3',
-            borderRadius: 3,
-            pointerEvents: 'none',
-            filter: 'blur(0.5px)',
-            opacity: 0.95,
-            fontWeight: 900,
-          }}
-        />
-      </Box>
-      <Alert
-        severity="info"
-        icon={false}
-        sx={{
-          px: { xs: 2.5, sm: 4, md: 5 },
-          py: { xs: 2, sm: 2.5, md: 3 },
-          mb: 2,
-          fontSize: { xs: 15, sm: 16 },
-          wordBreak: 'keep-all',
-          borderRadius: 2,
-          background: '#FBEDE3',
-          color: TEXT_COLOR,
-          fontWeight: 600,
-          lineHeight: 1.7,
-          letterSpacing: 0.1,
-          textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-        }}
-      >
-        <Box component="span" sx={{ fontWeight: 800, fontSize: 17, color: TEXT_COLOR }}>
-          [ 하나의 부위당 하나의 요청사항 작성바랍니다 ]
-        </Box>
-
-        <Box sx={{ fontWeight: 800, fontSize: 16, color: TEXT_COLOR, mt: 1 }}>
-          <div>(o) 1. 입꼬리 올려주세요.</div>
-          <div>2. 콧볼 줄여주세요.</div>
-          <div>3. 얼굴 줄여주세요.</div>
-          <br />
-          <div
-            style={{
-              fontWeight: 800,
-              background: 'rgba(255,255,255,0.85)',
-              borderRadius: 4,
-              padding: '0px 6px',
-              display: 'inline-block',
-            }}
-          >
-            (x) 1. 입꼬리 올려주시고, 콧볼 줄여주시고 얼굴 줄여주세요.
-          </div>
-          <br />
-          <br />
-          <div style={{ fontWeight: 800 }}>
-            (2인 기준) 전체 요청사항(10가지) / 개별 요청사항(5가지) 초과 시 추가금 있습니다.
-          </div>
-        </Box>
-      </Alert> */}
       <br />
-      <TextField
-        label="요청사항을 입력해 주세요"
-        multiline
-        minRows={5}
-        fullWidth
-        defaultValue={value}
+      <Input.TextArea
+        style={{
+          backgroundColor: 'white',
+          border: '3px solid #94C6FF',
+          minHeight: 400,
+        }}
+        autoSize={false}
         onBlur={(e) => onChange?.(e.target.value)}
-        variant="outlined"
-        InputProps={{
-          sx: {
-            color: TEXT_COLOR,
-            background: PAPER_BG,
-            fontWeight: 500,
-            letterSpacing: 0.5,
-            p: 4,
-            '& .MuiInputBase-input': { color: TEXT_COLOR },
-          },
-        }}
-        InputLabelProps={{
-          sx: {
-            color: ACCENT_COLOR_DARK,
-            fontWeight: 700,
-            letterSpacing: 0.2,
-            fontSize: 16,
-            textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-            lineHeight: 1.2,
-          },
-          shrink: true,
-        }}
+        defaultValue={`보정정도를 기재해주세요   약함 | 보통 | 강함
+(피부 상품, 체형(+얼굴) 상품 주문 시에만 기재 부탁드려요!)
+:
+
+
+전체 사진에 적용될 요청사항
+(피부 상품, 체형(+얼굴) 상품 주문 시에만 기재 부탁드려요!)
+신랑님💕 -
+신부님💕 - 
+
+
+
+사진별 요청사항
+사진 이름 - 요청 내용 : 
+(주문 해주신 상품외에 다른 상품에 대한 요청사항 기재 시 적용되지 않으니 꼭 상품별 적용부분 확인 부탁드립니다!) 
+
+`}
       />
     </Box>
   );

@@ -124,7 +124,7 @@ export default function ImageUploader({ onChange, title, alert, maxCount = 0, is
     >
       <Space>
         <Typography
-          variant="h4"
+          variant="h3"
           style={{
             margin: '0 0 3px 0',
             color: ACCENT_COLOR,
