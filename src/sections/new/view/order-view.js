@@ -30,6 +30,7 @@ import OrderRequest from '../order-request';
 import { CAUTION_GUIDE, PHOTO_UPLOAD_GUIDE } from 'src/constant/wantswedding';
 
 import { getMe } from 'src/actions/user';
+import { createOrder, uploadToS3 } from 'src/actions/order';
 
 const getStyles = (assetsDir) => ({
   loadingOverlay: {
@@ -266,73 +267,98 @@ function WantsNewOrderPage() {
 
   const confirmDialog = useBoolean();
 
-  // 실제 함수애
-  const handleFormUpload = async () => {
-    if (!parseInt(formData.photoCount)) {
-      showSnackbar('error', `사진 장수를 입력해주세요!`);
-      return;
+  const validateRequiredFields = () => {
+    const { orderNumber, grade, photoCount, orderImages, orderRequest, cautionAgree } = formData;
+    if (!orderNumber || !grade || !photoCount) {
+      showSnackbar('error', '주문번호, 등급, 사진 수량을 모두 입력해주세요.');
+      return false;
     }
-    if (parseInt(formData.photoCount) !== parseInt(photoList.length)) {
-      showSnackbar('error', `사진 장수가 일치하지 않습니다!`);
-      return;
+    if (!orderImages || orderImages.length === 0) {
+      showSnackbar('error', '주문 이미지를 1개 이상 업로드해주세요.');
+      return false;
     }
-    if (!formData.orderNumber) {
-      showSnackbar('error', `주문번호는 필수 입력 정보입니다.`);
-      return;
+    if (!orderRequest || orderRequest.trim() === '') {
+      showSnackbar('error', '요청사항을 입력해주세요.');
+      return false;
     }
-    if (!formData.grade) {
-      showSnackbar('error', `보정등급은 필수 입력 정보입니다.`);
-      return;
+    if (!cautionAgree || Object.keys(cautionAgree).some((k) => !cautionAgree[k])) {
+      showSnackbar('error', '모든 주의사항에 동의해주세요.');
+      return false;
     }
+    if (orderImages.length !== Number(photoCount)) {
+      showSnackbar(
+        'error',
+        `주문 수량(${photoCount}장)과 업로드한 이미지 수(${orderImages.length}장)가 일치하지 않습니다.`
+      );
+      return false;
+    }
+    return true;
+  };
 
-    const order = {
-      orderNumber: formData.orderNumber,
-      createdAt: formData.receivedDate,
-      origin: photoList,
-      status: '원츠웨딩',
-      grade: formData.grade,
-      customer: {
-        id: formData.userId,
-        name: formData.userName,
-        email: formData.userId,
-      },
-      totalQuantity: formData.photoCount,
-      comment: formData.orderRequest,
-      additionalOptions: formData.additionalOptions,
-      reviseQuantity: 0,
-      label: formData.grade === '샘플' ? '샘플' : '신규',
-      worker: {},
-      timeline: [{ title: '주문접수', time: formData.receivedDate }],
-      expiredDate: getExpiredDate('원츠웨딩', formData.grade, formData.receivedDate),
-      isCheck: false,
-      folderId: folderId,
-      process: '1차 보정본 작업 진행중',
-    };
+  // 업로드 로직 수정
+  const handleFormUpload = async () => {
+    if (!validateRequiredFields()) return;
+
+    setUploading(true);
+    setUploadPercent(0);
 
     try {
-      setUploading(true);
-      setUploadPercent(0);
+      const uploadedOrderImages = [];
+      const orderImgs = formData.orderImages || [];
+      const totalFiles = orderImgs.length;
+      let completedFiles = 0;
 
-      let fakePercent = 0;
-      const interval = setInterval(() => {
-        fakePercent += Math.random() * 20;
-        setUploadPercent(Math.min(95, Math.floor(fakePercent)));
-      }, 200);
+      for (let i = 0; i < orderImgs.length; i++) {
+        const file = orderImgs[i];
+        const result = await uploadToS3(
+          file,
+          [
+            '원츠웨딩',
+            formData.grade === '샘플' ? '샘플' : '신규',
+            formData.userName,
+            formData.userId,
+            formData.orderNumber,
+            'order',
+          ],
+          (percent) => {
+            const overall = ((completedFiles + percent / 100) / totalFiles) * 100;
+            setUploadPercent(Math.round(overall));
+          }
+        );
+        uploadedOrderImages.push(result);
+        completedFiles++;
+        setUploadPercent(Math.round((completedFiles / totalFiles) * 100));
+      }
 
-      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/order`, order, {
-        headers: { 'Content-Type': 'application/json' },
+      // 주문 데이터 구조를 orderForm, customer, status로 분리
+      const orderForm = {
+        ...formData,
+        uploadedOrderImages,
+        photoCount: Number(formData.photoCount),
+      };
+
+      const customer = {
+        userId: formData.userId,
+        email: formData.userId,
+        name: formData.userName,
+      };
+
+      const status = '원츠웨딩';
+      const label = formData.grade === '샘플' ? '샘플' : '신규';
+
+      // createOrder에 구조 맞춰서 전달
+      await createOrder({
+        orderForm,
+        customer,
+        status,
+        label,
       });
 
-      clearInterval(interval);
       setUploadPercent(100);
-
-      if (res.data?.success) {
-        setUploadSuccessDialogOpen(true);
-        showSnackbar('success', '주문이 성공적으로 등록되었습니다.');
-      } else {
-        showSnackbar('error', '주문 등록에 실패했습니다.');
-      }
+      setUploadSuccessDialogOpen(true);
+      showSnackbar('success', '주문이 성공적으로 등록되었습니다.');
     } catch (err) {
+      console.error(err);
       setUploadPercent(0);
       showSnackbar('error', '주문 등록에 실패했습니다.');
     } finally {
@@ -387,7 +413,7 @@ function WantsNewOrderPage() {
     >
       <Flex vertical style={styles.mainFlex}>
         <div style={styles.bgImage}></div>
-        <OrderForm formData={formData} onFormDataChange={(data) => console.log(data)} />
+        <OrderForm formData={formData} onFormDataChange={setFormData} />
         <Flex style={styles.orderFormFlex} vertical>
           <div style={styles.titleImage}></div>
           <Flex vertical gap="large" style={styles.imageUploaderFlex}>
@@ -428,7 +454,10 @@ function WantsNewOrderPage() {
               icon={<BsCaretRightFill />}
               iconPosition="end"
               type="text"
-              disabled={checkedItems.filter((item) => item).length < 4}
+              // cautionAgree의 모든 항목이 체크되어야만 버튼 활성화
+              disabled={
+                !formData.cautionAgree || !Object.values(formData.cautionAgree).every(Boolean)
+              }
               style={{
                 width: 'auto',
                 alignSelf: 'center',
