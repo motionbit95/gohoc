@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import axiosInstance from 'src/lib/axios';
 import axios from 'axios';
+import { CONFIG } from 'src/global-config';
 
 // MUI Flex 대체
 const Flex = ({ children, style, ...props }) => (
@@ -196,19 +197,6 @@ const NormalButtons = ({ order }) => {
     (order.label === '재수정' ? !hasRevworkWorkSubmission : !hasFirstWorkSubmission) ||
     !order.isClear;
 
-  // 버튼 스타일: sample-buttons.js에서 스타일만 가져옴
-  const getButtonSx = (disabled) => ({
-    backgroundColor: !disabled ? 'rgba(69, 85, 43, 1)' : 'rgba(150,150,150,0.4)',
-    color: 'white',
-    cursor: !disabled ? 'pointer' : 'not-allowed',
-    opacity: !disabled ? 1 : 0.6,
-    fontSize: { xs: 15, md: 17 },
-    width: '100%',
-    '&:hover': {
-      backgroundColor: !disabled ? 'rgba(69, 85, 43, 0.85)' : 'rgba(150,150,150,0.4)',
-    },
-  });
-
   // 실제 다운로드 핸들러
   const handleDownloadZip = useCallback(
     async (worksubmission, label, originalFiles = []) => {
@@ -302,86 +290,180 @@ const NormalButtons = ({ order }) => {
       </Dialog>
       <Flex
         style={{
-          alignSelf: 'center',
+          alignItems: 'center',
+          justifyContent: 'center',
           paddingBlock: '36px',
-          width: screens.md ? '80%' : '100%',
-          flexDirection: screens.md ? 'row' : 'column',
-          gap: '20px',
+          width: '100%',
         }}
       >
-        {/* 1차 보정본 다운로드 버튼 */}
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={
-            loading && loadingTarget === '보정본' ? (
-              <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
-            ) : (
-              <BsCaretRightFill />
-            )
-          }
-          sx={getButtonSx(isFirstDownloadDisabled)}
-          disabled={isFirstDownloadDisabled}
-          onClick={() => {
-            // workSubmissions에서 type === 'first'만 추출
-            const files =
-              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-                ? order.workSubmissions.filter((ws) => ws.type === 'first')
-                : [];
-            // 원본 파일 추출: type === 'order' 또는 type === 'origin'
-            const originalFiles =
-              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-                ? order.workSubmissions
-                    .filter(
-                      (ws) => ws.type === 'order' || ws.type === 'origin' || ws.type === '원본'
-                    )
-                    .flatMap((ws) => (Array.isArray(ws.files) ? ws.files : []))
-                : [];
-            handleDownloadZip(files, '보정본', originalFiles);
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '30px',
+            width: screens.md ? '80%' : '100%',
+            maxWidth: 400,
+            margin: '0 auto',
           }}
         >
-          1차 보정본 다운로드
-        </Button>
+          {/* 1차 보정본 다운로드 버튼 */}
+          <div
+            style={{
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button4.png)`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              width: screens.md ? '250px' : '200px',
+              height: screens.md ? '180px' : '150px',
+              display: 'flex',
+              position: 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isFirstDownloadDisabled ? 0.6 : 1,
+              cursor: isFirstDownloadDisabled ? 'not-allowed' : 'pointer',
+              margin: '0 auto',
+            }}
+          >
+            <Button
+              htmlType="submit"
+              type="text"
+              size="large"
+              style={{
+                width: 'auto',
+                alignSelf: 'center',
+                fontWeight: 300,
+                fontFamily: 'GumiRomanceTTF',
+                whiteSpace: 'pre-line',
+                color: '#006C92',
+                backgroundColor: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+                fontSize: screens.md ? '18px' : '16px',
+              }}
+              disabled={isFirstDownloadDisabled}
+              onClick={() => {
+                if (isFirstDownloadDisabled) return;
+                const files =
+                  Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                    ? order.workSubmissions.filter((ws) => ws.type === 'first')
+                    : [];
+                const originalFiles =
+                  Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                    ? order.workSubmissions
+                        .filter(
+                          (ws) => ws.type === 'order' || ws.type === 'origin' || ws.type === '원본'
+                        )
+                        .flatMap((ws) => (Array.isArray(ws.files) ? ws.files : []))
+                    : [];
+                handleDownloadZip(files, '보정본', originalFiles);
+              }}
+            >
+              {loading && loadingTarget === '보정본' ? (
+                <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+              ) : (
+                '신규 다운로드'
+              )}
+            </Button>
+          </div>
 
-        {/* 최근 재수정본 다운로드 버튼 */}
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={
-            loading && loadingTarget === '재수정본' ? (
-              <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
-            ) : (
-              <BsCaretRightFill />
-            )
-          }
-          sx={getButtonSx(isReviseDownloadDisabled)}
-          disabled={isReviseDownloadDisabled}
-          onClick={() => {
-            // workSubmissions에서 type === 'revwork'만 추출
-            const files =
-              Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-                ? order.workSubmissions.filter((ws) => ws.type === 'revwork')
-                : [];
-            handleDownloadZip(files, '재수정본');
-          }}
-        >
-          최근 재수정본 다운로드
-        </Button>
+          {/* 최근 재수정본 다운로드 버튼 */}
+          <div
+            style={{
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button4.png)`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              width: screens.md ? '250px' : '200px',
+              height: screens.md ? '180px' : '150px',
+              display: 'flex',
+              position: 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isReviseDownloadDisabled ? 0.6 : 1,
+              cursor: isReviseDownloadDisabled ? 'not-allowed' : 'pointer',
+              margin: '0 auto',
+            }}
+          >
+            <Button
+              htmlType="submit"
+              type="text"
+              size="large"
+              style={{
+                width: 'auto',
+                alignSelf: 'center',
+                fontFamily: 'GumiRomanceTTF',
+                fontWeight: 300,
+                whiteSpace: 'pre-line',
+                color: '#006C92',
+                backgroundColor: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+                fontSize: screens.md ? '18px' : '16px',
+              }}
+              disabled={isReviseDownloadDisabled}
+              onClick={() => {
+                if (isReviseDownloadDisabled) return;
+                const files =
+                  Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                    ? order.workSubmissions.filter((ws) => ws.type === 'revwork')
+                    : [];
+                handleDownloadZip(files, '재수정본');
+              }}
+            >
+              {loading && loadingTarget === '재수정본' ? (
+                <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+              ) : (
+                '재수정 다운로드'
+              )}
+            </Button>
+          </div>
 
-        {/* 재수정 신청 버튼 */}
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={<BsCaretRightFill />}
-          disabled={isReapplyDisabled}
-          sx={getButtonSx(isReapplyDisabled)}
-          onClick={() => {
-            // 이 페이지로 이동함
-            router.push(`${paths.wantswedding.form}/${order.id}`);
-          }}
-        >
-          재수정 신청
-        </Button>
+          {/* 재수정 신청 버튼 */}
+          <div
+            style={{
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button4.png)`,
+              backgroundSize: 'contain',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+              width: screens.md ? '250px' : '200px',
+              height: screens.md ? '180px' : '150px',
+              display: 'flex',
+              position: 'relative',
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isReapplyDisabled ? 0.6 : 1,
+              cursor: isReapplyDisabled ? 'not-allowed' : 'pointer',
+              margin: '0 auto',
+            }}
+          >
+            <Button
+              htmlType="submit"
+              type="text"
+              size="large"
+              style={{
+                width: 'auto',
+                alignSelf: 'center',
+                fontFamily: 'GumiRomanceTTF',
+                fontWeight: 300,
+                whiteSpace: 'pre-line',
+                color: '#006C92',
+                backgroundColor: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+                fontSize: screens.md ? '18px' : '16px',
+              }}
+              disabled={isReapplyDisabled}
+              onClick={() => {
+                if (isReapplyDisabled) return;
+                router.push(`${paths.wantswedding.form}/${order.id}`);
+              }}
+            >
+              재수정 신청
+            </Button>
+          </div>
+        </Box>
       </Flex>
     </>
   );

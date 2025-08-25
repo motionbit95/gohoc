@@ -32,16 +32,16 @@ dayjs.extend(relativeTime);
 // ----------------------------------------------------------------------
 
 export const formatPatterns = {
-  dateTime: 'DD MMM YYYY h:mm a', // 17 Apr 2022 12:00 am
-  date: 'DD MMM YYYY', // 17 Apr 2022
-  time: 'h:mm a', // 12:00 am
+  dateTime: 'YYYY년 MM월 DD일 HH:mm', // 2022년 04월 17일 00:00
+  date: 'YYYY년 MM월 DD일', // 2022년 04월 17일
+  time: 'HH:mm', // 00:00
   split: {
-    dateTime: 'DD/MM/YYYY h:mm a', // 17/04/2022 12:00 am
-    date: 'DD/MM/YYYY', // 17/04/2022
+    dateTime: 'YYYY.MM.DD HH:mm', // 2022.04.17 00:00
+    date: 'YYYY.MM.DD', // 2022.04.17
   },
   paramCase: {
-    dateTime: 'DD-MM-YYYY h:mm a', // 17-04-2022 12:00 am
-    date: 'DD-MM-YYYY', // 17-04-2022
+    dateTime: 'YYYY-MM-DD HH:mm', // 2022-04-17 00:00
+    date: 'YYYY-MM-DD', // 2022-04-17
   },
 };
 

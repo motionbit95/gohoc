@@ -26,17 +26,16 @@ const UNIFIED_RADIUS = STYLES.UNIFIED_RADIUS;
 const UNIFIED_HEIGHT = STYLES.UNIFIED_HEIGHT;
 
 export const GRADE_OPTIONS = [
-  { value: '샘플', label: '샘플 (4일 이내)' },
-  { value: '씨앗', label: '씨앗 (7일 이내)' },
-  { value: '새싹', label: '새싹 (4일 이내)' },
-  { value: '나무', label: '나무 (2일 이내)' },
-  { value: '숲', label: '숲 (3시간 이내)' },
+  { value: '샘플', label: '샘플' },
+  { value: '~4일', label: '~4일 (기본)' },
+  { value: '~48시간', label: '~48시간 (추가금 : 1500원)' },
 ];
 
 export const ADDITIONAL_OPTIONS = [
-  { value: '필름 추가', label: '색감작업(필름)', price: 1500 },
-  { value: '인원 추가', label: '인원 추가', price: 2000 },
+  { value: '피부', label: '피부', price: 1500 },
+  { value: '체형(+얼굴)', label: '체형(+얼굴)', price: 2000 },
   { value: '합성', label: '합성', price: 2000 },
+  { value: '색감', label: '색감', price: 2000 },
 ];
 
 export const REVISION_OPTIONS = [

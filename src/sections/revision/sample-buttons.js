@@ -1,33 +1,14 @@
 import { useCallback, useState, useMemo } from 'react';
-import { Stack, Button, useMediaQuery, CircularProgress } from '@mui/material';
+import { Box, Button, useMediaQuery, CircularProgress } from '@mui/material';
 import { BsCaretRightFill } from 'react-icons/bs';
-
-import { COLORS } from 'src/constant/colors';
 import ImagePreviewModal from 'src/components/upload/components/image-preview-modal';
+import { CONFIG } from 'src/global-config';
 
-// 유틸: 파일명 생성
-const getFileName = (fileObj, idx, url) => {
-  let filename =
-    fileObj.originalFileName || fileObj.fileName || fileObj.title || fileObj.id || `file-${idx}`;
-  // 확장자 추출
-  const urlParts = url.split('.');
-  const ext = urlParts.length > 1 ? urlParts[urlParts.length - 1].split(/\#|\?/)[0] : '';
-  if (ext && !filename.endsWith(`.${ext}`)) {
-    filename += `.${ext}`;
-  }
-  // 원본 파일 prefix
-  if (fileObj._originalPrefix) {
-    filename = `${filename}`;
-  }
-  return filename;
-};
+// 스타일만 취하기: normal-buttons.js의 스타일 구조를 샘플 버튼에 적용
 
-// 유틸: pad
-const pad = (n) => n.toString().padStart(2, '0');
-
-// 샘플 버튼 컴포넌트
 const SampleButtons = ({ order }) => {
   const isMdUp = useMediaQuery('(min-width:726px)');
+  const screens = { md: isMdUp };
   const [loading, setLoading] = useState(false);
   const [loadingTarget, setLoadingTarget] = useState('');
   const [showImage, setShowImage] = useState(null);
@@ -63,6 +44,24 @@ const SampleButtons = ({ order }) => {
     }
   }, [isPreviewDisabled, items]);
 
+  // 파일명 유틸
+  const getFileName = (fileObj, idx, url) => {
+    let filename =
+      fileObj.originalFileName || fileObj.fileName || fileObj.title || fileObj.id || `file-${idx}`;
+    const urlParts = url.split('.');
+    const ext = urlParts.length > 1 ? urlParts[urlParts.length - 1].split(/\#|\?/)[0] : '';
+    if (ext && !filename.endsWith(`.${ext}`)) {
+      filename += `.${ext}`;
+    }
+    if (fileObj._originalPrefix) {
+      filename = `${filename}`;
+    }
+    return filename;
+  };
+
+  // pad 유틸
+  const pad = (n) => n.toString().padStart(2, '0');
+
   // zip 다운로드
   const downloadZipFiles = useCallback(
     async ({ worksubmission, label, order, originalFiles = [] }) => {
@@ -84,7 +83,6 @@ const SampleButtons = ({ order }) => {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
 
-      // 파일 다운로드 및 zip에 추가
       await Promise.all(
         allFiles.map(async (fileObj, idx) => {
           try {
@@ -101,7 +99,6 @@ const SampleButtons = ({ order }) => {
         })
       );
 
-      // zip 파일 생성 및 다운로드
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const url = URL.createObjectURL(zipBlob);
       const a = document.createElement('a');
@@ -148,73 +145,121 @@ const SampleButtons = ({ order }) => {
 
   return (
     <>
-      <Stack
-        direction={isMdUp ? 'row' : 'column'}
-        spacing={2.5}
+      <Box
+        display="flex"
+        flexDirection="column"
         alignItems="center"
-        sx={{
-          alignSelf: 'center',
-          py: 4.5,
-          width: isMdUp ? '50%' : '100%',
-        }}
+        justifyContent="center"
+        paddingBlock="36px"
+        width="100%"
+        gap={screens.md ? 4 : 2.5}
       >
-        <Button
-          variant="contained"
-          endIcon={<BsCaretRightFill />}
-          disabled={isPreviewDisabled}
-          fullWidth
-          onClick={handlePreviewAll}
+        {/* 미리보기 버튼 */}
+        <Box
           sx={{
-            fontSize: { xs: 15, md: 17 },
-            backgroundColor: isPreviewDisabled
-              ? 'rgba(150,150,150,0.4)'
-              : COLORS.DETAIL_ACCENT_COLOR,
-            color: COLORS.DETAIL_BG_COLOR,
-            fontWeight: 700,
-            boxShadow: '0 2px 8px 0 rgba(110,133,87,0.10)',
+            backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button4.png)`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            width: screens.md ? '250px' : '200px',
+            height: screens.md ? '180px' : '150px',
+            display: 'flex',
+            position: 'relative',
+            alignItems: 'center',
+            justifyContent: 'center',
             opacity: isPreviewDisabled ? 0.6 : 1,
             cursor: isPreviewDisabled ? 'not-allowed' : 'pointer',
-            '&:hover': {
-              backgroundColor: isPreviewDisabled
-                ? 'rgba(150,150,150,0.4)'
-                : COLORS.DETAIL_ACCENT_COLOR_DARK,
-            },
+            margin: '0 auto',
           }}
         >
-          웹에서 미리보기
-        </Button>
-        <Button
-          variant="contained"
-          endIcon={
-            loading && loadingTarget === '샘플' ? (
-              <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
-            ) : (
-              <BsCaretRightFill />
-            )
-          }
-          fullWidth
+          <Button
+            htmlType="submit"
+            type="text"
+            size="large"
+            style={{
+              width: 'auto',
+              alignSelf: 'center',
+              fontWeight: 300,
+              fontFamily: 'GumiRomanceTTF',
+              whiteSpace: 'pre-line',
+              color: '#006C92',
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+              fontSize: screens.md ? '18px' : '16px',
+            }}
+            disabled={isPreviewDisabled}
+            onClick={handlePreviewAll}
+            endIcon={<BsCaretRightFill />}
+            fullWidth
+          >
+            웹에서 미리보기
+          </Button>
+        </Box>
+        {/* 샘플 다운로드 버튼 */}
+        <Box
           sx={{
-            backgroundColor: isSampleDownloadDisabled
-              ? 'rgba(150,150,150,0.4)'
-              : COLORS.DETAIL_ACCENT_COLOR,
-            color: COLORS.DETAIL_BG_COLOR,
-            cursor: isSampleDownloadDisabled ? 'not-allowed' : 'pointer',
+            backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button4.png)`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            width: screens.md ? '250px' : '200px',
+            height: screens.md ? '180px' : '150px',
+            display: 'flex',
+            position: 'relative',
+            alignItems: 'center',
+            justifyContent: 'center',
             opacity: isSampleDownloadDisabled ? 0.6 : 1,
-            fontSize: { xs: 15, md: 17 },
-            fontWeight: 700,
-            boxShadow: '0 2px 8px 0 rgba(110,133,87,0.10)',
-            '&:hover': {
-              backgroundColor: isSampleDownloadDisabled
-                ? 'rgba(150,150,150,0.4)'
-                : COLORS.DETAIL_ACCENT_COLOR_DARK,
-            },
+            cursor: isSampleDownloadDisabled ? 'not-allowed' : 'pointer',
+            margin: '0 auto',
           }}
-          onClick={() => handleDownloadZip(sampleWorkSubmissions, '샘플', [])}
-          disabled={isSampleDownloadDisabled}
         >
-          샘플 다운로드
-        </Button>
-      </Stack>
+          <Button
+            htmlType="submit"
+            type="text"
+            size="large"
+            style={{
+              width: 'auto',
+              alignSelf: 'center',
+              fontFamily: 'GumiRomanceTTF',
+              fontWeight: 300,
+              whiteSpace: 'pre-line',
+              color: '#006C92',
+              backgroundColor: 'transparent',
+              border: 'none',
+              boxShadow: 'none',
+              fontSize: screens.md ? '18px' : '16px',
+            }}
+            disabled={isSampleDownloadDisabled}
+            onClick={() => {
+              if (isSampleDownloadDisabled) return;
+              const sampleWorkSubmissions =
+                Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                  ? order.workSubmissions.filter((ws) => ws.type === 'first')
+                  : [];
+              const originalFiles =
+                Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
+                  ? order.workSubmissions
+                      .filter(
+                        (ws) => ws.type === 'order' || ws.type === 'origin' || ws.type === '원본'
+                      )
+                      .flatMap((ws) => (Array.isArray(ws.files) ? ws.files : []))
+                  : [];
+              handleDownloadZip(sampleWorkSubmissions, '샘플', originalFiles);
+            }}
+            endIcon={
+              loading && loadingTarget === '샘플' ? (
+                <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
+              ) : (
+                <BsCaretRightFill />
+              )
+            }
+            fullWidth
+          >
+            샘플 다운로드
+          </Button>
+        </Box>
+      </Box>
       <ImagePreviewModal order={order} showImage={showImage} onClose={handleClose} items={items} />
     </>
   );

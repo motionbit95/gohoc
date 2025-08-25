@@ -15,10 +15,10 @@ export const GRADE_OPTIONS = [
 
 // 추가 옵션 목록
 export const ADDITIONAL_OPTIONS = [
-  { value: 'skin', label: '피부', price: 1500 },
-  { value: 'body', label: '체형(+얼굴)', price: 2000 },
-  { value: 'edit', label: '합성', price: 2000 },
-  { value: 'filter', label: '색감', price: 2000 },
+  { value: '피부', label: '피부', price: 1500 },
+  { value: '체형(+얼굴)', label: '체형(+얼굴)', price: 2000 },
+  { value: '합성', label: '합성', price: 2000 },
+  { value: '색감', label: '색감', price: 2000 },
 ];
 
 const labelStyle = {
