@@ -40,6 +40,8 @@ import OrderForm from '../order-form';
 import { createWorkSubmission } from 'src/actions/work-submission';
 import { createOrderComment } from 'src/actions/comment';
 import { timeline } from 'src/theme/core/components/timeline';
+import { CONFIG } from 'src/global-config';
+import { Flex } from 'antd';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';
@@ -369,6 +371,21 @@ export default function RevisionFormView() {
     }
   };
 
+  // 구글 폰트 동적 로드 함수
+  function loadGoogleFont() {
+    // 이미 로드된 경우 중복 삽입 방지
+    if (document.getElementById('lilita-one-font-link')) return;
+    const link = document.createElement('link');
+    link.id = 'lilita-one-font-link';
+    link.rel = 'stylesheet';
+    link.href = 'https://fonts.googleapis.com/css2?family=Lilita+One&display=swap';
+    document.head.appendChild(link);
+  }
+
+  useEffect(() => {
+    loadGoogleFont();
+  }, []);
+
   useEffect(
     () => () => {
       if (redirectTimeoutRef.current) {
@@ -395,7 +412,7 @@ export default function RevisionFormView() {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', background: BG_COLOR }}>
+    <Box sx={{ minHeight: '100vh', background: '#EFFAFF' }}>
       <Container maxWidth={false} disableGutters sx={{ py: { xs: 2, md: 4 } }}>
         <Stack
           spacing={4}
@@ -406,43 +423,81 @@ export default function RevisionFormView() {
             px: { xs: 1, sm: 2, md: 0 },
           }}
         >
-          <Typography
-            variant="h4"
-            component="h1"
-            sx={{
-              fontWeight: 800,
-              fontSize: { xs: 24, md: 30 },
-              color: COLORS.DETAIL_ACCENT_COLOR_DARK,
-              letterSpacing: 1,
-              textShadow: '0 1px 2px rgba(35,41,31,0.18)',
-              mb: 1.5,
-              textAlign: 'center',
-              mt: '10vh',
-              mb: '5vh',
-            }}
-          >
-            재수정 신청
-          </Typography>
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
               width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
+              paddingTop: '30%',
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/bg2.png)`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center bottom',
+            }}
+          ></div>
+
+          <div
+            style={{
+              position: 'relative',
+              marginBottom: '64px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 32,
+              width: '100%',
+              maxWidth: 'none',
             }}
           >
-            <OrderForm
-              value={{
-                ...formData.orderForm,
-                additionalOptions: order?.additionalOptions || [],
-                revisionOptions: order?.revisionOptions || [],
+            <Typography
+              sx={{
+                fontFamily: "'Lilita One', sans-serif",
+                whiteSpace: 'nowrap',
+                fontWeight: 400,
+                fontSize: { xs: '2.5rem', md: '4rem', lg: '8rem' },
+                color: 'white',
+                WebkitTextStroke: '0.5px #2E4B50',
+                marginBottom: { xs: 0, lg: '-2rem' },
+
+                lineHeight: 1.05,
+                width: '100%',
+                textAlign: 'center',
               }}
-              onChange={handleOrderFormChange}
-              userId={user?.userId || user?.id || ''}
-              userName={user?.userName || user?.name || user?.nickname || ''}
-              isRevision
-            />
-          </Box>
+            >
+              Order Information
+            </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Lilita One', sans-serif",
+                whiteSpace: 'nowrap',
+                fontWeight: 400,
+                fontSize: { xs: '2rem', md: '3rem', lg: '4rem' },
+                color: 'white',
+                WebkitTextStroke: '0.5px #2E4B50',
+                marginTop: 10,
+                marginBottom: { xs: 0, lg: '-1.5rem' },
+
+                lineHeight: 1.05,
+                width: '100%',
+                textAlign: 'center',
+              }}
+            >
+              (Re-modification)
+            </Typography>
+          </div>
+
+          <div
+            style={{
+              width: '100%',
+              paddingTop: '10%',
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/title.png)`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center bottom',
+              minHeight: '60px',
+            }}
+          ></div>
+
           <Box
             sx={{
               maxWidth: 'md',
@@ -466,21 +521,6 @@ export default function RevisionFormView() {
               px: { xs: 1, sm: 2, md: 0 },
             }}
           >
-            <ImageUploader
-              title="참고 사진 업로드"
-              alert={REVISE_REFERENCE_UPLOAD_GUIDE}
-              onChange={handleReferenceImagesChange}
-              isRevision={true}
-            />
-          </Box>
-          <Box
-            sx={{
-              maxWidth: 'md',
-              mx: 'auto',
-              width: '100%',
-              px: { xs: 1, sm: 2, md: 0 },
-            }}
-          >
             <OrderRequest
               title="재수정 요청사항 작성"
               value={formData.orderRequest}
@@ -488,37 +528,69 @@ export default function RevisionFormView() {
               isRevision={true}
             />
           </Box>
-          <WantsWeddingDivider text="Ourdrama" isBorder />
+
+          <div
+            style={{
+              width: '100%',
+              paddingTop: '6%',
+              backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/title2.png)`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center bottom',
+              marginTop: '64px',
+            }}
+          ></div>
 
           <CautionAgree
             checked={formData.cautionAgree}
             content={REVISE_CAUTION_GUIDE}
             onChange={handleCautionAgreeChange}
           />
-          <Box sx={{ textAlign: 'center', mt: 2 }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleUploadClick}
-              disabled={uploading}
-              sx={{
-                mb: 2,
-                background: ACCENT_COLOR,
-                color: BG_COLOR,
-                fontWeight: 800,
-                fontSize: 16,
-                letterSpacing: 0.5,
-                textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-                '&:hover': {
-                  background: ACCENT_COLOR_DARK,
-                },
-                boxShadow: '0 2px 8px 0 rgba(255,224,130,0.15)',
-                minWidth: '256px',
+          <Stack alignItems="center" justifyContent="center">
+            <div
+              style={{
+                height: '100px',
+                width: 1,
+                backgroundColor: '#94C6FF',
+                margin: '0 auto',
+              }}
+            />
+            <div
+              style={{
+                backgroundImage: `url(${CONFIG.assetsDir}/assets/wantswedding/button_click.png)`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                display: 'flex',
+                position: 'relative',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '16px',
+                transform: 'translateY(-50%)',
+                margin: '0 auto',
+                width: '300px',
               }}
             >
-              {uploading ? '업로드 중...' : '재수정 신청'}
-            </Button>
-          </Box>
+              <Flex vertical align="center">
+                <Button
+                  onClick={handleUploadClick}
+                  htmlType="submit"
+                  iconPosition="end"
+                  type="text"
+                  // cautionAgree의 모든 항목이 체크되어야만 버튼 활성화
+                  disabled={uploading}
+                  style={{
+                    width: 'auto',
+                    alignSelf: 'center',
+                    fontFamily: 'GumiRomanceTTF',
+                    color: '#006C92',
+                  }}
+                >
+                  작업접수
+                </Button>
+              </Flex>
+            </div>
+          </Stack>
         </Stack>
         <Snackbar
           open={messageOpen}

@@ -95,39 +95,6 @@ export default function OrderRequest({ value = '', onChange }) {
                 }}
               />
               <div>
-                {'보정사항에 대해 알려드릴게요! 📝'}
-                <br />
-                상세페이지에 나와있는 각 수정사항별로 원하시는 사항들을 요청사항에 기재해주시면
-                됩니다!
-                <br />
-                <br />
-                보정정도 / 2. 전체 사진에 적용될 요청사항 / 3. 사진별 요청사항
-                <br />
-                <br />
-                피부 주문 시 → 1 / 2 / 3
-                <br />
-                체형(+얼굴) 주문 시 → 1 / 2 / 3
-                <br />
-                합성 주문 시 → 3 : 원하시는 하늘
-                <br />
-                색감 주문 시 → 3 : 원하시는 색감
-                <br />
-                (주문하신 상품 외에 다른 상품 요청사항 기재 시에는 적용되지 않으니 참고
-                부탁드립니다!)
-              </div>
-            </Stack>
-
-            <Stack direction={'row'} gap={2}>
-              <div
-                style={{
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: '#79D2FF',
-                  borderRadius: '20px',
-                  marginTop: 2,
-                }}
-              />
-              <div>
                 {'방향 구분하는 방법이에요!'}
                 <br />
                 좌우는 모니터 보는 기준으로 말씀해주시면 됩니다! (사진 속 신랑신부님 기준이 아니라
@@ -206,26 +173,11 @@ export default function OrderRequest({ value = '', onChange }) {
           backgroundColor: 'white',
           border: '3px solid #94C6FF',
           minHeight: 400,
+          fontFamily: 'GumiRomanceTTF',
         }}
         autoSize={false}
         onBlur={(e) => onChange?.(e.target.value)}
-        defaultValue={`보정정도를 기재해주세요   약함 | 보통 | 강함
-(피부 상품, 체형(+얼굴) 상품 주문 시에만 기재 부탁드려요!)
-:
-
-
-전체 사진에 적용될 요청사항
-(피부 상품, 체형(+얼굴) 상품 주문 시에만 기재 부탁드려요!)
-신랑님💕 -
-신부님💕 - 
-
-
-
-사진별 요청사항
-사진 이름 - 요청 내용 : 
-(주문 해주신 상품외에 다른 상품에 대한 요청사항 기재 시 적용되지 않으니 꼭 상품별 적용부분 확인 부탁드립니다!) 
-
-`}
+        defaultValue={`파일명 - 요청내용`}
       />
     </Box>
   );

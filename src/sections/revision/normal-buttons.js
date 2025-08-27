@@ -454,9 +454,9 @@ const NormalButtons = ({ order }) => {
                 boxShadow: 'none',
                 fontSize: screens.md ? '18px' : '16px',
               }}
-              disabled={isReapplyDisabled}
+              // disabled={isReapplyDisabled}
               onClick={() => {
-                if (isReapplyDisabled) return;
+                // if (isReapplyDisabled) return;
                 router.push(`${paths.wantswedding.form}/${order.id}`);
               }}
             >
