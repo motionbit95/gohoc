@@ -182,7 +182,7 @@ const NormalButtons = ({ order }) => {
     Array.isArray(order.workSubmissions) && order.workSubmissions.some((ws) => ws.type === 'first');
   const hasRevworkWorkSubmission =
     Array.isArray(order.workSubmissions) &&
-    order.workSubmissions.some((ws) => ws.type === 'revwork');
+    order.workSubmissions.some((ws) => ws.type && ws.type.includes('revwork'));
   const isSendStatusPhase =
     (order.step === '작업자현황' || order.step === '전송예약') &&
     order.grade !== '샘플' &&
@@ -360,7 +360,10 @@ const NormalButtons = ({ order }) => {
             // workSubmissions에서 type === 'revwork'만 추출
             const files =
               Array.isArray(order.workSubmissions) && order.workSubmissions.length > 0
-                ? order.workSubmissions.filter((ws) => ws.type === 'revwork')
+                ? order.workSubmissions
+                    .filter((ws) => ws.type && ws.type.includes('revwork'))
+                    .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))
+                    .slice(0, 1)
                 : [];
             handleDownloadZip(files, '재수정본');
           }}
