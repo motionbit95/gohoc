@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { Form, Input, Checkbox, Typography, Flex } from 'antd';
-import { Stack, useMediaQuery } from '@mui/material';
+import { FormControlLabel, FormGroup, Stack, useMediaQuery, Box } from '@mui/material';
 import { theme } from './theme';
 import { CONFIG } from 'src/global-config';
 
@@ -19,6 +19,11 @@ export const ADDITIONAL_OPTIONS = [
   { value: '체형(+얼굴)', label: '체형(+얼굴)', price: 2000 },
   { value: '합성', label: '합성', price: 2000 },
   { value: '색감', label: '색감', price: 2000 },
+];
+
+export const REVISION_OPTIONS = [
+  { value: '2회 재수정', label: '2회 재수정' },
+  { value: '한달 무제한 재수정', label: '한달 무제한 재수정' },
 ];
 
 const labelStyle = {
@@ -74,6 +79,7 @@ const getInitialFormData = (formData) => ({
   photoCount: formData.photoCount || '',
   photoReview: formData.photoReview || '',
   receivedDate: formData.receivedDate || '',
+  revisionOptions: formData.revisionOptions || [],
 });
 
 const OrderForm = ({
@@ -90,6 +96,15 @@ const OrderForm = ({
 
   // formData prop이 바뀌면 localFormData도 동기화 (단, 값이 실제로 바뀔 때만)
   const prevFormDataRef = useRef(formData);
+
+  // 재수정 체크박스 핸들러 (한 가지만 선택 가능)
+  const handleRevisionOptionsChange = (e) => {
+    const { value: optionValue, checked } = e.target;
+    setLocalFormData((prev) => ({
+      ...prev,
+      revisionOptions: checked ? [optionValue] : [],
+    }));
+  };
 
   useEffect(() => {
     // shallow compare: 만약 formData가 바뀌었으면 동기화
@@ -236,6 +251,14 @@ const OrderForm = ({
       photoReview: value,
     }));
   };
+
+  // 재수정 체크박스 렌더링 (MUI)
+  // ACCENT_COLOR, ACCENT_COLOR_DARK, UNIFIED_RADIUS, UNIFIED_HEIGHT, TEXT_COLOR 등은 정의되어 있지 않으므로 대체값 사용
+  const ACCENT_COLOR = '#1976d2';
+  const ACCENT_COLOR_DARK = '#115293';
+  const UNIFIED_RADIUS = 4;
+  const UNIFIED_HEIGHT = 40;
+  const TEXT_COLOR = theme.colors.text;
 
   return (
     <Form
@@ -538,6 +561,68 @@ const OrderForm = ({
                 </Flex>
               </span>
             </div>
+          </div>
+        </Form.Item>
+
+        <Form.Item
+          label={<div style={{ ...labelStyle, fontSize: labelFontSize }}>{'재수정'}</div>}
+          colon={false}
+        >
+          <div
+            className="checkbox-group"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: theme.spacing.sm,
+            }}
+          >
+            {REVISION_OPTIONS.map((option) => (
+              <div
+                key={option.value}
+                className="checkbox-item"
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  padding: theme.spacing.sm,
+                  borderRadius: '4px',
+                  gap: 8,
+                  fontFamily: 'GumiRomanceTTF',
+                  width: '100%',
+                  fontSize: checkboxFontSize,
+                  opacity:
+                    (localFormData.revisionOptions || []).length > 0 &&
+                    !(localFormData.revisionOptions || []).includes(option.value)
+                      ? 0.5
+                      : 1,
+                }}
+              >
+                <Checkbox
+                  checked={(localFormData.revisionOptions || []).includes(option.value)}
+                  onChange={handleRevisionOptionsChange}
+                  value={option.value}
+                  disabled={
+                    (localFormData.revisionOptions || []).length > 0 &&
+                    !(localFormData.revisionOptions || []).includes(option.value)
+                  }
+                />
+                <span
+                  className="checkbox-label"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                    width: '100%',
+                    color: theme.colors.text,
+                  }}
+                >
+                  <Flex vertical>
+                    <span className="checkbox-title" style={{ fontSize: checkboxFontSize }}>
+                      {option.label}
+                    </span>
+                  </Flex>
+                </span>
+              </div>
+            ))}
           </div>
         </Form.Item>
       </Stack>
