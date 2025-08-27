@@ -4,6 +4,7 @@ import { BsCaretRightFill } from 'react-icons/bs';
 
 import { COLORS } from 'src/constant/colors';
 import ImagePreviewModal from 'src/components/upload/components/image-preview-modal';
+import axios from 'axios';
 
 // 유틸: 파일명 생성
 const getFileName = (fileObj, idx, url) => {
@@ -85,21 +86,54 @@ const SampleButtons = ({ order }) => {
       const zip = new JSZip();
 
       // 파일 다운로드 및 zip에 추가
-      await Promise.all(
-        allFiles.map(async (fileObj, idx) => {
-          try {
-            const url = fileObj.s3ViewLink || fileObj.fileUrl;
-            if (!url) throw new Error('No file url');
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const blob = await response.blob();
-            const filename = getFileName(fileObj, idx, url);
-            zip.file(filename, blob);
-          } catch (err) {
-            console.error('파일 다운로드 실패:', fileObj, err);
+      // await Promise.all(
+      //   allFiles.map(async (fileObj, idx) => {
+      //     try {
+      //       const url = fileObj.s3ViewLink || fileObj.fileUrl;
+      //       if (!url) throw new Error('No file url');
+      //       const response = await fetch(url);
+      //       if (!response.ok) throw new Error('Network response was not ok');
+      //       const blob = await response.blob();
+      //       const filename = getFileName(fileObj, idx, url);
+      //       zip.file(filename, blob);
+      //     } catch (err) {
+      //       console.error('파일 다운로드 실패:', fileObj, err);
+      //     }
+      //   })
+      // );
+
+      const fetchAndAddToZip = async (slide, idx) => {
+        if (!slide?.s3ViewLink) return;
+
+        try {
+          // 링크 변환
+          const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/s3/presign-from-url`, {
+            s3Url: slide.s3ViewLink,
+          });
+          const presignedUrl = res.data.presignedUrl;
+
+          const response = await fetch(presignedUrl);
+
+          if (!response.ok) throw new Error('Network response was not ok');
+          const blob = await response.blob();
+
+          // 파일명 결정: originalFileName 또는 id 또는 idx
+          let filename = slide.originalFileName || slide.title || slide.id || `file-${idx}`;
+          // 확장자 추출
+          const urlParts = slide.s3ViewLink.split('.');
+          const ext = urlParts.length > 1 ? urlParts[urlParts.length - 1].split(/\#|\?/)[0] : '';
+          if (ext && !filename.endsWith(`.${ext}`)) {
+            filename += `.${ext}`;
           }
-        })
-      );
+          zip.file(filename, blob);
+        } catch (err) {
+          // 실패한 파일은 무시
+          console.error('파일 다운로드 실패:', slide, err);
+        }
+      };
+
+      // 모든 파일을 zip에 추가
+      await Promise.all(allFiles.map((fileObj, idx) => fetchAndAddToZip(fileObj, idx)));
 
       // zip 파일 생성 및 다운로드
       const zipBlob = await zip.generateAsync({ type: 'blob' });
