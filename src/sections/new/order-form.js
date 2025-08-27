@@ -106,30 +106,37 @@ const OrderForm = ({
     }));
   };
 
+  // 무한 호출 방지: formData가 바뀌었을 때만 setLocalFormData 호출
+  // formData prop이 바뀌었을 때만 localFormData 동기화 (불필요한 렌더 방지)
+  // 처음 마운트 시에만 userName, userId만 받아오고 나머지는 초기화
   useEffect(() => {
-    // shallow compare: 만약 formData가 바뀌었으면 동기화
-    const prev = prevFormDataRef.current;
+    setLocalFormData((prev) => ({
+      ...prev,
+      userName: formData.userName || '',
+      userId: formData.userId || '',
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.userName]);
+
+  // localFormData가 바뀔 때마다 부모로 전체 데이터 전달 (무한 호출 방지)
+  const prevOnFormDataChange = useRef(onFormDataChange);
+  const prevLocalFormData = useRef(localFormData);
+
+  useEffect(() => {
+    // localFormData가 이전과 다를 때만 onFormDataChange 호출
+    const prev = prevLocalFormData.current;
     let changed = false;
-    for (const key of Object.keys(getInitialFormData({}))) {
-      if (formData[key] !== prev[key]) {
+    for (const key of Object.keys(localFormData)) {
+      if (localFormData[key] !== prev[key]) {
         changed = true;
         break;
       }
     }
-    if (changed) {
-      setLocalFormData(getInitialFormData(formData));
-      prevFormDataRef.current = formData;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData]);
-
-  // localFormData가 바뀔 때마다 부모로 전체 데이터 전달
-  const prevOnFormDataChange = useRef(onFormDataChange);
-  useEffect(() => {
-    if (typeof onFormDataChange === 'function') {
+    if (changed && typeof onFormDataChange === 'function') {
       onFormDataChange(localFormData);
     }
     prevOnFormDataChange.current = onFormDataChange;
+    prevLocalFormData.current = localFormData;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localFormData, onFormDataChange]);
 
