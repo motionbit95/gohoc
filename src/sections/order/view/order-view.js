@@ -29,10 +29,10 @@ import {
   CAUTION_GUIDE,
 } from 'src/constant/taility';
 
-import OrderForm from '../order-form';
-import OrderRequest from '../order-request';
-import CautionAgree from '../caution-agree';
-import ImageUploader from '../image-uploader';
+import OrderForm from '../components/order-form';
+import OrderRequest from '../components/order-request';
+import CautionAgree from '../components/caution-agree';
+import ImageUploader from '../components/image-uploader';
 import { Grid } from 'antd';
 import { Divider } from 'antd';
 

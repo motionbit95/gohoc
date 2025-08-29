@@ -33,13 +33,13 @@ import {
   REVISE_CAUTION_GUIDE,
 } from 'src/constant/taility';
 
-import OrderRequest from '../../new/order-request';
-import CautionAgree from '../../new/caution-agree';
-import ImageUploader from '../../new/image-uploader';
-import OrderForm from '../order-form';
+import OrderRequest from '../../order/components/order-request';
+import CautionAgree from '../../order/components/caution-agree';
+import ImageUploader from '../../order/components/image-uploader';
+import OrderForm from '../components/order-form';
 import { createWorkSubmission } from 'src/actions/work-submission';
 import { createOrderComment } from 'src/actions/comment';
-import PageTitle from '../revision-title';
+import PageTitle from '../components/revision-title';
 
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;
 const ACCENT_COLOR_DARK = 'rgb(220, 222, 204)';

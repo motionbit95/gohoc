@@ -18,7 +18,7 @@ import {
 
 // 색상 상수 import
 import { COLORS, STYLES } from 'src/constant/taility-colors';
-import { REVISION_OPTIONS } from '../revision/order-form';
+import { REVISION_OPTIONS } from '../../revision/components/order-form';
 
 // 색감 수정: 상세페이지 전용 색상 사용
 const BG_COLOR = COLORS.DETAIL_BG_COLOR;

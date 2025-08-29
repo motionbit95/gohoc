@@ -55,7 +55,8 @@
       "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/routes/**)",
       "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/assets/illustrations/**)",
       "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/assets/data/**)",
-      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/**)"
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/**)",
+      "Bash(tree:*)"
     ],
     "deny": [],
     "ask": []

@@ -7,8 +7,8 @@ import { getMe } from 'src/actions/user';
 import { COLORS } from 'src/constant/colors';
 import { getOrderByNaverId } from 'src/actions/order';
 
-import OrderBox from '../order-box';
-import OrderListCaution from '../order-list-caution';
+import OrderBox from '../components/order-box';
+import OrderListCaution from '../components/order-list-caution';
 
 // 스타일 분리
 const styles = {

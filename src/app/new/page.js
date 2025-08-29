@@ -1,4 +1,4 @@
-import OrderView from 'src/sections/new/view/order-view';
+import OrderView from 'src/sections/order/view/order-view';
 
 export const metadata = {
   title: '테일리티 | 주문접수',

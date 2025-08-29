@@ -1,4 +1,4 @@
-import LoginView from 'src/sections/login/view/login-view';
+import LoginView from 'src/sections/auth/view/login-view';
 
 export const metadata = {
   title: '테일리티 | 로그인',

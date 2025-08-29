@@ -1,4 +1,4 @@
-import Taility from 'src/sections/intro/view/intro-view';
+import Taility from 'src/sections/home/view/intro-view';
 
 export const metadata = {
   title: '테일리티',
