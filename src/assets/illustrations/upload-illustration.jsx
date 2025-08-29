@@ -2,7 +2,6 @@ import { memo } from 'react';
 
 import SvgIcon from '@mui/material/SvgIcon';
 
-import { BackgroundShape } from './background-shape';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +24,6 @@ function UploadIllustration({ hideBackground, sx, ...other }) {
       ]}
       {...other}
     >
-      {!hideBackground && <BackgroundShape />}
 
       <defs>
         <linearGradient id="linearGradient-2" x1="30.113%" x2="30.113%" y1="0%" y2="100%">

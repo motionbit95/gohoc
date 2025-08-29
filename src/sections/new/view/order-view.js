@@ -387,7 +387,7 @@ export default function OrderView() {
           <Typography
             sx={{
               fontFamily: 'Linden Hill, serif',
-              fontSize: { xs: '48px', sm: '72px', md: '120px', lg: '160px' },
+              fontSize: { xs: '48px', sm: '72px', md: '96px', lg: '128px' },
               whiteSpace: 'nowrap',
               mb: { xs: '-24px', sm: '-36px', md: '-56px', lg: '-80px' },
               lineHeight: 1,
@@ -395,9 +395,9 @@ export default function OrderView() {
               textAlign: 'center',
               fontWeight: 400,
               width: '100%',
-              maxWidth: 900,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
+              // maxWidth: 900,
+              // overflow: 'hidden',
+              // textOverflow: 'ellipsis',
             }}
           >
             Order Information

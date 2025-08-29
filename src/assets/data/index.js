@@ -1,1 +1,1 @@
-export * from './countries';
+// No data exports needed for Taility app
