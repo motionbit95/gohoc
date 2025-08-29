@@ -29,7 +29,7 @@ const styles = {
     width: '100%',
     maxWidth: 900,
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
+    // textOverflow: 'ellipsis',
   },
   titleSub: {
     fontFamily: '"Linden Hill", Baskervville, serif',

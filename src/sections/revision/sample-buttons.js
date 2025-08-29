@@ -3,7 +3,8 @@ import { Stack, Button, useMediaQuery, CircularProgress } from '@mui/material';
 import { BsCaretRightFill } from 'react-icons/bs';
 
 import { COLORS } from 'src/constant/taility-colors';
-import ImagePreviewModal from 'src/components/upload/components/image-preview-modal';
+import { Dialog, DialogContent, DialogActions, IconButton } from '@mui/material';
+import { Iconify } from 'src/components/iconify';
 
 // 유틸: 파일명 생성
 const getFileName = (fileObj, idx, url) => {
@@ -222,7 +223,27 @@ const SampleButtons = ({ order }) => {
           샘플 다운로드
         </Button>
       </Stack>
-      <ImagePreviewModal order={order} showImage={showImage} onClose={handleClose} items={items} />
+      <Dialog open={!!showImage} onClose={handleClose} maxWidth="lg" fullWidth>
+        <DialogActions sx={{ justifyContent: 'flex-end', p: 1 }}>
+          <IconButton onClick={handleClose} size="small">
+            <Iconify icon="solar:close-circle-bold" />
+          </IconButton>
+        </DialogActions>
+        <DialogContent sx={{ p: 0, display: 'flex', justifyContent: 'center' }}>
+          {showImage && (
+            <img
+              src={showImage}
+              alt="Preview"
+              style={{
+                width: '100%',
+                height: 'auto',
+                maxHeight: '80vh',
+                objectFit: 'contain'
+              }}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/taility/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/new/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/taility/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/new/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/login/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/revision/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/auth/jwt/sign-in/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/intro/view/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/blank/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Read(/Users/krystal/Library/**)",
+      "Bash(rm:*)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/app/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/new/**)",
+      "Bash(npm run build:*)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/revision/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
