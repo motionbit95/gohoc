@@ -59,7 +59,9 @@
       "Bash(tree:*)",
       "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/order/components/**)",
       "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/order/styles/**)",
-      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/order/styles/**)"
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/order/styles/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/order/view/**)",
+      "Read(/Users/krystal/Library/Mobile Documents/com~apple~CloudDocs/프로젝트/studio/user/src/sections/revision/view/**)"
     ],
     "deny": [],
     "ask": []

@@ -13,10 +13,6 @@ import {
   Typography,
   LinearProgress,
   CircularProgress,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
 } from '@mui/material';
 
 import { getMe } from 'src/actions/user';
@@ -33,6 +29,7 @@ import OrderForm from '../components/order-form';
 import OrderRequest from '../components/order-request';
 import CautionAgree from '../components/caution-agree';
 import ImageUploader from '../components/image-uploader';
+import UploadSuccessDialog from 'src/components/upload-success-dialog';
 import { Grid } from 'antd';
 import { Divider } from 'antd';
 
@@ -617,74 +614,32 @@ export default function OrderView() {
               </Typography>
             </Box>
           </Backdrop>
-          <Dialog
+          <UploadSuccessDialog
             open={uploadSuccessDialogOpen}
             onClose={handleUploadSuccessDialogClose}
-            aria-labelledby="upload-success-dialog-title"
-            maxWidth="xs"
-            fullWidth
-            PaperProps={{
-              sx: {
-                borderRadius: 3,
-                p: { xs: 2, sm: 3 },
-                minWidth: { xs: 260, sm: 340, md: 400 },
-                boxShadow: 6,
-              },
-            }}
+            title="업로드 완료"
           >
-            <DialogTitle
-              id="upload-success-dialog-title"
+            <Typography
               sx={{
-                fontWeight: 700,
-                fontSize: { xs: 20, sm: 22, md: 24 },
+                fontSize: { xs: 15, sm: 16, md: 17 },
+                mt: 1.5,
+                mb: 2,
                 textAlign: 'center',
-                letterSpacing: 0.5,
-                mt: 1,
-                mb: 0.5,
-                color: '#222',
+                fontWeight: 400,
+                lineHeight: 1.7,
+                color: '#333',
               }}
             >
-              업로드 완료
-            </DialogTitle>
-            <DialogContent>
-              <Typography
-                sx={{
-                  fontSize: { xs: 15, sm: 16, md: 17 },
-                  mt: 1.5,
-                  mb: 2,
-                  textAlign: 'center',
-                  fontWeight: 500,
-                  lineHeight: 1.7,
-                  color: '#444',
-                }}
-              >
-                업로드가 완료되었습니다.
-                <br />
-                작업 완료일정은 [접수 내역 → 진행 상황]에서 확인 가능합니다.
-                <br />
-                처음 화면으로 이동합니다.
-              </Typography>
-            </DialogContent>
-            <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-              <Button
-                onClick={handleUploadSuccessDialogClose}
-                variant="contained"
-                color="success"
-                sx={{
-                  fontWeight: 700,
-                  minWidth: 120,
-                  fontSize: { xs: 15, sm: 16 },
-                  py: 1,
-                  boxShadow: 'none',
-                  textTransform: 'none',
-                  letterSpacing: 0.2,
-                }}
-                size="medium"
-              >
-                확인
-              </Button>
-            </DialogActions>
-          </Dialog>
+              업로드가 완료되었습니다.
+              <br />
+              작업 완료일정은 <span style={{ fontWeight: 900 }}>[접수 내역 → 진행 상황]</span>
+              에서 <br />
+              확인 가능합니다.
+              <br />
+              <br />
+              처음 화면으로 이동합니다.
+            </Typography>
+          </UploadSuccessDialog>
         </Container>
       </Box>
 
