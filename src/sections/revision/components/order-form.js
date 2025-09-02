@@ -106,10 +106,7 @@ export const ADDITIONAL_OPTIONS = [
   { value: '합성', label: '합성', price: 2000 },
 ];
 
-export const REVISION_OPTIONS = [
-  { value: '2회 재수정', label: '2회 재수정' },
-  { value: '한달 무제한 재수정', label: '한달 무제한 재수정' },
-];
+export const REVISION_OPTIONS = [{ value: '재수정(2주)', label: '재수정(2주)' }];
 
 function getCurrentDateTimeString() {
   const now = new Date();
