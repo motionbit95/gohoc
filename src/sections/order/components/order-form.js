@@ -40,45 +40,33 @@ export const ADDITIONAL_OPTIONS = [
 ];
 
 // 재수정 옵션 목록
-export const REVISION_OPTIONS = [
-  { value: '1회재수정', label: '1회재수정' },
-  { value: '2회재수정', label: '2회재수정' },
-  { value: '3회재수정', label: '3회재수정' },
-];
+export const REVISION_OPTIONS = [{ value: '재수정(2주)', label: '재수정(2주)' }];
 
 // 상수 추출
-const {
-  TEXT_COLOR,
-  BG_COLOR,
-  ACCENT_COLOR,
-  ACCENT_COLOR_DARK
-} = ORDER_COLORS;
+const { TEXT_COLOR, BG_COLOR, ACCENT_COLOR, ACCENT_COLOR_DARK } = ORDER_COLORS;
 
-const {
-  UNIFIED_RADIUS,
-  UNIFIED_HEIGHT
-} = ORDER_SIZES;
+const { UNIFIED_RADIUS, UNIFIED_HEIGHT } = ORDER_SIZES;
 
 // 스타일 설정
 const unifiedInputProps = {
-  style: { 
+  style: {
     color: TEXT_COLOR,
     height: UNIFIED_HEIGHT - 2,
-    padding: '0 14px' 
-  }
+    padding: '0 14px',
+  },
 };
 
 const unifiedInputLabelProps = {
-  style: { 
+  style: {
     color: ACCENT_COLOR,
     fontWeight: 600,
-    fontSize: 14
+    fontSize: 14,
   },
   sx: {
     color: ACCENT_COLOR,
     fontWeight: 600,
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 };
 
 const unifiedInputSx = {
@@ -226,7 +214,7 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           sx={{
             ...unifiedInputSx,
             '& .MuiInput-underline:before': {
-              borderBottom: `1px solid ${ACCENT_COLOR}`,
+              borderBottom: `1px solid #e0e0e0`,
             },
             '& .MuiInput-underline:after': {
               borderBottom: `1px solid ${ACCENT_COLOR}`,
@@ -355,7 +343,7 @@ export default function OrderForm({ value = {}, onChange, userId = '', userName 
           sx={{
             ...unifiedInputSx,
             '& .MuiInput-underline:before': {
-              borderBottom: `1px solid ${ACCENT_COLOR}`,
+              borderBottom: `1px solid #e0e0e0`,
             },
             '& .MuiInput-underline:after': {
               borderBottom: `1px solid ${ACCENT_COLOR}`,
