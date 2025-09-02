@@ -16,19 +16,13 @@ import {
   FormControlLabel,
 } from '@mui/material';
 
-// 색상 상수 import
-import { COLORS, STYLES } from 'src/constant/taility-colors';
-import { REVISION_OPTIONS } from '../../revision/components/order-form';
+// 스타일 유틸리티 import
+import { unifiedInputStyle } from '../styles/utils';
+import { ORDER_COLORS, ORDER_SIZES } from '../styles/constants';
 
-// 색감 수정: 상세페이지 전용 색상 사용
-const BG_COLOR = COLORS.DETAIL_BG_COLOR;
-const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-const ACCENT_COLOR = '#000';
-const ACCENT_COLOR_DARK = '#888';
-
-// 통일된 input 스타일 변수
-const UNIFIED_RADIUS = 0;
-const UNIFIED_HEIGHT = STYLES.UNIFIED_HEIGHT;
+// 컴포넌트 import
+import { OrderTextField, OrderSelect } from './order-input-field';
+import { OrderCheckbox, OrderAllAgreeCheckbox } from './order-checkbox';
 
 // 등급 옵션
 export const GRADE_OPTIONS = [
@@ -45,6 +39,64 @@ export const ADDITIONAL_OPTIONS = [
   { value: '합성', label: '합성', price: 2000 },
 ];
 
+// 재수정 옵션 목록
+export const REVISION_OPTIONS = [
+  { value: '1회재수정', label: '1회재수정' },
+  { value: '2회재수정', label: '2회재수정' },
+  { value: '3회재수정', label: '3회재수정' },
+];
+
+// 상수 추출
+const {
+  TEXT_COLOR,
+  BG_COLOR,
+  ACCENT_COLOR,
+  ACCENT_COLOR_DARK
+} = ORDER_COLORS;
+
+const {
+  UNIFIED_RADIUS,
+  UNIFIED_HEIGHT
+} = ORDER_SIZES;
+
+// 스타일 설정
+const unifiedInputProps = {
+  style: { 
+    color: TEXT_COLOR,
+    height: UNIFIED_HEIGHT - 2,
+    padding: '0 14px' 
+  }
+};
+
+const unifiedInputLabelProps = {
+  style: { 
+    color: ACCENT_COLOR,
+    fontWeight: 600,
+    fontSize: 14
+  },
+  sx: {
+    color: ACCENT_COLOR,
+    fontWeight: 600,
+    fontSize: 14
+  }
+};
+
+const unifiedInputSx = {
+  color: TEXT_COLOR,
+  background: BG_COLOR,
+  borderRadius: UNIFIED_RADIUS,
+  fontWeight: 500,
+  letterSpacing: 0.5,
+  height: UNIFIED_HEIGHT,
+  minHeight: UNIFIED_HEIGHT,
+  '& .MuiInputBase-input': {
+    color: TEXT_COLOR,
+    height: UNIFIED_HEIGHT - 2,
+    minHeight: UNIFIED_HEIGHT - 2,
+    padding: '0 14px',
+  },
+};
+
 // 현재 날짜와 시간을 yyyy-MM-dd HH:mm:ss 형식의 문자열로 반환
 function getCurrentDateTimeString() {
   const now = new Date();
@@ -56,101 +108,6 @@ function getCurrentDateTimeString() {
   const ss = String(now.getSeconds()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`;
 }
-
-// 통일된 input 스타일
-const unifiedInputSx = {
-  color: TEXT_COLOR,
-  background: BG_COLOR,
-  borderRadius: UNIFIED_RADIUS,
-  fontWeight: 500,
-  letterSpacing: 0.5,
-  height: UNIFIED_HEIGHT,
-  minHeight: UNIFIED_HEIGHT,
-  boxSizing: 'border-box',
-  mb: 2,
-  '& .MuiInputBase-input': {
-    color: TEXT_COLOR,
-    height: UNIFIED_HEIGHT - 2,
-    minHeight: UNIFIED_HEIGHT - 2,
-    boxSizing: 'border-box',
-    padding: '0 14px',
-    display: 'flex',
-    alignItems: 'center',
-    background: 'none',
-  },
-  '& .MuiOutlinedInput-root': {
-    borderRadius: UNIFIED_RADIUS,
-    minHeight: UNIFIED_HEIGHT,
-    height: UNIFIED_HEIGHT,
-    background: BG_COLOR,
-    boxShadow: 'none',
-    '& fieldset': {
-      borderRadius: UNIFIED_RADIUS,
-      borderColor: ACCENT_COLOR,
-    },
-    '&:hover fieldset': {
-      borderColor: ACCENT_COLOR,
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: ACCENT_COLOR,
-      borderWidth: 2,
-    },
-  },
-  '& .MuiInputLabel-root': {
-    color: ACCENT_COLOR,
-    fontWeight: 700,
-    letterSpacing: 0.2,
-    fontSize: 16,
-    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-    lineHeight: 1.2,
-  },
-  // 밑줄을 검정색으로
-  '& .MuiInput-underline:before': {
-    borderBottom: `1px solid ${ACCENT_COLOR}`,
-  },
-  '& .MuiInput-underline:after': {
-    borderBottom: `1px solid ${ACCENT_COLOR}`,
-  },
-  '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
-    borderBottom: `1px solid ${ACCENT_COLOR}`,
-  },
-};
-
-const unifiedInputProps = {
-  disableUnderline: false, // underline만 보이도록
-  sx: {
-    ...unifiedInputSx,
-    background: 'none',
-    borderRadius: 0,
-    boxShadow: 'none',
-    px: 0,
-    py: 0,
-    pointerEvents: 'none', // readOnly용
-    // 밑줄을 검정색으로
-    '&:before': {
-      borderBottom: `1px solid ${ACCENT_COLOR}`,
-    },
-    '&:after': {
-      borderBottom: `1px solid ${ACCENT_COLOR}`,
-    },
-    '&:hover:not(.Mui-disabled):before': {
-      borderBottom: `1px solid ${ACCENT_COLOR}`,
-    },
-  },
-  readOnly: true,
-};
-
-const unifiedInputLabelProps = {
-  sx: {
-    color: ACCENT_COLOR,
-    fontWeight: 700,
-    letterSpacing: 0.2,
-    fontSize: 16,
-    textShadow: '0 1px 2px rgba(0,0,0,0.18)',
-    lineHeight: 1.2,
-  },
-  shrink: true,
-};
 
 export default function OrderForm({ value = {}, onChange, userId = '', userName = '' }) {
   // value prop: { orderNumber, grade, photoCount, additionalOptions }

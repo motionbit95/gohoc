@@ -4,55 +4,12 @@ import React from 'react';
 
 import { Box, Checkbox, FormGroup, FormControlLabel } from '@mui/material';
 
-import { COLORS } from 'src/constant/taility-colors';
-
-// 컬러 팔레트 (image-uploader.js와 통일)
-const BG_COLOR = COLORS.DETAIL_PAPER_BG;
-const TEXT_COLOR = COLORS.DETAIL_TEXT_COLOR;
-const ACCENT_COLOR = COLORS.DETAIL_ACCENT_COLOR;
-const ACCENT_COLOR_DARK = COLORS.DETAIL_ACCENT_COLOR_DARK;
+import { sectionContainerStyle } from '../styles/utils';
 
 // "모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄" 체크박스 key
 const ALL_AGREE_KEY = 'allAgree';
 
-// 체크박스 스타일 공통화
-const checkboxSx = {
-  color: ACCENT_COLOR_DARK,
-
-  '&.Mui-checked': {
-    color: ACCENT_COLOR_DARK,
-  },
-  transform: 'scale(1.5)',
-  marginRight: 2,
-};
-
-// 라벨 스타일 공통화
-const labelSx = {
-  alignItems: 'flex-start',
-  color: TEXT_COLOR,
-  '.MuiFormControlLabel-label': {
-    fontSize: { xs: 15, sm: 16 },
-    fontWeight: 600,
-    lineHeight: 1.7,
-    letterSpacing: 0.1,
-    textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-    wordBreak: 'keep-all',
-  },
-};
-
-const allAgreeLabelSx = {
-  alignItems: 'flex-start',
-  mt: 2,
-  color: ACCENT_COLOR_DARK,
-  '.MuiFormControlLabel-label': {
-    fontSize: { xs: 16, sm: 17 },
-    fontWeight: 800,
-    lineHeight: 2.0,
-    letterSpacing: 0.15,
-    textShadow: '0 1px 2px rgba(0,0,0,0.10)',
-    wordBreak: 'keep-all',
-  },
-};
+import { OrderCheckbox, OrderAllAgreeCheckbox } from './order-checkbox';
 
 export default function CautionAgree({ checked = {}, content, onChange }) {
   function getAllChecked(checked) {
@@ -89,13 +46,7 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
   };
 
   return (
-    <Box
-      sx={{
-        my: 2,
-        py: { xs: 2, sm: 3 },
-        color: TEXT_COLOR,
-      }}
-    >
+    <Box sx={sectionContainerStyle}>
       <Box
         sx={{
           maxWidth: 'md',
@@ -121,20 +72,14 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
         </span>
         <FormGroup sx={{ mt: 4 }}>
           {content.map((item) => (
-            <FormControlLabel
+            <OrderCheckbox
               key={item.key}
-              control={
-                <Checkbox
-                  checked={!!checked?.[item.key]}
-                  onChange={handleChange(item.key)}
-                  sx={checkboxSx}
-                />
-              }
-              sx={{ ...labelSx, mb: 1.5 }}
+              checked={!!checked?.[item.key]}
+              onChange={handleChange(item.key)}
               label={
                 <span
                   style={{
-                    color: TEXT_COLOR,
+                    color: '#111',
                     fontWeight: 600,
                     fontSize: 'inherit',
                     lineHeight: 2.0,
@@ -146,20 +91,13 @@ export default function CautionAgree({ checked = {}, content, onChange }) {
           ))}
           {/* 모든 내용에 동의하면 위의 내용을 모두 숙지했습니다를 나타냄 */}
           <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', mt: 2 }}>
-            <FormControlLabel
-              key={ALL_AGREE_KEY}
-              control={
-                <Checkbox
-                  checked={!!checked?.[ALL_AGREE_KEY]}
-                  //   onChange={handleChange(ALL_AGREE_KEY)}
-                  sx={checkboxSx}
-                />
-              }
-              sx={allAgreeLabelSx}
+            <OrderAllAgreeCheckbox
+              checked={!!checked?.[ALL_AGREE_KEY]}
+              onChange={handleChange(ALL_AGREE_KEY)}
               label={
                 <span
                   style={{
-                    color: TEXT_COLOR,
+                    color: '#111',
                     fontWeight: 800,
                     fontSize: 'inherit',
                     lineHeight: 2.0,
