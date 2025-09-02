@@ -21,7 +21,7 @@ export default function UploadSuccessDialog({
 }) {
   return (
     <Dialog
-      open={true}
+      open={open}
       onClose={onClose}
       aria-labelledby="upload-success-dialog-title"
       maxWidth="xs"
