@@ -159,12 +159,12 @@ export default function OrderView() {
       return false;
     }
 
-    if (!orderForm.revisionOptions || !orderForm.revisionOptions.length) {
-      setMessage('재수정 옵션을 선택해주세요.');
-      setMessageType('error');
-      setMessageOpen(true);
-      return false;
-    }
+    // if (!orderForm.revisionOptions || !orderForm.revisionOptions.length) {
+    //   setMessage('재수정 옵션을 선택해주세요.');
+    //   setMessageType('error');
+    //   setMessageOpen(true);
+    //   return false;
+    // }
 
     // 2. 주문 이미지 1개 이상
     if (!orderImages || orderImages.length === 0) {
