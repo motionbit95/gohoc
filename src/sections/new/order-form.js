@@ -21,10 +21,7 @@ export const ADDITIONAL_OPTIONS = [
   { value: '색감', label: '색감', price: 2000 },
 ];
 
-export const REVISION_OPTIONS = [
-  { value: '2회 재수정', label: '2회 재수정' },
-  { value: '한달 무제한 재수정', label: '한달 무제한 재수정' },
-];
+export const REVISION_OPTIONS = [{ value: '재수정(2주)', label: '재수정(2주)' }];
 
 const labelStyle = {
   color: theme.colors.label,
