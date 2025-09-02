@@ -161,7 +161,7 @@ export const REVISE_CAUTION_GUIDE = [
   },
   {
     key: 'refund',
-    label: `위의 내용을 인지 하셨을까요?`,
+    label: `작업 요청(작업 착수)후에는 환불 및 변경은 불가하다는 점 인지하셨을까요?`,
     required: true,
   },
 ];
