@@ -1,5 +1,5 @@
 import { useCallback, useState, useMemo } from 'react';
-import { Stack, Button, useMediaQuery, CircularProgress } from '@mui/material';
+import { Stack, Button, useMediaQuery, CircularProgress, Box } from '@mui/material';
 import { BsCaretRightFill } from 'react-icons/bs';
 
 import { COLORS } from 'src/constant/taility-colors';
@@ -223,27 +223,136 @@ const SampleButtons = ({ order }) => {
           샘플 다운로드
         </Button>
       </Stack>
-      <Dialog open={!!showImage} onClose={handleClose} maxWidth="lg" fullWidth>
-        <DialogActions sx={{ justifyContent: 'flex-end', p: 1 }}>
-          <IconButton onClick={handleClose} size="small">
-            <Iconify icon="solar:close-circle-bold" />
+      {showImage && (
+        <Box
+          sx={{
+            position: 'fixed',
+            zIndex: 1400,
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            bgcolor: 'rgba(0,0,0,0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          {/* 닫기 버튼 */}
+          <IconButton
+            onClick={handleClose}
+            size="large"
+            sx={{
+              position: 'fixed',
+              top: { xs: 16, md: 32 },
+              right: { xs: 16, md: 32 },
+              color: '#fff',
+              zIndex: 1410,
+              background: 'rgba(0,0,0,0.3)',
+              '&:hover': { background: 'rgba(0,0,0,0.5)' },
+            }}
+          >
+            <Iconify icon="solar:close-circle-bold" width={36} height={36} />
           </IconButton>
-        </DialogActions>
-        <DialogContent sx={{ p: 0, display: 'flex', justifyContent: 'center' }}>
-          {showImage && (
+          {/* 이미지 및 워터마크 */}
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100vw',
+              height: '100vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+            }}
+          >
             <img
               src={showImage}
               alt="Preview"
               style={{
-                width: '100%',
-                height: 'auto',
-                maxHeight: '80vh',
-                objectFit: 'contain'
+                maxHeight: '100vh',
+                height: '100vh',
+                width: 'auto',
+                objectFit: 'contain',
+                display: 'block',
+                userSelect: 'none',
+                pointerEvents: 'none',
+                margin: '0 auto',
+                zIndex: 1,
               }}
+              draggable={false}
             />
-          )}
-        </DialogContent>
-      </Dialog>
+            {/* 워터마크: Tailwind CSS로 45도 반복 */}
+            {/* 워터마크: 이미지보다 앞에, 글씨 크기 줄이고 타일 반복 */}
+            <Box
+              sx={{
+                pointerEvents: 'none',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                zIndex: 3, // 이미지보다 앞에
+                opacity: 0.28, // 더 선명하게 (기존 0.13 -> 0.28)
+                backgroundImage: `
+                  repeating-linear-gradient(
+                    45deg,
+                    rgba(255,255,255,0.28) 0,
+                    rgba(255,255,255,0.28) 1px,
+                    transparent 1px,
+                    transparent 60px
+                  )
+                `,
+                overflow: 'hidden',
+              }}
+            >
+              {/* 타일 반복 워터마크 */}
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '-50%',
+                  left: '-50%',
+                  width: '200%',
+                  height: '200%',
+                  transform: 'rotate(-45deg)',
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  opacity: 0.38, // 더 선명하게 (기존 0.18 -> 0.38)
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                  zIndex: 4,
+                }}
+              >
+                {Array.from({ length: 10 }).map((_, row) =>
+                  Array.from({ length: 20 }).map((_, col) => (
+                    <Box
+                      key={`${row}-${col}`}
+                      sx={{
+                        color: '#fff',
+                        fontWeight: 700,
+                        fontSize: { xs: 18, sm: 24, md: 32, lg: 40 }, // 글씨 크기 줄임
+                        textShadow: '2px 2px 8px rgba(0,0,0,0.28)', // 그림자도 더 진하게
+                        letterSpacing: 1,
+                        lineHeight: 2.2,
+                        opacity: 1,
+                        px: 2,
+                        py: 0.5,
+                        whiteSpace: 'nowrap',
+                        textAlign: 'center',
+                        userSelect: 'none',
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      Taility
+                    </Box>
+                  ))
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };
